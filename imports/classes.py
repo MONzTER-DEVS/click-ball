@@ -1,5 +1,6 @@
 # Imports
 import pymunk, pygame, math, os
+# from settings import WW, WH
 
 GLOBAL_FRICTION = 0.5
 
@@ -64,7 +65,7 @@ class StaticLine:
 # Victory Flag
 class VictoryFlag:
     def __init__(self, pos):  # U have to put bottom point of the flag while making an instance
-        self.image = pygame.image.load(os.path.join('assets', 'imgs', 'victory_flag.png'))
+        self.image = pygame.image.load(os.path.join('imports', 'assets', 'imgs', 'victory_flag.png'))
         self.rect = self.image.get_rect()
         self.rect.bottomleft = tuple(pos)
 
@@ -113,11 +114,3 @@ class Portal:
         if obj.rect.colliderect(self.end_rect):
             obj.body.position = self.start_pos
 
-class Player:
-    def __init__(self, x, y):
-        self.img = pygame.image.load('assets/imgs/player/ball.png')
-        self.player = DynamicBall((WW//2, WH//2), 0, 0, self.img, space)
-
-class Survival:
-    def __init__(self):
-        self.player = Player(WW//2, WH//2)

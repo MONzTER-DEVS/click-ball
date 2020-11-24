@@ -1,4 +1,4 @@
-import pygame
+import pygame, os
 WW,WH = 1200,720
 
 # Font
@@ -24,3 +24,20 @@ L_BLUE = (0, 255, 255)
 PINK = (255, 0, 255)
 PURPLE = (148, 0, 211)
 GRAY = (100, 100, 100)
+
+## Player Skins
+img_path = os.path.join('imports', 'assets', 'imgs', 'skins_png')
+# lvl_path = os.path.join('assets', 'levels')
+skins = [
+    pygame.image.load(os.path.join(img_path, 'ball.png')),
+    pygame.image.load(os.path.join(img_path, 'EggBlue.png')),
+    pygame.image.load(os.path.join(img_path, 'EggGreen.png')),
+    pygame.image.load(os.path.join(img_path, 'EggPurp.png')),
+    pygame.image.load(os.path.join(img_path, 'EggRed.png')),
+    pygame.image.load(os.path.join(img_path, 'EggYellow.png')),
+    pygame.image.load(os.path.join(img_path, 'EnBallBlue.png')),
+    pygame.image.load(os.path.join(img_path, 'EnBallGreen.png')),
+    pygame.image.load(os.path.join(img_path, 'EnBallPurp.png')),
+    pygame.image.load(os.path.join(img_path, 'EnBallRed.png')),
+    pygame.image.load(os.path.join(img_path, 'EnBallYellow.png'))
+]
