@@ -47,10 +47,8 @@ while True:
         print("under Dev")
         to_do = game_select_screen(screen)  # @todo Make a Real Campaign mode
 
-
     elif to_do[0] == 'themes':
-        print("under Dev")
-        to_do = welcome_screen(screen)  # @todo change this to themes Screen later
+        to_do = theme_screen(screen)  # @todo change this to themes Screen later
 
     elif to_do[0] == 'leaderboard':
         print("under Dev")

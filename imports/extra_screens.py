@@ -131,3 +131,49 @@ def game_select_screen(screen):
                 mx, my = pygame.mouse.get_pos()
 
         pygame.display.update()
+
+
+def theme_screen(screen):
+    mx, my = pygame.mouse.get_pos()
+    clicked = False
+    while True:
+        theme = Themes.active_theme
+        screen.fill(theme.background)
+
+        heading_text = big_font.render('THEMES !', True, theme.font_c)
+        heading_rect = heading_text.get_rect()
+        heading_rect.center = (WW // 2, 50)
+        screen.blit(heading_text, heading_rect.topleft)
+
+        back_text = small_font.render('Back', True, theme.font_c)
+        back_rect = back_text.get_rect()
+        back_rect.topleft = (10, WH-50)
+        screen.blit(back_text, back_rect.topleft)
+        hover(back_rect, screen)
+
+        if clicked:
+            if back_rect.left < mx < back_rect.right and back_rect.top < my < back_rect.bottom:
+                return ['welcome']
+
+        for them, y in zip(Themes.themes, range(200, WH - 100, 60)):
+            heading_text = medium_font.render(them.name, True, theme.font_c)
+            heading_rect = heading_text.get_rect()
+            heading_rect.center = (WW // 2, y)
+            screen.blit(heading_text, heading_rect.topleft)
+            hover(heading_rect, screen)
+
+            # CLick detection
+            if clicked:
+                mx, my = pygame.mouse.get_pos()
+                if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
+                    them.set_to_active_theme()
+
+        clicked = False
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return ['quit']
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                clicked = True
+                mx, my = pygame.mouse.get_pos()
+
+        pygame.display.update()
