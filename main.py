@@ -13,29 +13,38 @@ screen = pygame.display.set_mode((WW, WH))
 pygame.display.set_caption('Click Ball!')
 clock = pygame.time.Clock()
 
+
 def survival_mode(screen):
     while True:
-        screen.fill((255,255,255))
+        screen.fill((255, 255, 255))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                return 'quit'
-
+                return ['quit']
 
         heading_text = big_font.render('Game Screen!', True, (0, 0, 0))
         heading_rect = heading_text.get_rect()
-        heading_rect.center = (WW/2, 50)
+        heading_rect.center = (WW / 2, 50)
         screen.blit(heading_text, heading_rect.topleft)
 
-
         pygame.display.update()
+
 
 to_do = extra_screens.welcome_screen(screen)
 
 # Main Loop
 while True:
-    if to_do == 'start':
+    if to_do[0] == 'game':
         to_do = survival_mode(screen)
 
-    elif to_do == 'quit':
+    elif to_do[0] == 'themes':
+        to_do = extra_screens.welcome_screen(screen)  # @todo change this to themes Screen later
+
+    elif to_do[0] == 'leaderboard':
+        to_do = extra_screens.welcome_screen(screen)  # @todo change this to leaderboard Screen later
+
+    elif to_do[0] == 'ball':
+        to_do = extra_screens.welcome_screen(screen)  # @todo change this to ball Screen later
+
+    elif to_do[0] == 'quit':
         break
