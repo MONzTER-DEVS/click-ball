@@ -65,7 +65,7 @@ class StaticLine:
 # Victory Flag
 class VictoryFlag:
     def __init__(self, pos):  # U have to put bottom point of the flag while making an instance
-        self.image = pygame.image.load(os.path.join('imports', 'assets', 'imgs', 'victory_flag.png'))
+        self.image = pygame.image.load(os.path.join('assets', 'imgs', 'victory_flag.png'))
         self.rect = self.image.get_rect()
         self.rect.bottomleft = tuple(pos)
 
@@ -114,3 +114,12 @@ class Portal:
         if obj.rect.colliderect(self.end_rect):
             obj.body.position = self.start_pos
 
+
+class Levels:
+    levels = []
+    current_level = None
+
+    def __init__(self, name):
+        self.name = name
+        Levels.levels.append(self)
+        self.number = Levels.levels.index(self)

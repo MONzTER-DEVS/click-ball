@@ -26,7 +26,7 @@ PURPLE = (148, 0, 211)
 GRAY = (100, 100, 100)
 
 ## Player Skins
-img_path = os.path.join('imports', 'assets', 'imgs', 'skins_png')
+img_path = os.path.join('assets', 'imgs', 'skins_png')
 # lvl_path = os.path.join('assets', 'levels')
 skins = [
     pygame.image.load(os.path.join(img_path, 'ball.png')),
