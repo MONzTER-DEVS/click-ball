@@ -13,8 +13,9 @@ class DB:
         c = conn.cursor()
 
         # Create a Table
-        c.execute('CREATE TABLE users(name text,password text,level integer)')
-        c.execute('CREATE TABLE data(theme text)')
+        c.execute("CREATE TABLE users(name text,password text,level integer)")
+        c.execute("CREATE TABLE cache(theme text)")
+        c.execute("INSERT INTO cache values('Bright White')")
         conn.commit()
         conn.close()
 
@@ -40,4 +41,19 @@ class DB:
 
     @staticmethod
     def load_all_data():
-        pass
+        conn = sqlite3.connect(os.path.join('assets', 'data.db'))
+        c = conn.cursor()
+        c.execute("SELECT * FROM cache")
+        values = c.fetchall()
+        conn.commit()
+        conn.close()
+        return values[0]
+
+    @staticmethod
+    def change_cache_value(field, value, old):
+        conn = sqlite3.connect(os.path.join('assets', 'data.db'))
+        c = conn.cursor()
+        c.execute(f"UPDATE cache SET {field} = '{value}'")
+
+        conn.commit()
+        conn.close()

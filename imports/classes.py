@@ -1,5 +1,6 @@
 # Imports
 import pymunk, pygame, math, os, json
+from .db_functions import DB
 # from settings import WW, WH
 
 GLOBAL_FRICTION = 0.5
@@ -88,6 +89,7 @@ class Themes:
 
     def set_to_active_theme(self):
         Themes.active_theme = self
+
 
     @staticmethod
     def set_active_by_name(name):

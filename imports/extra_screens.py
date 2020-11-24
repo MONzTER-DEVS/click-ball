@@ -166,7 +166,9 @@ def theme_screen(screen):
             if clicked:
                 mx, my = pygame.mouse.get_pos()
                 if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
+                    old = Themes.active_theme
                     them.set_to_active_theme()
+                    DB.change_cache_value('theme', Themes.active_theme.name, old.name)
 
         clicked = False
         for event in pygame.event.get():

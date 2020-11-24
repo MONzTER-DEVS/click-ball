@@ -3,9 +3,6 @@ import pymunk, pygame, time
 
 from imports import *
 
-# make database if it doesnt Exist
-# if not os.path.exists(os.path.join('assets', 'data.db')):
-#     DB.make_db()
 
 ## -------- PyMunk Initialization --------
 space = pymunk.Space()  # Create a Space which contain the simulation
