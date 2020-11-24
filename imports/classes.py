@@ -1,5 +1,5 @@
 # Imports
-import pymunk, pygame, math, os
+import pymunk, pygame, math, os, json
 # from settings import WW, WH
 
 GLOBAL_FRICTION = 0.5
@@ -118,8 +118,17 @@ class Portal:
 class Levels:
     levels = []
     current_level = None
+    number = 0
 
-    def __init__(self, name):
+    def __init__(self, name, json_path):
+        f = open(json_path, 'r')
+        self.dict = json.load(f)
+        f.close()
         self.name = name
-        Levels.levels.append(self)
-        self.number = Levels.levels.index(self)
+        Levels.levels.append(self.dict)
+        Levels.number = Levels.levels.index(self.dict) + 1
+    
+    @staticmethod
+    def load_level_by_num(num):
+        Levels.current_level = Levels.levels[num]
+        return Levels.current_level
