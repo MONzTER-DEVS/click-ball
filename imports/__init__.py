@@ -13,3 +13,9 @@ dracula_theme = Themes("Dracula",         BLACK,     PINK,       PINK,       PIN
 light_theme.set_to_active_theme()
 
 from .extra_screens import *
+from .db_functions import *
+
+data = DB.load_all_data()
+
+# Will activate it later
+# Themes.set_to_active_theme(data[0])

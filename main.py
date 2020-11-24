@@ -3,6 +3,10 @@ import pymunk, pygame, time
 
 from imports import *
 
+# make database if it doesnt Exist
+# if not os.path.exists(os.path.join('assets', 'data.db')):
+#     DB.make_db()
+
 ## -------- PyMunk Initialization --------
 space = pymunk.Space()  # Create a Space which contain the simulation
 space.gravity = 0, GRAVITY  # Set its gravity
@@ -16,24 +20,27 @@ clock = pygame.time.Clock()
 ## Common To both modes
 p_img = skins[0]
 max_speed = 100
-player = DynamicBall((WW//2, WH//2), 10, 0, p_img, space)
-flag = VictoryFlag((WW-100, WH-100))
-line = StaticLine((WW//2-100, WH//2+100), (WW//2+100, WH//2+100), 10, space)
+player = DynamicBall((WW // 2, WH // 2), 10, 0, p_img, space)
+flag = VictoryFlag((WW - 100, WH - 100))
+line = StaticLine((WW // 2 - 100, WH // 2 + 100), (WW // 2 + 100, WH // 2 + 100), 10, space)
 level = Levels('AvdaKadavra', os.path.join(lvl_path_50, 'level1.json'))
+
 
 ## -------------------- Some functions --------------------
 def restart_game():
     pass
 
+
 def reset_level():
     pass
+
 
 def survival_mode(screen):
     # Initialization of the game ;)
     score = 0
     st_time = 0  # Time
     level_number_to_display = 1
-    death_time = 0 # Death time
+    death_time = 0  # Death time
     moves = 5
     clicked = False
     while True:
@@ -93,15 +100,17 @@ def survival_mode(screen):
         ## -------------------- Time and stuff --------------------
         if st_time == 0:
             st_time = time.time()
-        if death_time!=0:
+        if death_time != 0:
             if death_time - int(time.time()) + 10 <= 0:
                 restart_game()
 
             # giving a 10 seconds timer and Auto reset if not colliding with the Flag
-            if death_time!=0:
-                screen.blit(small_font.render(str(death_time - int(time.time()) + 10), True, Themes.active_theme.font_c), (WW-50, 31))
+            if death_time != 0:
+                screen.blit(
+                    small_font.render(str(death_time - int(time.time()) + 10), True, Themes.active_theme.font_c),
+                    (WW - 50, 31))
 
-        space.step(2/FPS)
+        space.step(2 / FPS)
         clock.tick(FPS)
         pygame.display.update()
 
