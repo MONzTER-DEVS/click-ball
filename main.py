@@ -19,8 +19,7 @@ max_speed = 100
 player = DynamicBall((WW//2, WH//2), 10, 0, p_img, space)
 flag = VictoryFlag((WW-100, WH-100))
 line = StaticLine((WW//2-100, WH//2+100), (WW//2+100, WH//2+100), 10, space)
-level_path = os.path.join('assets', 'levels', '1-50')
-level = Levels('AvdaKadavra', os.path.join(level_path, 'level1.json'))
+level = Levels('AvdaKadavra', os.path.join(lvl_path_50, 'level1.json'))
 
 ## -------------------- Some functions --------------------
 def restart_game():

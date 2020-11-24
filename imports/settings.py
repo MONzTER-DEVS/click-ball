@@ -27,17 +27,14 @@ GRAY = (100, 100, 100)
 
 ## Player Skins
 img_path = os.path.join('assets', 'imgs', 'skins_png')
-# lvl_path = os.path.join('assets', 'levels')
-skins = [
-    pygame.image.load(os.path.join(img_path, 'ball.png')),
-    pygame.image.load(os.path.join(img_path, 'EggBlue.png')),
-    pygame.image.load(os.path.join(img_path, 'EggGreen.png')),
-    pygame.image.load(os.path.join(img_path, 'EggPurp.png')),
-    pygame.image.load(os.path.join(img_path, 'EggRed.png')),
-    pygame.image.load(os.path.join(img_path, 'EggYellow.png')),
-    pygame.image.load(os.path.join(img_path, 'EnBallBlue.png')),
-    pygame.image.load(os.path.join(img_path, 'EnBallGreen.png')),
-    pygame.image.load(os.path.join(img_path, 'EnBallPurp.png')),
-    pygame.image.load(os.path.join(img_path, 'EnBallRed.png')),
-    pygame.image.load(os.path.join(img_path, 'EnBallYellow.png'))
-]
+skins = []
+for img_name in os.listdir(img_path):
+    if os.path.isfile(os.path.join(img_path, img_name)):
+        skins.append(pygame.image.load(os.path.join(img_path, img_name)))
+
+## Levels
+lvl_path_50 = os.path.join('assets', 'levels', '1-50')
+levels = []
+for lvl_name in os.listdir(lvl_path_50):
+    if os.path.isfile(os.path.join(lvl_path_50, lvl_name)):
+        levels.append(os.path.join(lvl_path_50, lvl_name))

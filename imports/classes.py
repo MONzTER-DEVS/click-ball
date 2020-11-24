@@ -124,6 +124,7 @@ class Levels:
         f = open(json_path, 'r')
         self.dict = json.load(f)
         f.close()
+        print(self.dict)
         self.name = name
         Levels.levels.append(self.dict)
         Levels.number = Levels.levels.index(self.dict) + 1
