@@ -1,6 +1,6 @@
 import os
 import sqlite3
-
+import ast
 
 class crypt:
     key = "}>CX[JAnpm8)H[rKEvrt/kse1G'j{Pd\jxfTNCxU/b4i0MeeV9A(FusO9zd9bM\m"
@@ -16,7 +16,7 @@ class crypt:
             try:
                 decrypted += chr(int(int(num) / ord(crypt.key[index])))
             except IndexError:
-                decrypted += chr(int(int(num) / ord(crypt.key[index%64])))
+                decrypted += chr(int(int(num) / ord(crypt.key[index % 64])))
             finally:
                 index += 1
 
@@ -48,9 +48,51 @@ class DB:
         c = conn.cursor()
 
         # Create a Table
-        c.execute("CREATE TABLE users(name text,password text,level integer)")
+        c.execute("CREATE TABLE users(name text,password text)")
         c.execute("CREATE TABLE cache(theme text)")
+        c.execute("CREATE TABLE saves(data text)")
         c.execute("INSERT INTO cache values('Bright White')")
+        conn.commit()
+        conn.close()
+
+    @staticmethod
+    def load_all_data():
+        conn = sqlite3.connect(os.path.join('assets', 'data.db'))
+        c = conn.cursor()
+        c.execute("SELECT * FROM cache")
+        values = c.fetchall()
+        conn.commit()
+        conn.close()
+        return values[0]
+
+    @staticmethod
+    def level_save(dumping_dict):
+        conn = sqlite3.connect(os.path.join('assets', 'data.db'))
+        c = conn.cursor()
+        to_dump = crypt.en(str(dumping_dict))
+        c.execute("DROP TABLE saves")
+        c.execute("CREATE TABLE saves(data text)")
+        c.execute(f"INSERT INTO saves values('{to_dump}')")
+        conn.commit()
+        conn.close()
+
+    @staticmethod
+    def load_save():
+        conn = sqlite3.connect(os.path.join('assets', 'data.db'))
+        c = conn.cursor()
+
+        c.execute("SELECT * FROM saves")
+        values = ast.literal_eval(crypt.de(c.fetchall()[0][0])) # the complex Decryption alg
+        conn.commit()
+        conn.close()
+        return values
+
+    @staticmethod
+    def change_cache_value(field, value, old):
+        conn = sqlite3.connect(os.path.join('assets', 'data.db'))
+        c = conn.cursor()
+        c.execute(f"UPDATE cache SET {field} = '{value}'")
+
         conn.commit()
         conn.close()
 
@@ -73,22 +115,3 @@ class DB:
         conn.commit()
         conn.close()
         return vals
-
-    @staticmethod
-    def load_all_data():
-        conn = sqlite3.connect(os.path.join('assets', 'data.db'))
-        c = conn.cursor()
-        c.execute("SELECT * FROM cache")
-        values = c.fetchall()
-        conn.commit()
-        conn.close()
-        return values[0]
-
-    @staticmethod
-    def change_cache_value(field, value, old):
-        conn = sqlite3.connect(os.path.join('assets', 'data.db'))
-        c = conn.cursor()
-        c.execute(f"UPDATE cache SET {field} = '{value}'")
-
-        conn.commit()
-        conn.close()

@@ -1,22 +1,13 @@
-from .settings import *
+import requests
+import threading
+import time
+
 from .classes import *
+from .settings import *
+from .extra_screen_functions import *
 
-mouse_rect = pygame.Rect(0, 0, 10, 10)
-select_rect = pygame.Rect(0, 0, 0, 0)
-select_rect_color = GRAY
-
-
-def hover(obj_rect, Screen):
-    mouse_rect.center = pygame.mouse.get_pos()
-    if mouse_rect.colliderect(obj_rect):
-        select_rect.topleft = obj_rect.topleft
-        select_rect.size = obj_rect.size
-
-        ## Not using pygame.draw.rect cuz usme opacity set nhi hoti
-        s_img = pygame.Surface(select_rect.size)
-        s_img.set_alpha(50)
-        s_img.fill(select_rect_color)
-        Screen.blit(s_img, select_rect.topleft)
+# Declaring some Variables
+lboard_data = []
 
 
 def welcome_screen(screen):
@@ -147,7 +138,7 @@ def theme_screen(screen):
 
         back_text = small_font.render('Back', True, theme.font_c)
         back_rect = back_text.get_rect()
-        back_rect.topleft = (10, WH-50)
+        back_rect.topleft = (10, WH - 50)
         screen.blit(back_text, back_rect.topleft)
         hover(back_rect, screen)
 
@@ -180,8 +171,11 @@ def theme_screen(screen):
 
         pygame.display.update()
 
+
 def score_screen(screen, score):
     theme = Themes.active_theme
+    clicked = False
+    mx, my = pygame.mouse.get_pos()
     while True:
         screen.fill(theme.background)
         heading_text = big_font.render('You passed the Level!', True, theme.font_c)
@@ -194,17 +188,85 @@ def score_screen(screen, score):
         heading_rect.center = (WW // 2, 350)
         screen.blit(heading_text, heading_rect.topleft)
 
-        heading_text = small_font.render('Press a key to continue!', True, theme.font_c)
+        heading_text = big_font.render('Continue', True, theme.font_c)
         heading_rect = heading_text.get_rect()
         heading_rect.center = (WW // 2, 450)
         screen.blit(heading_text, heading_rect.topleft)
 
+        hover(heading_rect, screen)
+        if clicked:
+            if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
+                return ['survival']
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return ['quit']
-            elif event.type == pygame.KEYDOWN:
-                return ['survival']
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                return ['survival']
+                clicked = True
+                mx, my = pygame.mouse.get_pos()
+
+        pygame.display.update()
+
+
+# pycharm msg below -_-
+# noinspection PyUnboundLocalVariable
+# pycharm msg above -_-
+
+def leaderboard_screen(screen):
+    theme = Themes.active_theme
+    mx, my = pygame.mouse.get_pos()
+
+    def global_some_data():global lboard_data; lboard_data = get_data()
+
+    t = threading.Thread(target=global_some_data)
+    t.start()
+    clicked = False
+    while True:
+        initial_coordinates = [50, 100]
+        screen.fill(theme.background)
+        heading_text = big_font.render('Click Ball Leaderboard!', True, theme.font_c)
+        heading_rect = heading_text.get_rect()
+        heading_rect.center = (WW // 2, 50)
+        screen.blit(heading_text, heading_rect.topleft)
+
+        if len(lboard_data) != 0:
+            heading_text = medium_font.render('Name', True, theme.font_c)
+            heading_rect = heading_text.get_rect()
+            heading_rect.topleft = (50, 100)
+            screen.blit(heading_text, heading_rect.topleft)
+
+            heading_text = medium_font.render('score', True, theme.font_c)
+            heading_rect = heading_text.get_rect()
+            heading_rect.topleft = (350, 100)
+            screen.blit(heading_text, heading_rect.topleft)
+
+            for obj in lboard_data:
+                initial_coordinates[1] += 50  # control Y change
+                screen.blit(game_font_generator(28).render(obj[0], True, theme.font_c),
+                            (initial_coordinates[0], initial_coordinates[1] + 20))
+                screen.blit(game_font_generator(28).render(str(obj[1]), True, theme.font_c),
+                            (initial_coordinates[0] + 300, initial_coordinates[1] + 20))
+        else:
+            heading_text = medium_font.render('Fetching data...', True, theme.font_c)
+            heading_rect = heading_text.get_rect()
+            heading_rect.center = (WW / 2, 400)
+            screen.blit(heading_text, heading_rect.topleft)
+
+        heading_text = small_font.render('back', True, theme.font_c)
+        heading_rect = heading_text.get_rect()
+        heading_rect.bottomleft = (10, WH - 10)
+        screen.blit(heading_text, heading_rect.topleft)
+        hover(heading_rect, screen)
+
+        if clicked:
+            if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
+                return ['welcome']
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return ['quit']
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                clicked = True
+                mx, my = pygame.mouse.get_pos()
 
         pygame.display.update()

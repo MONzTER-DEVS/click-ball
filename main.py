@@ -162,8 +162,7 @@ while True:
         to_do = theme_screen(screen)        # @todo change this to themes Screen later
 
     elif to_do[0] == 'leaderboard':
-        print("under Dev")
-        to_do = welcome_screen(screen)      # @todo change this to leaderboard Screen later
+        to_do = leaderboard_screen(screen)      # @todo add real content to leaderboard Screen
 
     elif to_do[0] == 'ball':
         print("under Dev")
