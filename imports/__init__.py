@@ -21,4 +21,4 @@ if not os.path.exists(os.path.join('assets', 'data.db')):
 data = DB.load_all_data()
 Themes.set_active_by_name(data[0])
 
-values = DB.load_save()
+# values = DB.load_save()

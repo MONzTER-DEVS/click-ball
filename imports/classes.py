@@ -1,5 +1,5 @@
 # Imports
-import pymunk, pygame, math, os, json
+import pymunk, pygame, math, os, json, random
 from .db_functions import DB
 # from settings import WW, WH
 
@@ -116,6 +116,17 @@ class Portal:
         if obj.rect.colliderect(self.end_rect):
             obj.body.position = self.start_pos
 
+class Particle():
+    particles = []
+    def __init__(self, pos, ran, num):
+        self.pos = pygame.Vector2(pos)
+        self.ran = ran
+        for p in range(num):
+            Particle.particles.append(self)
+    
+    @staticmethod
+    def do_particle_thingy():
+        pass
 
 class Levels:
     levels = []

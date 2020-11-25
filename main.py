@@ -1,5 +1,5 @@
 # Importing
-import pymunk, pygame, time
+import pymunk, pygame, time, random
 
 from imports import *
 
@@ -30,15 +30,15 @@ def remove_lines_of_level_by_number(i, lines):
     Returns empty list, assign this to the lines list
     '''
     for rl in lines:
-        space.remove(rl.body, rl.shape)  # Extremely Necessary
-    return []  # Deleting the lines of the prev level
+        space.remove(rl.body, rl.shape)                         # Extremely Necessary
+    return []                                                   # Deleting the lines of the prev level
 
 current_level = load_level_by_num('The Beginning', 1)
 
 ## ========================= Survival Mode =========================
 def survival_mode(screen):
-    global current_level
     ## -------------------- Initializing Game --------------------
+    global current_level
     score = 0
     st_time = 0  # Time
     death_time = 0  # Death time
@@ -69,6 +69,9 @@ def survival_mode(screen):
                 clicked = True
             if event.type == pygame.KEYDOWN:
                 if moves == 0 and event.key == pygame.K_r:
+                    lines = remove_lines_of_level_by_number(current_level, lines)
+                    current_level = load_level_by_num('noname', 1)
+                    player.body.angular_velocity = 0
                     return ['welcome']
 
 
@@ -107,6 +110,7 @@ def survival_mode(screen):
             death_time = 0
             current_level = load_level_by_num('noname', current_level.number + 1)
             lines = remove_lines_of_level_by_number(current_level, lines)
+            player.body.angular_velocity = 0
             return ['score', score]          # @todo make a score screen ;)
 
 
