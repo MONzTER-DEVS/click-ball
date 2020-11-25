@@ -19,27 +19,44 @@ p_img = skins[0]
 max_speed = 100
 player = DynamicBall((WW // 2, WH // 2), 10, 0, p_img, space)
 flag = VictoryFlag((WW - 100, WH - 100))
-line = StaticLine((WW // 2 - 100, WH // 2 + 100), (WW // 2 + 100, WH // 2 + 100), 10, space)
-level = Levels('AvdaKadavra', os.path.join(lvl_path_50, 'level1.json'))
-
 
 ## -------------------- Some functions --------------------
-def restart_game():
-    pass
+def load_level_by_num(name, i):
+    return Levels(name, os.path.join(lvl_path_50, f'level{i}.json'))
 
+def remove_lines_of_level_by_number(i, lines):
+    '''
+    Returns empty list, assign this to the lines list
+    '''
+    for rl in lines:
+        space.remove(rl.body, rl.shape)  # Extremely Necessary
+    return []  # Deleting the lines of the prev level
 
-def reset_level():
-    pass
+current_level = load_level_by_num('The Beginning', 1)
 
-
+## ========================= Survival Mode =========================
 def survival_mode(screen):
-    # Initialization of the game ;)
+    global current_level
+    ## -------------------- Initializing Game --------------------
     score = 0
     st_time = 0  # Time
-    level_number_to_display = 1
     death_time = 0  # Death time
-    moves = 5
     clicked = False
+
+    ## -------------------- Initializing Level --------------------
+    player.body.position = current_level.dict["player"][0]      ## Player
+    player.body.velocity = (0, 0)                               ## Player
+    flag.rect.bottomleft = current_level.dict["victory"][0]     ## Flag
+    moves = 5                                                   ## Moves
+    ## Lines
+    lines = []
+    line_number = 0
+    for s, e in zip(current_level.dict["start"], current_level.dict["end"]):  # can't use nested cuz it makes wierd things happen xD
+        l = StaticLine(s, e, current_level.dict["thickness"][line_number], space)
+        lines.append(l)
+        line_number += 1
+    line_number = 0
+
     while True:
         screen.fill(Themes.active_theme.background)
 
@@ -51,7 +68,8 @@ def survival_mode(screen):
                 clicked = True
             if event.type == pygame.KEYDOWN:
                 if moves == 0 and event.key == pygame.K_r:
-                    restart_game()
+                    return ['welcome']
+
 
         ## -------------------- Player --------------------
         player.draw(screen)
@@ -72,17 +90,24 @@ def survival_mode(screen):
         if disty > max_speed:
             disty = max_speed
 
-        ## -------------------- Lines --------------------
-        line.draw(screen, Themes.active_theme.platform_c)
 
-        ## Flag
+        ## -------------------- Lines --------------------
+        for line in lines:
+            line.draw(screen, Themes.active_theme.platform_c)
+
+
+        ## -------------------- Flag --------------------
         flag.draw(screen)
         # Checking collision b/w player and the victory flag
         if player.rect.colliderect(flag.rect):
             # Adding to Score and reset score Variables
-            # score += 100 + int(float(100 * current_level['moves']/(current_level['moves']-moves)) / float(time.time() - st_time))
+            score += 100 + int(float(100 * current_level.dict['moves']/(current_level.dict['moves']-moves)) / float(time.time() - st_time))
             st_time = 0
             death_time = 0
+            current_level = load_level_by_num('noname', current_level.number + 1)
+            lines = remove_lines_of_level_by_number(current_level, lines)
+            return ['welcome']          # @todo make a score screen ;)
+
 
         ## -------------------- In-game UI --------------------
         # Displaying the number of moves left
@@ -91,8 +116,9 @@ def survival_mode(screen):
         moves_rect.center = (WW // 2, 50)
         screen.blit(moves_text, moves_rect.topleft)
         # Displaying the level
-        # level_text = small_font.render(f"level: {level_number_to_display}", True, active_theme.font_c)
-        # screen.blit(level_text, (20, 31))
+        level_text = small_font.render(f"level: {current_level.number}", True, Themes.active_theme.font_c)
+        screen.blit(level_text, (20, 31))
+
 
         ## -------------------- Time and stuff --------------------
         if st_time == 0:
@@ -107,6 +133,8 @@ def survival_mode(screen):
                     small_font.render(str(death_time - int(time.time()) + 10), True, Themes.active_theme.font_c),
                     (WW - 50, 31))
 
+
+        ## -------------------- Updating--------------------
         space.step(2 / FPS)
         clock.tick(FPS)
         pygame.display.update()
