@@ -1,4 +1,29 @@
-import sqlite3, os
+import os
+import sqlite3
+
+
+class crypt:
+    key = "}>CX[JAnpm8)H[rKEvrt/kse1G'j{Pd\jxfTNCxU/b4i0MeeV9A(FusO9zd9bM\m"
+    splitter = "z"
+
+    @staticmethod
+    def decrypt(inputed_str):
+        decrypted = ""
+        return decrypted
+
+    @staticmethod
+    def encrypt(string):
+        index = 0
+        encrypted = ""
+        for alpha in string:
+            try:
+                encrypted += str(ord(alpha) * ord(crypt.key[index])) + crypt.splitter
+            except IndexError:
+                encrypted += str(ord(alpha) * ord(crypt.key[index % 64])) + crypt.splitter
+                print(index % 64)
+            finally:
+                index += 1
+        return encrypted
 
 
 class DB:
