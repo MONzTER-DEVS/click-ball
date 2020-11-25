@@ -16,6 +16,7 @@ clock = pygame.time.Clock()
 
 ## Common To both modes
 p_img = skins[0]
+player_speed_factor = 1.1                                       ## Experimental value
 max_speed = 100
 player = DynamicBall((WW // 2, WH // 2), 10, 0, p_img, space)
 flag = VictoryFlag((WW - 100, WH - 100))
@@ -82,7 +83,7 @@ def survival_mode(screen):
         if clicked:
             if moves > 0:
                 moves -= 1
-                player.body.velocity = (distx, disty)
+                player.body.velocity = (distx * player_speed_factor, disty * player_speed_factor)
             clicked = False
         # Limiting the player's velocity (so that it doesn't flies across like hell xD)
         if distx > max_speed:
@@ -158,18 +159,20 @@ while True:
         to_do = game_select_screen(screen)  # @todo Make a Real Campaign mode
 
     elif to_do[0] == 'themes':
-        to_do = theme_screen(screen)  # @todo change this to themes Screen later
+        to_do = theme_screen(screen)        # @todo change this to themes Screen later
 
     elif to_do[0] == 'leaderboard':
         print("under Dev")
-        to_do = welcome_screen(screen)  # @todo change this to leaderboard Screen later
+        to_do = welcome_screen(screen)      # @todo change this to leaderboard Screen later
 
     elif to_do[0] == 'ball':
         print("under Dev")
-        to_do = welcome_screen(screen)  # @todo change this to ball Screen later
+        to_do = welcome_screen(screen)      # @todo change this to ball Screen later
     
     elif to_do[0] == 'score':
         to_do = score_screen(screen, to_do[1])
 
     elif to_do[0] == 'quit':
         break
+
+pygame.quit()
