@@ -7,12 +7,23 @@ class crypt:
     splitter = "z"
 
     @staticmethod
-    def decrypt(inputed_str):
+    def de(inputed_str):
         decrypted = ""
+        encrypted_list = inputed_str[:-1].split(crypt.splitter)
+
+        index = 0
+        for num in encrypted_list:
+            try:
+                decrypted += chr(int(int(num) / ord(crypt.key[index])))
+            except IndexError:
+                decrypted += chr(int(int(num) / ord(crypt.key[index%64])))
+            finally:
+                index += 1
+
         return decrypted
 
     @staticmethod
-    def encrypt(string):
+    def en(string):
         index = 0
         encrypted = ""
         for alpha in string:
@@ -20,7 +31,6 @@ class crypt:
                 encrypted += str(ord(alpha) * ord(crypt.key[index])) + crypt.splitter
             except IndexError:
                 encrypted += str(ord(alpha) * ord(crypt.key[index % 64])) + crypt.splitter
-                print(index % 64)
             finally:
                 index += 1
         return encrypted
