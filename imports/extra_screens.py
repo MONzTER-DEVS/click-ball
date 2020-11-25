@@ -179,3 +179,32 @@ def theme_screen(screen):
                 mx, my = pygame.mouse.get_pos()
 
         pygame.display.update()
+
+def score_screen(screen, score):
+    theme = Themes.active_theme
+    while True:
+        screen.fill(theme.background)
+        heading_text = big_font.render('You passed the Level!', True, theme.font_c)
+        heading_rect = heading_text.get_rect()
+        heading_rect.center = (WW // 2, 50)
+        screen.blit(heading_text, heading_rect.topleft)
+
+        heading_text = medium_font.render(f'Your Score {score}', True, theme.font_c)
+        heading_rect = heading_text.get_rect()
+        heading_rect.center = (WW // 2, 350)
+        screen.blit(heading_text, heading_rect.topleft)
+
+        heading_text = small_font.render('Press a key to continue!', True, theme.font_c)
+        heading_rect = heading_text.get_rect()
+        heading_rect.center = (WW // 2, 450)
+        screen.blit(heading_text, heading_rect.topleft)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return ['quit']
+            elif event.type == pygame.KEYDOWN:
+                return ['survival']
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                return ['survival']
+
+        pygame.display.update()

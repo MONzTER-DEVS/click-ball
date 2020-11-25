@@ -106,7 +106,7 @@ def survival_mode(screen):
             death_time = 0
             current_level = load_level_by_num('noname', current_level.number + 1)
             lines = remove_lines_of_level_by_number(current_level, lines)
-            return ['welcome']          # @todo make a score screen ;)
+            return ['score', score]          # @todo make a score screen ;)
 
 
         ## -------------------- In-game UI --------------------
@@ -125,7 +125,7 @@ def survival_mode(screen):
             st_time = time.time()
         if death_time != 0:
             if death_time - int(time.time()) + 10 <= 0:
-                restart_game()
+                return ['welcome']
 
             # giving a 10 seconds timer and Auto reset if not colliding with the Flag
             if death_time != 0:
@@ -167,6 +167,9 @@ while True:
     elif to_do[0] == 'ball':
         print("under Dev")
         to_do = welcome_screen(screen)  # @todo change this to ball Screen later
+    
+    elif to_do[0] == 'score':
+        to_do = score_screen(screen, to_do[1])
 
     elif to_do[0] == 'quit':
         break
