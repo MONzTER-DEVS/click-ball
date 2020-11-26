@@ -293,7 +293,6 @@ def campaign(screen, current_level):
         pygame.display.update()
 
 
-to_do = welcome_screen(screen)
 
 # Main Loop
 while True:

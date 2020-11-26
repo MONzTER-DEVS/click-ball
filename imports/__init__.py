@@ -1,4 +1,5 @@
 import pygame
+import threading, time
 
 pygame.init()
 
@@ -10,15 +11,53 @@ light_theme = Themes('Bright White', WHITE, L_BLUE, GREEN, PINK, WHITE)
 violet_theme = Themes("Limited Voilet", PURPLE, WHITE, WHITE, WHITE, WHITE)
 dark_light_theme = Themes("Darkest Light", BLACK, WHITE, WHITE, L_BLUE, WHITE)
 dracula_theme = Themes("Dracula", BLACK, PINK, PINK, PINK, WHITE)
+light_theme.set_to_active_theme()
 
 from .extra_screens import *
 from .db_functions import *
 
 # Make DB if it doesnt Exist
-if not os.path.exists(os.path.join('assets', 'data.db')):
-    DB.make_db()
 
-data = DB.load_all_data()
-Themes.set_active_by_name(data[0])
+can_start_game = False
 
-# values = DB.load_save()
+
+def load_data_while_loading_screen():
+    global can_start_game
+    time.sleep(2) # to add delay in loading
+    if not os.path.exists(os.path.join('assets', 'data.db')):
+        DB.make_db()
+    data = DB.load_all_data()
+    Themes.set_active_by_name(data[0])
+    time.sleep(3) # to add delay in loading
+    can_start_game = True
+
+
+t_load_data_while_loading_screen = threading.Thread(target=load_data_while_loading_screen)
+t_load_data_while_loading_screen.start()
+# Starting to load data
+
+# starting screen
+screen_flags = pygame.SCALED | pygame.RESIZABLE
+screen = pygame.display.set_mode((WW, WH), screen_flags)
+pygame.display.set_caption('Click Ball!')
+clock = pygame.time.Clock()
+loading_screen_running = True
+
+
+to_do = ['welcome']
+while loading_screen_running:
+    screen.fill(Themes.active_theme.background)
+    text = big_font.render("Loading Screen", True, Themes.active_theme.font_c)
+    text_rect = text.get_rect()
+    text_rect.center = (WW/2, 50)
+    screen.blit(text, text_rect)
+
+
+    if can_start_game:
+        loading_screen_running = False
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            loading_screen_running = False
+            to_do = ['quit']
+    pygame.display.update()
