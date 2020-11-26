@@ -277,9 +277,10 @@ def level_select_screen(screen):
     clicked = False
     mx, my = pygame.mouse.get_pos()
     level = 1                   ## Default level
-    page = 1                    ## Default page
-    levels_per_page = 5         ## MAX IS '8' ## ONLY PUT VALUES DIVISIBLE BY '2'
+    levels_per_page = 5         
     gap = WH//levels_per_page
+    level_nums_to_display = range(1, levels_per_page+1)
+    page = 1                    ## Default page
     while True:
         screen.fill(theme.background)
         heading_text = big_font.render('Level Select!', True, theme.font_c)
@@ -298,7 +299,7 @@ def level_select_screen(screen):
                 return level
 
         ## -------------------- The level selection --------------------
-        for y, num in zip(range(125, WH, gap), range(1, levels_per_page + 1)):
+        for y, num in zip(range(125, WH, gap), level_nums_to_display):
             # drawing levels
             heading_text = medium_font.render('LEVEL '+str(num), True, theme.font_c)
             heading_rect = heading_text.get_rect()

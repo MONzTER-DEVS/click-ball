@@ -159,7 +159,7 @@ def survival_mode(screen, current_level):
         screen.blit(level_text, (20, 31))
 
         ## -------------------- Updating--------------------
-        space.step(2 / FPS)
+        space.step(1.5 / FPS)
         clock.tick(FPS)
         pygame.display.update()
 
@@ -288,7 +288,7 @@ def campaign(screen, current_level):
         screen.blit(level_text, (20, 31))
 
         ## -------------------- Updating--------------------
-        space.step(2 / FPS)
+        space.step(1.5 / FPS)
         clock.tick(FPS)
         pygame.display.update()
 
