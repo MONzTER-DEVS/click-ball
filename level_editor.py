@@ -1,19 +1,27 @@
 '''
 YaY i made it finally
 Instructions:
-1) Run the file
-2) Click to place line
-3) 'F' to change end of line
-4) use 'UP' and "DOWN" arrow keys to increase and decrease tht thickness of the selected line
-5) 'N' to add a new line and 'D' to delete the current line 
-6) 'Enter' to change line 
-7) 'S' to print the coordinates (for now atleast)
-8) 'M' to change mode (line, flag, player)
-9) If u wanna change these shortcuts, u can tell me or change urself!!
-10) Have fun
-11) Keep Coding :)
+    > Run the file
+    > 'S' to print the coordinates (for now atleast)
+    > 'M' to change mode (line, flag, player, bouncing ball)
+    > If u wanna change these shortcuts, u can tell me or change urself!!
+MODES:
+    line:
+        > Click to place line
+        > 'F' to change end of line
+        > use 'UP' and "DOWN" arrow keys to increase and decrease the thickness of the selected line
+        > 'N' to add a new line and 'D' to delete the current line 
+        > 'Enter' to change line 
+    flag:
+        > Click to place flag
+    player:
+        > Click to place player
+    bouncing ball:
+        > 'N' to add a new ball and 'D' to delete the current ball 
+        > Click to place ball
+        > use 'UP' and "DOWN" arrow keys to increase and decrease the radius of the selected ball
+        > 'Enter' to change ball 
 
-** last and last second are compulsary :p **
 '''
 
 from imports.settings import WW, WH
@@ -154,7 +162,7 @@ def save():
 
 
 ## line / flag / player
-modes = ['line', 'flag', 'player', 'bouncing ball']
+modes = ['line', 'flag', 'player', 'bouncing ball', 'portal']
 mode_index = 0
 mode = modes[mode_index]
 while running:

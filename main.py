@@ -12,7 +12,7 @@ clock = pygame.time.Clock()
 
 ## Common To both modes
 p_img = skins[0]
-player_speed_factor = 1.1  ## Experimental value
+player_speed_factor = 1.2  ## Experimental value
 max_speed = 100
 player = DynamicBall((WW // 2, WH // 2), 10, 0, p_img, space)
 flag = VictoryFlag((WW - 100, WH - 100))
@@ -20,15 +20,20 @@ flag = VictoryFlag((WW - 100, WH - 100))
 
 ## -------------------- Some functions --------------------
 def load_level_by_num(name, i):
-    return Levels.levels[i-1]
+    try:
+        return Levels.levels[i-1]
+    except IndexError:
+        return Levels.levels[0]
 
 
-def remove_lines_of_level_by_number(i, lines):
+def remove_lines_and_balls_of_level_by_number(i, lines, balls):
     '''
-    Returns empty list, assign this to the lines list
+    Returns empty list, assign this to the lines and balls list
     '''
     for rl in lines:
         space.remove(rl.body, rl.shape)  # Extremely Necessary
+    for rb in balls:
+        space.remove(rb.body, rb.shape)  # Extremely Necessary
     return []  # Deleting the lines of the prev level
 
 
@@ -44,7 +49,7 @@ def survival_mode(screen, current_level):
     player.body.position = current_level.dict["player"][0]  ## Player
     player.body.velocity = (0, 0)  ## Player
     flag.rect.bottomleft = current_level.dict["victory"][0]  ## Flag
-    moves = 5  ## Moves
+    moves = current_level.dict["moves"]  ## Moves
     ## Lines
     lines = []
     line_number = 0
@@ -54,6 +59,23 @@ def survival_mode(screen, current_level):
         lines.append(l)
         line_number += 1
     line_number = 0
+    ## Dummy Balls
+    balls = []
+    try:        ## Incase there are no balls ;)
+        for p, r in zip(current_level.dict["ball_center"],
+                        current_level.dict["ball_radius"]):  # can't use nested cuz it makes wierd things happen xD
+            b = DynamicBallWithColor(p, 0, 0, r, space)
+            balls.append(b)
+    except KeyError:
+        pass
+    # ## Portals        EDIT: Don't mind if it is kept here ;)
+    # portals = []
+    # try:
+    #     for p in current_level.dict["ball_center"]:  # can't use nested cuz it makes wierd things happen xD
+    #         l = DynamicBall(p, 0, 0,  player.image, space)
+    #         balls.append(l)
+    # except KeyError:
+    #     pass
 
     while True:
         screen.fill(Themes.active_theme.background)
@@ -61,11 +83,11 @@ def survival_mode(screen, current_level):
         if st_time == 0:
 
             # load level
-            remove_lines_of_level_by_number(current_level.number, lines)
+            lines = balls = remove_lines_and_balls_of_level_by_number(current_level.number, lines, balls)
             player.body.position = current_level.dict["player"][0]  ## Player
             player.body.velocity = (0, 0)  ## Player
             flag.rect.bottomleft = current_level.dict["victory"][0]  ## Flag
-            moves = 5  ## Moves
+            moves = current_level.dict["moves"]  ## Moves
             ## Lines
             lines = []
             line_number = 0
@@ -75,11 +97,20 @@ def survival_mode(screen, current_level):
                 lines.append(l)
                 line_number += 1
             line_number = 0
+            ## Dummy Balls
+            balls = []
+            try:        ## Incase there are no balls ;)
+                for p, r in zip(current_level.dict["ball_center"],
+                                current_level.dict["ball_radius"]):  # can't use nested cuz it makes wierd things happen xD
+                    b = DynamicBallWithColor(p, 0, 0, r, space)
+                    balls.append(b)
+            except KeyError:
+                pass
 
             st_time = time.time()
         if death_time != 0:
             if death_time - int(time.time()) + 10 <= 0:
-                remove_lines_of_level_by_number(current_level.number, lines)
+                lines = balls = remove_lines_and_balls_of_level_by_number(current_level.number, lines, balls)
                 return ['welcome']  # @todo make a Death screen
 
             # giving a 10 seconds timer and Auto reset if not colliding with the Flag
@@ -96,7 +127,7 @@ def survival_mode(screen, current_level):
                 clicked = True
             if event.type == pygame.KEYDOWN:
                 if moves == 0 and event.key == pygame.K_r:
-                    lines = remove_lines_of_level_by_number(current_level, lines)
+                    lines = balls = remove_lines_and_balls_of_level_by_number(current_level.number, lines, balls)
                     current_level = load_level_by_num('noname', 1)
                     player.body.angular_velocity = 0
                     return ['welcome']
@@ -125,9 +156,11 @@ def survival_mode(screen, current_level):
         if disty > max_speed:
             disty = max_speed
 
-        ## -------------------- Lines --------------------
+        ## -------------------- Lines and balls --------------------
         for line in lines:
             line.draw(screen, Themes.active_theme.platform_c)
+        for ball in balls:
+            ball.draw(screen)
 
         ## -------------------- Flag --------------------
         flag.draw(screen)
@@ -139,7 +172,7 @@ def survival_mode(screen, current_level):
             st_time = 0
             death_time = 0
             current_level = load_level_by_num('noname', current_level.number + 1)
-            lines = remove_lines_of_level_by_number(current_level, lines)
+            lines = balls = remove_lines_and_balls_of_level_by_number(current_level.number, lines, balls)
             player.body.angular_velocity = 0
             score_data = score_screen(screen, score)
             if score_data[0] == 'quit':
@@ -173,7 +206,7 @@ def campaign(screen, current_level):
     player.body.position = current_level.dict["player"][0]  ## Player
     player.body.velocity = (0, 0)  ## Player
     flag.rect.bottomleft = current_level.dict["victory"][0]  ## Flag
-    moves = 5  ## Moves
+    moves = current_level.dict["moves"]  ## Moves
     ## Lines
     lines = []
     line_number = 0
@@ -183,6 +216,15 @@ def campaign(screen, current_level):
         lines.append(l)
         line_number += 1
     line_number = 0
+    ## Dummy Balls
+    balls = []
+    try:        ## Incase there are no balls ;)
+        for p, r in zip(current_level.dict["ball_center"],
+                        current_level.dict["ball_radius"]):  # can't use nested cuz it makes wierd things happen xD
+            b = DynamicBallWithColor(p, 0, 0, r, space)
+            balls.append(b)
+    except KeyError:
+        pass
 
     while True:
         screen.fill(Themes.active_theme.background)
@@ -190,11 +232,11 @@ def campaign(screen, current_level):
         if st_time == 0:
 
             # load level
-            remove_lines_of_level_by_number(current_level.number, lines)
+            lines = balls = remove_lines_and_balls_of_level_by_number(current_level.number, lines, balls)
             player.body.position = current_level.dict["player"][0]  ## Player
             player.body.velocity = (0, 0)  ## Player
             flag.rect.bottomleft = current_level.dict["victory"][0]  ## Flag
-            moves = 5  ## Moves
+            moves = current_level.dict["moves"]  ## Moves
             ## Lines
             lines = []
             line_number = 0
@@ -204,11 +246,20 @@ def campaign(screen, current_level):
                 lines.append(l)
                 line_number += 1
             line_number = 0
+            ## Dummy Balls
+            balls = []
+            try:        ## Incase there are no balls ;)
+                for p, r in zip(current_level.dict["ball_center"],
+                                current_level.dict["ball_radius"]):  # can't use nested cuz it makes wierd things happen xD
+                    b = DynamicBallWithColor(p, 0, 0, r, space)
+                    balls.append(b)
+            except KeyError:
+                pass
 
             st_time = time.time()
         if death_time != 0:
             if death_time - int(time.time()) + 10 <= 0:
-                remove_lines_of_level_by_number(current_level.number, lines)
+                lines = balls = remove_lines_and_balls_of_level_by_number(current_level.number, lines, balls)
                 return ['welcome']  # @todo make a Death screen
 
             # giving a 10 seconds timer and Auto reset if not colliding with the Flag
@@ -225,7 +276,7 @@ def campaign(screen, current_level):
                 clicked = True
             if event.type == pygame.KEYDOWN:
                 if moves == 0 and event.key == pygame.K_r:
-                    lines = remove_lines_of_level_by_number(current_level, lines)
+                    lines = balls = remove_lines_and_balls_of_level_by_number(current_level, lines, balls)
                     current_level = load_level_by_num('noname', 1)
                     player.body.angular_velocity = 0
                     return ['welcome']
@@ -254,9 +305,11 @@ def campaign(screen, current_level):
         if disty > max_speed:
             disty = max_speed
 
-        ## -------------------- Lines --------------------
+        ## -------------------- Lines and balls --------------------
         for line in lines:
             line.draw(screen, Themes.active_theme.platform_c)
+        for ball in balls:
+            ball.draw(screen, Themes.active_theme.platform_c)
 
         ## -------------------- Flag --------------------
         flag.draw(screen)
@@ -268,7 +321,7 @@ def campaign(screen, current_level):
             st_time = 0
             death_time = 0
             current_level = load_level_by_num('noname', current_level.number + 1)
-            lines = remove_lines_of_level_by_number(current_level, lines)
+            lines = balls = remove_lines_and_balls_of_level_by_number(current_level, lines, balls)
             player.body.angular_velocity = 0
             score_data = score_screen(screen, score)
             if score_data[0] == 'quit':

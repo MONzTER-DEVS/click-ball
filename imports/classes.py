@@ -47,6 +47,35 @@ class DynamicBall:
         surf.blit(rotated_image, new_rect.topleft)
 
 
+class DynamicBallWithColor:
+    def __init__(self, pos, vx, vy, radius, space):
+        ## Body
+        self.body = pymunk.Body(body_type=pymunk.Body.DYNAMIC)  ## name suggests everything -_-
+        self.body.position = tuple(pos)  ## name suggests everything -_-
+        self.body.velocity = vx, vy  ## name suggests everything -_-
+        ## Shape
+        self.shape = pymunk.Circle(self.body, radius)  ## this is the collision shape
+        self.shape.density = 1  ## if set to 0, body will behave wierdly
+        self.shape.elasticity = 0.50  ## name suggests everything -_-
+        self.shape.friction = GLOBAL_FRICTION
+        ## Adding to the space
+        space.add(self.body, self.shape)
+        self.shape.collision_type = 1  ## idk wht this does, but if i comment it, the ball doesn't move
+        ## This will b used for collsions for pygame
+        self.rect = pygame.Rect(
+            self.body.position.x,
+            self.body.position.y,
+            self.shape.radius * 2,
+            self.shape.radius * 2
+        )
+
+    def draw(self, surf, color):
+        ## Pygame comes into action ;)
+        x, y = self.body.position
+        self.rect.center = self.shape.body.position
+        pygame.draw.ellipse(surf, color, self.rect)
+
+
 # Box is slow so just draw a line with the width ;)
 # looks the same tho
 class StaticLine:
