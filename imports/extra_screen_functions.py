@@ -7,7 +7,7 @@ select_rect_color = GRAY
 
 
 def get_data():
-    req = requests.get("http://cb-leaderboard.herokuapp.com/get", params={'game': 'physics'})
+    req = requests.get("http://cb-leaderboard.herokuapp.com/get", params={'game': 'physics'}, timeout=90)
     req = req.json()
     to_return = []
     if len(req) > 10:

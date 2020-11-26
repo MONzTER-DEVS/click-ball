@@ -23,12 +23,13 @@ can_start_game = False
 
 def load_data_while_loading_screen():
     global can_start_game
-    time.sleep(2) # to add delay in loading
     if not os.path.exists(os.path.join('assets', 'data.db')):
         DB.make_db()
     data = DB.load_all_data()
     Themes.set_active_by_name(data[0])
-    time.sleep(3) # to add delay in loading
+    time.sleep(2)  # to add delay in loading
+
+    # change this at the absolute end else conflicts will happen
     can_start_game = True
 
 
@@ -43,15 +44,13 @@ pygame.display.set_caption('Click Ball!')
 clock = pygame.time.Clock()
 loading_screen_running = True
 
-
 to_do = ['welcome']
 while loading_screen_running:
     screen.fill(Themes.active_theme.background)
     text = big_font.render("Loading Screen", True, Themes.active_theme.font_c)
     text_rect = text.get_rect()
-    text_rect.center = (WW/2, 50)
+    text_rect.center = (WW / 2, 50)
     screen.blit(text, text_rect)
-
 
     if can_start_game:
         loading_screen_running = False

@@ -34,14 +34,14 @@ def welcome_screen(screen):
                 return ['game']
 
         # Themes Screen
-        heading_text = small_font.render('Themes', True, theme.font_c)
+        heading_text = small_font.render('Settings', True, theme.font_c)
         heading_rect = heading_text.get_rect()
         heading_rect.center = (WW / 2, WH - 100)
         screen.blit(heading_text, heading_rect.topleft)
         hover(heading_rect, screen)
         if clicked:
             if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
-                return ['themes']
+                return ['settings']
 
         # Leaderboard
         heading_text = small_font.render('Leaderboard', True, theme.font_c)
@@ -52,16 +52,6 @@ def welcome_screen(screen):
         if clicked:
             if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
                 return ['leaderboard']
-
-        # Ball Screen
-        heading_text = small_font.render('Change Ball', True, theme.font_c)
-        heading_rect = heading_text.get_rect()
-        heading_rect.center = (WW * 7 / 8, WH - 50)
-        screen.blit(heading_text, heading_rect.topleft)
-        hover(heading_rect, screen)
-        if clicked:
-            if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
-                return ['ball']
 
         # Events
         clicked = False
@@ -138,13 +128,13 @@ def theme_screen(screen):
 
         back_text = small_font.render('Back', True, theme.font_c)
         back_rect = back_text.get_rect()
-        back_rect.topleft = (10, WH - 50)
+        back_rect.bottomleft = (10, WH - 10)
         screen.blit(back_text, back_rect.topleft)
         hover(back_rect, screen)
 
         if clicked:
             if back_rect.left < mx < back_rect.right and back_rect.top < my < back_rect.bottom:
-                return ['welcome']
+                return ['settings']
 
         for them, y in zip(Themes.themes, range(200, WH - 100, 60)):
             heading_text = medium_font.render(them.name, True, theme.font_c)
@@ -216,7 +206,9 @@ def leaderboard_screen(screen):
     theme = Themes.active_theme
     mx, my = pygame.mouse.get_pos()
 
-    def global_some_data():global lboard_data; lboard_data = get_data()
+    def global_some_data():
+        global lboard_data;
+        lboard_data = get_data()
 
     t = threading.Thread(target=global_some_data)
     t.start()
@@ -252,7 +244,7 @@ def leaderboard_screen(screen):
             heading_rect.center = (WW / 2, 400)
             screen.blit(heading_text, heading_rect.topleft)
 
-        heading_text = small_font.render('back', True, theme.font_c)
+        heading_text = small_font.render('Back', True, theme.font_c)
         heading_rect = heading_text.get_rect()
         heading_rect.bottomleft = (10, WH - 10)
         screen.blit(heading_text, heading_rect.topleft)
@@ -276,14 +268,14 @@ def level_select_screen(screen):
     theme = Themes.active_theme
     clicked = False
     mx, my = pygame.mouse.get_pos()
-    level = 1                   ## Default level
-    levels_per_page = 5         
-    gap = WH//levels_per_page
+    level = 1  ## Default level
+    levels_per_page = 5
+    gap = WH // levels_per_page
 
     max_page, min_page = 10, 1
-    page = 1                    ## Default page
+    page = 1  ## Default page
 
-    level_nums_to_display = range(((page-1) * levels_per_page) + 1, (page * levels_per_page) + 1)
+    level_nums_to_display = range(((page - 1) * levels_per_page) + 1, (page * levels_per_page) + 1)
 
     while True:
         screen.fill(theme.background)
@@ -294,7 +286,7 @@ def level_select_screen(screen):
 
         heading_text = medium_font.render('Continue', True, theme.font_c)
         heading_rect = heading_text.get_rect()
-        heading_rect.center = (WW-100, WH-50)
+        heading_rect.center = (WW - 100, WH - 50)
         screen.blit(heading_text, heading_rect.topleft)
 
         hover(heading_rect, screen)
@@ -305,35 +297,35 @@ def level_select_screen(screen):
         ## Next Page
         heading_text = medium_font.render('->', True, theme.font_c)
         heading_rect = heading_text.get_rect()
-        heading_rect.center = (WW//2 + 150, WH//2)
+        heading_rect.center = (WW // 2 + 150, WH // 2)
         screen.blit(heading_text, heading_rect.topleft)
 
         hover(heading_rect, screen)
         if clicked and page < max_page:
             if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
                 page += 1
-                level_nums_to_display = range(((page-1) * levels_per_page) + 1, (page * levels_per_page) + 1)
+                level_nums_to_display = range(((page - 1) * levels_per_page) + 1, (page * levels_per_page) + 1)
                 clicked = False
 
         ## Prev Page
         heading_text = medium_font.render('<-', True, theme.font_c)
         heading_rect = heading_text.get_rect()
-        heading_rect.center = (WW//2 - 150, WH//2)
+        heading_rect.center = (WW // 2 - 150, WH // 2)
         screen.blit(heading_text, heading_rect.topleft)
 
         hover(heading_rect, screen)
         if clicked and page > min_page:
             if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
                 page -= 1
-                level_nums_to_display = range(((page-1) * levels_per_page) + 1, (page * levels_per_page) + 1)
+                level_nums_to_display = range(((page - 1) * levels_per_page) + 1, (page * levels_per_page) + 1)
                 clicked = False
 
         ## -------------------- The level selection --------------------
         for y, num in zip(range(125, WH, gap), level_nums_to_display):
             # drawing levels
-            heading_text = medium_font.render('LEVEL '+str(num), True, theme.font_c)
+            heading_text = medium_font.render('LEVEL ' + str(num), True, theme.font_c)
             heading_rect = heading_text.get_rect()
-            heading_rect.center = (WW//2, y)
+            heading_rect.center = (WW // 2, y)
             screen.blit(heading_text, heading_rect.topleft)
             ## selecting and hovering
             hover(heading_rect, screen)
@@ -354,4 +346,56 @@ def level_select_screen(screen):
                 clicked = True
                 mx, my = pygame.mouse.get_pos()
 
+        pygame.display.update()
+
+
+def settings_screen(screen):
+    theme = Themes.active_theme
+    clicked = False
+    mx, my = pygame.mouse.get_pos()
+    while True:
+        screen.fill(theme.background)
+
+        heading_text = big_font.render('Settings', True, theme.font_c)
+        heading_rect = heading_text.get_rect()
+        heading_rect.center = (WW // 2, 50)
+        screen.blit(heading_text, heading_rect.topleft)
+
+        heading_text = medium_font.render('Change Theme', True, theme.font_c)
+        rect = heading_text.get_rect()
+        rect.center = (WW // 2, 250)
+        screen.blit(heading_text, rect.topleft)
+        hover(rect, screen)
+
+        if clicked:
+            if rect.left < mx < rect.right and rect.top < my < rect.bottom:
+                return ['themes']
+
+        heading_text = medium_font.render('Change Ball', True, theme.font_c)
+        rect = heading_text.get_rect()
+        rect.center = (WW // 2, 325)
+        screen.blit(heading_text, rect.topleft)
+        hover(rect, screen)
+
+        if clicked:
+            if rect.left < mx < rect.right and rect.top < my < rect.bottom:
+                return ['ball']
+
+        heading_text = small_font.render('Back', True, theme.font_c)
+        rect = heading_text.get_rect()
+        rect.bottomleft = (10, WH-10)
+        screen.blit(heading_text, rect.topleft)
+        hover(rect, screen)
+
+        if clicked:
+            if rect.left < mx < rect.right and rect.top < my < rect.bottom:
+                return ['welcome']
+
+
+        clicked = False
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: return ['quit']
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                clicked = True
+                mx, my = pygame.mouse.get_pos()
         pygame.display.update()

@@ -293,7 +293,6 @@ def campaign(screen, current_level):
         pygame.display.update()
 
 
-
 # Main Loop
 while True:
     if to_do[0] == 'game':
@@ -304,6 +303,9 @@ while True:
 
     elif to_do[0] == 'survival':
         to_do = survival_mode(screen, load_level_by_num('noname', 1))
+
+    elif to_do[0] == 'settings':
+        to_do = settings_screen(screen)
 
     elif to_do[0] == 'campaign':
         level_num = level_select_screen(screen)
@@ -320,7 +322,7 @@ while True:
 
     elif to_do[0] == 'ball':
         print("under Dev")
-        to_do = welcome_screen(screen)  # @todo change this to ball Screen later
+        to_do = settings_screen(screen)  # @todo change this to ball Screen later
 
     elif to_do[0] == 'quit':
         break
