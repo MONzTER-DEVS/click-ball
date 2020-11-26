@@ -1,6 +1,6 @@
 import requests
 
-from .settings import *
+from imports.settings import *
 mouse_rect = pygame.Rect(0, 0, 10, 10)
 select_rect = pygame.Rect(0, 0, 0, 0)
 select_rect_color = GRAY

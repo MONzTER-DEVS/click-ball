@@ -1,9 +1,5 @@
-import requests
 import threading
-import time
-
-from .classes import *
-from .settings import *
+from imports.classes import *
 from .extra_screen_functions import *
 
 # Declaring some Variables
@@ -383,14 +379,13 @@ def settings_screen(screen):
 
         heading_text = small_font.render('Back', True, theme.font_c)
         rect = heading_text.get_rect()
-        rect.bottomleft = (10, WH-10)
+        rect.bottomleft = (10, WH - 10)
         screen.blit(heading_text, rect.topleft)
         hover(rect, screen)
 
         if clicked:
             if rect.left < mx < rect.right and rect.top < my < rect.bottom:
                 return ['welcome']
-
 
         clicked = False
         for event in pygame.event.get():
