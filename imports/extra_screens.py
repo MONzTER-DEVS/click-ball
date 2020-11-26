@@ -270,3 +270,57 @@ def leaderboard_screen(screen):
                 mx, my = pygame.mouse.get_pos()
 
         pygame.display.update()
+
+
+def level_select_screen(screen):
+    theme = Themes.active_theme
+    clicked = False
+    mx, my = pygame.mouse.get_pos()
+    level = 1                   ## Default level
+    page = 1                    ## Default page
+    levels_per_page = 5         ## MAX IS '8' ## ONLY PUT VALUES DIVISIBLE BY '2'
+    gap = WH//levels_per_page
+    while True:
+        screen.fill(theme.background)
+        heading_text = big_font.render('Level Select!', True, theme.font_c)
+        heading_rect = heading_text.get_rect()
+        heading_rect.center = (WW // 2, 50)
+        screen.blit(heading_text, heading_rect.topleft)
+
+        heading_text = medium_font.render('Continue', True, theme.font_c)
+        heading_rect = heading_text.get_rect()
+        heading_rect.center = (WW-100, WH-50)
+        screen.blit(heading_text, heading_rect.topleft)
+
+        hover(heading_rect, screen)
+        if clicked:
+            if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
+                return level
+
+        ## -------------------- The level selection --------------------
+        for y, num in zip(range(125, WH, gap), range(1, levels_per_page + 1)):
+            # drawing levels
+            heading_text = medium_font.render('LEVEL '+str(num), True, theme.font_c)
+            heading_rect = heading_text.get_rect()
+            heading_rect.center = (WW//2, y)
+            screen.blit(heading_text, heading_rect.topleft)
+            ## selecting and hovering
+            hover(heading_rect, screen)
+            if clicked:
+                if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
+                    level = num
+            ## Drawing a selection rectangle
+            if num == level:
+                s_img = pygame.Surface(heading_rect.size)
+                s_img.set_alpha(100)
+                s_img.fill(select_rect_color)
+                screen.blit(s_img, heading_rect.topleft)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return 'quit'
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                clicked = True
+                mx, my = pygame.mouse.get_pos()
+
+        pygame.display.update()
