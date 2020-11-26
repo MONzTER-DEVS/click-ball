@@ -35,6 +35,3 @@ for img_name in os.listdir(img_path):
 ## Levels
 lvl_path_50 = os.path.join('assets', 'levels', '1-50')
 levels = []
-for lvl_name in os.listdir(lvl_path_50):
-    if os.path.isfile(os.path.join(lvl_path_50, lvl_name)):
-        levels.append(os.path.join(lvl_path_50, lvl_name))

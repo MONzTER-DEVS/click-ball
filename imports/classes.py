@@ -1,9 +1,14 @@
 # Imports
-import pymunk, pygame, math, os, json, random
-from .db_functions import DB
+import json
+import math
+import os
+import pygame
+import pymunk
+
 # from settings import WW, WH
 
 GLOBAL_FRICTION = 0.5
+
 
 # Dynamic means it will move
 class DynamicBall:
@@ -40,6 +45,7 @@ class DynamicBall:
         new_rect = rotated_image.get_rect(center=self.image.get_rect(topleft=self.rect.topleft).center)
 
         surf.blit(rotated_image, new_rect.topleft)
+
 
 # Box is slow so just draw a line with the width ;)
 # looks the same tho
@@ -90,7 +96,6 @@ class Themes:
     def set_to_active_theme(self):
         Themes.active_theme = self
 
-
     @staticmethod
     def set_active_by_name(name):
         for theme in Themes.themes:
@@ -103,8 +108,8 @@ class Portal:
         self.start_pos = start_pos
         self.end_pos = end_pos
         self.radius = radius
-        self.start_rect = pygame.Rect(self.start_pos, 2*self.radius, 2*self.radius)
-        self.end_rect = pygame.Rect(self.end_pos, 2*self.radius, 2*self.radius)
+        self.start_rect = pygame.Rect(self.start_pos, 2 * self.radius, 2 * self.radius)
+        self.end_rect = pygame.Rect(self.end_pos, 2 * self.radius, 2 * self.radius)
 
     def draw(self, surf, color):
         pygame.draw.ellipse(surf, color, self.start_rect)
@@ -116,25 +121,26 @@ class Portal:
         if obj.rect.colliderect(self.end_rect):
             obj.body.position = self.start_pos
 
+
 class Particle():
     particles = []
+
     def __init__(self, pos, ran, num):
         self.pos = pygame.Vector2(pos)
         self.ran = ran
         for p in range(num):
             Particle.particles.append(self)
-    
+
     @staticmethod
     def do_particle_thingy():
         pass
 
+
 class Levels:
     levels = []
 
-    def __init__(self, name, json_path):
-        f = open(json_path, 'r')
-        self.dict = json.load(f)
-        f.close()
+    def __init__(self, name, data):
+        self.dict = data
         self.name = name
-        Levels.levels.append(self.dict)
-        self.number = Levels.levels.index(self.dict) + 1
+        self.number = len(Levels.levels) + 1
+        Levels.levels.append(self)

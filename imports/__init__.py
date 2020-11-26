@@ -1,5 +1,5 @@
 import pygame
-import threading, time
+import time
 
 pygame.init()
 
@@ -27,7 +27,12 @@ def load_data_while_loading_screen():
         DB.make_db()
     data = DB.load_all_data()
     Themes.set_active_by_name(data[0])
-    time.sleep(2)  # to add delay in loading
+
+    for x in range(1, len(os.listdir(os.path.join('assets', 'levels')))+1):
+        f = open(os.path.join('assets', 'levels', f'level{x}.json'))
+        Levels(name='placeholder', data=json.load(f))
+        f.close()
+    time.sleep(2)
 
     # change this at the absolute end else conflicts will happen
     can_start_game = True

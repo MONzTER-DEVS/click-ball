@@ -1,6 +1,3 @@
-# Importing
-import pymunk, pygame, time, random
-
 from imports import *
 
 ## -------- PyMunk Initialization --------
@@ -23,7 +20,7 @@ flag = VictoryFlag((WW - 100, WH - 100))
 
 ## -------------------- Some functions --------------------
 def load_level_by_num(name, i):
-    return Levels(name, os.path.join(lvl_path_50, f'level{i}.json'))
+    return Levels.levels[i-1]
 
 
 def remove_lines_of_level_by_number(i, lines):
