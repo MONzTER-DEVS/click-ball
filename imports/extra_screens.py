@@ -279,8 +279,12 @@ def level_select_screen(screen):
     level = 1                   ## Default level
     levels_per_page = 5         
     gap = WH//levels_per_page
-    level_nums_to_display = range(1, levels_per_page+1)
+
+    max_page, min_page = 10, 1
     page = 1                    ## Default page
+
+    level_nums_to_display = range(((page-1) * levels_per_page) + 1, (page * levels_per_page) + 1)
+
     while True:
         screen.fill(theme.background)
         heading_text = big_font.render('Level Select!', True, theme.font_c)
@@ -297,6 +301,32 @@ def level_select_screen(screen):
         if clicked:
             if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
                 return level
+
+        ## Next Page
+        heading_text = medium_font.render('->', True, theme.font_c)
+        heading_rect = heading_text.get_rect()
+        heading_rect.center = (WW//2 + 150, WH//2)
+        screen.blit(heading_text, heading_rect.topleft)
+
+        hover(heading_rect, screen)
+        if clicked and page < max_page:
+            if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
+                page += 1
+                level_nums_to_display = range(((page-1) * levels_per_page) + 1, (page * levels_per_page) + 1)
+                clicked = False
+
+        ## Prev Page
+        heading_text = medium_font.render('<-', True, theme.font_c)
+        heading_rect = heading_text.get_rect()
+        heading_rect.center = (WW//2 - 150, WH//2)
+        screen.blit(heading_text, heading_rect.topleft)
+
+        hover(heading_rect, screen)
+        if clicked and page > min_page:
+            if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
+                page -= 1
+                level_nums_to_display = range(((page-1) * levels_per_page) + 1, (page * levels_per_page) + 1)
+                clicked = False
 
         ## -------------------- The level selection --------------------
         for y, num in zip(range(125, WH, gap), level_nums_to_display):
