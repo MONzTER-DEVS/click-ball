@@ -39,9 +39,8 @@ current_level = load_level_by_num('The Beginning', 1)
 
 
 ## ========================= Survival Mode =========================
-def survival_mode(screen):
+def survival_mode(screen, current_level):
     ## -------------------- Initializing Game --------------------
-    global current_level
     score = 0
     st_time = 0  # Time
     death_time = 0  # Death time
@@ -66,10 +65,28 @@ def survival_mode(screen):
         screen.fill(Themes.active_theme.background)
         ## -------------------- Time and stuff --------------------
         if st_time == 0:
+
+            # load level
+            remove_lines_of_level_by_number(current_level.number, lines)
+            player.body.position = current_level.dict["player"][0]  ## Player
+            player.body.velocity = (0, 0)  ## Player
+            flag.rect.bottomleft = current_level.dict["victory"][0]  ## Flag
+            moves = 5  ## Moves
+            ## Lines
+            lines = []
+            line_number = 0
+            for s, e in zip(current_level.dict["start"],
+                            current_level.dict["end"]):  # can't use nested cuz it makes wierd things happen xD
+                l = StaticLine(s, e, current_level.dict["thickness"][line_number], space)
+                lines.append(l)
+                line_number += 1
+            line_number = 0
+
             st_time = time.time()
         if death_time != 0:
             if death_time - int(time.time()) + 10 <= 0:
-                return ['welcome']
+                remove_lines_of_level_by_number(current_level.number, lines)
+                return ['welcome']  # @todo make a Death screen
 
             # giving a 10 seconds timer and Auto reset if not colliding with the Flag
             if death_time != 0:
@@ -104,7 +121,7 @@ def survival_mode(screen):
                 moves -= 1
                 player.body.velocity = (distx * player_speed_factor, disty * player_speed_factor)
 
-            if moves == 0 and death_time == 0: # Start Death timer if not already running
+            if moves == 0 and death_time == 0:  # Start Death timer if not already running
                 death_time = int(time.time())
             clicked = False
 
@@ -130,7 +147,9 @@ def survival_mode(screen):
             current_level = load_level_by_num('noname', current_level.number + 1)
             lines = remove_lines_of_level_by_number(current_level, lines)
             player.body.angular_velocity = 0
-            return ['score', score]  # @todo make a score screen ;)
+            score_data = score_screen(screen, score)
+            if score_data[0] == 'quit':
+                return ['quit']
 
         ## -------------------- In-game UI --------------------
         # Displaying the number of moves left
@@ -159,7 +178,7 @@ while True:
         to_do = welcome_screen(screen)
 
     elif to_do[0] == 'survival':
-        to_do = survival_mode(screen)
+        to_do = survival_mode(screen, current_level)
 
     elif to_do[0] == 'campaign':
         print("under Dev")
@@ -174,9 +193,6 @@ while True:
     elif to_do[0] == 'ball':
         print("under Dev")
         to_do = welcome_screen(screen)  # @todo change this to ball Screen later
-
-    elif to_do[0] == 'score':
-        to_do = score_screen(screen, to_do[1])
 
     elif to_do[0] == 'quit':
         break
