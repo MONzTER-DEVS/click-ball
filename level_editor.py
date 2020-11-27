@@ -125,6 +125,20 @@ selected_line_index = 0
 selected_line = lines[selected_line_index]
 selected_line_end = 'start'
 
+## portals
+num_of_portals = 0
+portals = []
+for i in range(num_of_portals):
+    p = Portal((WW//2, 100), (WW//2, WH-100), 10)
+    portals.append(p)
+
+selected_portal_index = 0
+selected_portal_end = 'start'
+try:
+    selected_portal = portals[selected_portal_index]
+except IndexError:
+    pass
+
 running = True
 clicked = False
 
@@ -135,6 +149,8 @@ def save():
     widths = []
     ball_positions = []
     ball_radius = []
+    portal_start_positions = []
+    portal_end_positions = []
     ## Lines
     for line in lines:
         start_positions.append(line.start_pos)
@@ -148,6 +164,10 @@ def save():
     for ball in balls:
         ball_positions.append(ball.center)
         ball_radius.append(ball.radius)
+    ## Portals
+    for portal in portals:
+        portal_start_positions.append(portal.start_pos)
+        portal_end_positions.append(portal.end_pos)
 
     # printing the final result ;)
     print('--------------------------------------------------')
@@ -171,7 +191,9 @@ def save():
     'victory':victory_position,
     'player':player_position,
     'ball_center':ball_positions,
-    'ball_radius':ball_radius
+    'ball_radius':ball_radius, 
+    'portal_start':portal_start_positions, 
+    'portal_end':portal_end_positions
     }
 
     f_name = str(len(os.listdir(os.path.join('assets', 'level_editor_saves'))))
@@ -266,6 +288,29 @@ while running:
                 ## To decrease radius, press down arrow
                 if e.key == pygame.K_DOWN:
                     selected_ball.radius -= 5
+            
+            ## Will only run if mode is portal
+            if mode == 'portal':
+                ## iterating thru portals
+                if e.key == pygame.K_RETURN:
+                    selected_portal_index += 1
+                    
+                ## iterating thru portal ends
+                if e.key == pygame.K_f:
+                    if selected_portal_end == 'start':
+                        selected_portal_end = 'end'
+                    elif selected_portal_end == 'end':
+                        selected_portal_end = 'start'
+
+                ## adding a new portal
+                if e.key == pygame.K_n:
+                    p = Portal((WW//2, 100), (WW//2, WH-100), 10)
+                    portals.append(p)
+                    selected_portal_index = portals.index(p) 
+                
+                ## deleting the current portal
+                if e.key == pygame.K_d:
+                    portals.remove(selected_portal)
 
     ## Drawing the grid
     for x in range(0, WW, GRID_SIZE):
@@ -284,6 +329,12 @@ while running:
         selected_ball = balls[selected_ball_index]
     except IndexError:
         selected_ball_index = 0
+    
+    ## Defining the selected portal
+    try:
+        selected_portal = portals[selected_portal_index]
+    except IndexError:
+        selected_portal_index = 0
 
     ## Defining mode
     mode_indicator = font.render("Mode: "+mode, True, (0, 0, 0))     ## Indicating current mode
@@ -315,6 +366,16 @@ while running:
                 ball.center = (mx, my)
         else:
             ball.color = BALL_COLOR
+
+    ## Drawing portals
+    for portal in portals:
+        portal.draw()
+        if portal == selected_portal and mode == 'portal':
+            if clicked and mode == 'portal':
+                if selected_portal_end == 'start':
+                    portal.start_pos = (mx, my)
+                if selected_portal_end == 'end':
+                    portal.end_pos = (mx, my)
 
     ## Drawing flag
     if clicked and mode == 'flag':
