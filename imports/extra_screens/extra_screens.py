@@ -49,6 +49,16 @@ def welcome_screen(screen):
             if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
                 return ['leaderboard']
 
+        # Exit
+        heading_text = small_font.render('Exit', True, theme.font_c)
+        heading_rect = heading_text.get_rect()
+        heading_rect.center = (WW - 50, WH - 50)
+        screen.blit(heading_text, heading_rect.topleft)
+        hover(heading_rect, screen)
+        if clicked:
+            if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
+                return ['quit']
+
         # Events
         clicked = False
         for event in pygame.event.get():
