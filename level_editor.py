@@ -42,6 +42,7 @@ LINE_COLOR = (100, 255, 255)
 SELECTED_BALL_COLOR = (255, 255, 50)
 BALL_COLOR = (100, 255, 255)
 
+
 class Line:
     def __init__(self, x1, y1, x2, y2, width):
         self.start_pos = (x1, y1)
@@ -52,6 +53,7 @@ class Line:
     def draw(self):
         pygame.draw.line(screen, self.color, self.start_pos, self.end_pos, self.width)
 
+
 class Flag:
     def __init__(self, x, y):
         self.image = pygame.image.load('assets/imgs/victory_flag.png')
@@ -60,6 +62,7 @@ class Flag:
     
     def draw(self):
         screen.blit(self.image, self.rect.topleft)
+
 
 class Player:
     def __init__(self, x, y):
@@ -70,6 +73,7 @@ class Player:
     def draw(self):
         screen.blit(self.image, self.rect.topleft)
 
+
 class BouncingBall:
     def __init__(self, x, y, r, color):
         self.center = (x, y)
@@ -78,6 +82,24 @@ class BouncingBall:
     
     def draw(self):
         pygame.draw.circle(screen, self.color, self.center, self.radius)
+
+
+class Portal:
+    def __init__(self, start_pos, end_pos, r):
+        self.start_pos = start_pos
+        self.end_pos = end_pos
+        self.start_img = pygame.image.load('assets/imgs/PortalStart.png')
+        self.end_img = pygame.image.load('assets/imgs/PortalEnd.png')
+        self.start_rect = self.start_img.get_rect()
+        self.end_rect = self.end_img.get_rect()
+
+    def draw(self):
+        self.start_rect.center = self.start_pos
+        self.end_rect.center = self.end_pos
+        pygame.draw.line(screen, (0, 0, 0), self.start_pos, self.end_pos)
+        screen.blit(self.start_img, self.start_rect.topleft)
+        screen.blit(self.end_img, self.end_rect.topleft)
+
 
 flag = Flag(WW//2, WH//2)
 player = Player(WW//2, WH//2)
