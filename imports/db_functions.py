@@ -1,40 +1,19 @@
 import os
 import sqlite3
 import ast
+from cryptography.fernet import *
+
 
 class crypt:
-    key = "}>CX[JAnpm8)H[rKEvrt/kse1G'j{Pd\jxfTNCxU/b4i0MeeV9A(FusO9zd9bM\m"
-    splitter = "z"
+    key = b'E0kGTj9oe68mgUnNZuMwfzosAWO4C1YiO_EIBsaQcTw='
 
     @staticmethod
-    def de(inputed_str):
-        decrypted = ""
-        encrypted_list = inputed_str[:-1].split(crypt.splitter)
-
-        index = 0
-        for num in encrypted_list:
-            try:
-                decrypted += chr(int(int(num) / ord(crypt.key[index])))
-            except IndexError:
-                decrypted += chr(int(int(num) / ord(crypt.key[index % 64])))
-            finally:
-                index += 1
-
-        return decrypted
+    def de(input_str):
+        return Fernet(crypt.key).decrypt(input_str).decode()
 
     @staticmethod
-    def en(string):
-        index = 0
-        encrypted = ""
-        for alpha in string:
-            try:
-                encrypted += str(ord(alpha) * ord(crypt.key[index])) + crypt.splitter
-            except IndexError:
-                encrypted += str(ord(alpha) * ord(crypt.key[index % 64])) + crypt.splitter
-            finally:
-                index += 1
-        return encrypted
-
+    def en(input_string):
+        return Fernet(crypt.key).encrypt(input_string.encode())
 
 class DB:
     path = os.path.join('assets', 'data.db')
@@ -56,7 +35,7 @@ class DB:
         conn.close()
 
     @staticmethod
-    def load_all_data():
+    def load_cache_data():
         conn = sqlite3.connect(os.path.join('assets', 'data.db'))
         c = conn.cursor()
         c.execute("SELECT * FROM cache")
@@ -82,7 +61,7 @@ class DB:
         c = conn.cursor()
 
         c.execute("SELECT * FROM saves")
-        values = ast.literal_eval(crypt.de(c.fetchall()[0][0])) # the complex Decryption alg
+        values = ast.literal_eval(crypt.de(c.fetchall()[0][0]))  # the complex Decryption alg
         conn.commit()
         conn.close()
         return values

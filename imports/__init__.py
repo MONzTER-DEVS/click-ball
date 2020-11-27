@@ -25,7 +25,7 @@ def load_data_while_loading_screen():
     global can_start_game
     if not os.path.exists(os.path.join('assets', 'data.db')):
         DB.make_db()
-    data = DB.load_all_data()
+    data = DB.load_cache_data()
     Themes.set_active_by_name(data[0])
 
     for x in range(1, len(os.listdir(os.path.join('assets', 'levels'))) + 1):
