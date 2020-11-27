@@ -137,18 +137,23 @@ class Portal:
         self.start_pos = start_pos
         self.end_pos = end_pos
         self.radius = radius
-        self.start_rect = pygame.Rect(self.start_pos, 2 * self.radius, 2 * self.radius)
-        self.end_rect = pygame.Rect(self.end_pos, 2 * self.radius, 2 * self.radius)
+        self.start_img = pygame.image.load('assets/imgs/PortalStart.png')
+        self.end_img = pygame.image.load('assets/imgs/PortalEnd.png')
+        self.start_rect = self.start_img.get_rect()
+        self.end_rect = self.end_img.get_rect()
+        self.start_rect.center = self.start_pos
+        self.end_rect.center = self.end_pos
 
-    def draw(self, surf, color):
-        pygame.draw.ellipse(surf, color, self.start_rect)
-        pygame.draw.ellipse(surf, color, self.end_rect)
+    def draw(self, surf, space):
+        self.start_rect.center = self.start_pos
+        self.end_rect.center = self.end_pos
+        surf.blit(self.start_img, self.start_rect.topleft)
+        surf.blit(self.end_img, self.end_rect.topleft)
+        pygame.draw.line(surf, (100, 100, 100), self.start_pos, self.end_pos)
 
     def teleport(self, obj):
         if obj.rect.colliderect(self.start_rect):
-            obj.body.position = self.end_pos
-        if obj.rect.colliderect(self.end_rect):
-            obj.body.position = self.start_pos
+            obj.body.position = self.end_rect.center
 
 
 class Particle():

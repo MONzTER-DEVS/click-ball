@@ -30,8 +30,11 @@ def remove_lines_and_balls_of_level_by_number(i, lines, balls):
     '''
     for rl in lines:
         space.remove(rl.body, rl.shape)  # Extremely Necessary
+    # try:
     for rb in balls:
         space.remove(rb.body, rb.shape)  # Extremely Necessary
+    # except Exception:
+    #     pass
     return []  # Deleting the lines of the prev level
 
 
@@ -66,14 +69,14 @@ def survival_mode(screen, current_level):
             balls.append(b)
     except KeyError:
         pass
-    # ## Portals        EDIT: Don't mind if it is kept here ;)
-    # portals = []
-    # try:
-    #     for p in current_level.dict["ball_center"]:  # can't use nested cuz it makes wierd things happen xD
-    #         l = DynamicBall(p, 0, 0,  player.image, space)
-    #         balls.append(l)
-    # except KeyError:
-    #     pass
+    ## Portals
+    portals = []
+    try:
+        for s, e in zip(current_level.dict["portal_start"], current_level.dict["portal_end"]):  # can't use nested cuz it makes wierd things happen xD
+            p = Portal(s, e, 32)
+            portals.append(p)
+    except KeyError:
+        pass
 
     while True:
         screen.fill(Themes.active_theme.background)
@@ -81,6 +84,7 @@ def survival_mode(screen, current_level):
         if st_time == 0:
 
             # load level
+            print(balls)
             lines = balls = remove_lines_and_balls_of_level_by_number(current_level.number, lines, balls)
             player.body.position = current_level.dict["player"][0]  ## Player
             player.body.velocity = (0, 0)  ## Player
@@ -102,6 +106,15 @@ def survival_mode(screen, current_level):
                                 current_level.dict["ball_radius"]):  # can't use nested cuz it makes wierd things happen xD
                     b = DynamicBallWithColor(p, 0, 0, r, space)
                     balls.append(b)
+            except KeyError:
+                pass
+            ## Portals
+            portals = []
+            try:
+                for s, e in zip(current_level.dict["portal_start"], 
+                                current_level.dict["portal_end"]):  # can't use nested cuz it makes wierd things happen xD
+                    p = Portal(s, e, 32)
+                    portals.append(p)
             except KeyError:
                 pass
 
@@ -154,11 +167,16 @@ def survival_mode(screen, current_level):
         if disty > max_speed:
             disty = max_speed
 
-        ## -------------------- Lines and balls --------------------
+        ## -------------------- Lines, balls and Portals --------------------
         for line in lines:
             line.draw(screen, Themes.active_theme.platform_c)
         for ball in balls:
-            ball.draw(screen)
+            ball.draw(screen, WHITE)
+        for portal in portals:
+            portal.draw(screen, space)
+            portal.teleport(player)
+            for ball in balls:
+                portal.teleport(ball)
 
         ## -------------------- Flag --------------------
         flag.draw(screen)
@@ -223,6 +241,15 @@ def campaign(screen, current_level):
             balls.append(b)
     except KeyError:
         pass
+    ## Portals
+    portals = []
+    try:
+        for s, e in zip(current_level.dict["portal_start"], 
+                        current_level.dict["portal_end"]):  # can't use nested cuz it makes wierd things happen xD
+            p = Portal(s, e, 32)
+            portals.append(p)
+    except KeyError:
+        pass
 
     while True:
         screen.fill(Themes.active_theme.background)
@@ -251,6 +278,15 @@ def campaign(screen, current_level):
                                 current_level.dict["ball_radius"]):  # can't use nested cuz it makes wierd things happen xD
                     b = DynamicBallWithColor(p, 0, 0, r, space)
                     balls.append(b)
+            except KeyError:
+                pass
+            ## Portals
+            portals = []
+            try:
+                for s, e in zip(current_level.dict["portal_start"], 
+                                current_level.dict["portal_end"]):  # can't use nested cuz it makes wierd things happen xD
+                    p = Portal(s, e, 32)
+                    portals.append(p)
             except KeyError:
                 pass
 
@@ -303,11 +339,16 @@ def campaign(screen, current_level):
         if disty > max_speed:
             disty = max_speed
 
-        ## -------------------- Lines and balls --------------------
+        ## -------------------- Lines, balls and Portals --------------------
         for line in lines:
             line.draw(screen, Themes.active_theme.platform_c)
         for ball in balls:
-            ball.draw(screen, Themes.active_theme.platform_c)
+            ball.draw(screen, WHITE)
+        for portal in portals:
+            portal.draw(screen, space)
+            portal.teleport(player)
+            for ball in balls:
+                portal.teleport(ball)
 
         ## -------------------- Flag --------------------
         flag.draw(screen)
