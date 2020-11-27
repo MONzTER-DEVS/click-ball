@@ -54,7 +54,7 @@ while loading_screen_running:
     screen.fill(Themes.active_theme.background)
     text = big_font.render("Loading Screen", True, Themes.active_theme.font_c)
     text_rect = text.get_rect()
-    text_rect.center = (WW / 2, 50)
+    text_rect.center = (WW / 2, WH / 2)
     screen.blit(text, text_rect)
 
     if can_start_game:

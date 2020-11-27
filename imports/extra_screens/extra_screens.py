@@ -404,3 +404,93 @@ def settings_screen(screen):
                 clicked = True
                 mx, my = pygame.mouse.get_pos()
         pygame.display.update()
+
+
+def skin_select_screen(screen):
+    theme = Themes.active_theme
+    clicked = False
+    mx, my = pygame.mouse.get_pos()
+    skin = 1  ## Default level
+    skins_per_page = 5
+    gap = WH // skins_per_page
+
+    max_page, min_page = (len(skins) + skins_per_page)//skins_per_page, 1
+    page = 1  ## Default page
+
+    skin_nums_to_display = range(((page - 1) * skins_per_page) + 1, (page * skins_per_page) + 1)
+
+    while True:
+        screen.fill(theme.background)
+        heading_text = big_font.render('Skin Select!', True, theme.font_c)
+        heading_rect = heading_text.get_rect()
+        heading_rect.center = (WW // 2, 50)
+        screen.blit(heading_text, heading_rect.topleft)
+
+        heading_text = small_font.render('Back', True, theme.font_c)
+        rect = heading_text.get_rect()
+        rect.bottomleft = (10, WH - 10)
+        screen.blit(heading_text, rect.topleft)
+        hover(rect, screen)
+
+        if clicked:
+            if rect.left < mx < rect.right and rect.top < my < rect.bottom:
+                return ['welcome', skins[skin]]
+
+        ## Next Page
+        heading_text = medium_font.render('->', True, theme.font_c)
+        heading_rect = heading_text.get_rect()
+        heading_rect.center = (WW // 2 + 150, WH // 2)
+        screen.blit(heading_text, heading_rect.topleft)
+
+        hover(heading_rect, screen)
+        if clicked and page < max_page:
+            if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
+                page += 1
+                skin_nums_to_display = range(((page - 1) * skins_per_page) + 1, (page * skins_per_page) + 1)
+                clicked = False
+
+        ## Prev Page
+        heading_text = medium_font.render('<-', True, theme.font_c)
+        heading_rect = heading_text.get_rect()
+        heading_rect.center = (WW // 2 - 150, WH // 2)
+        screen.blit(heading_text, heading_rect.topleft)
+
+        hover(heading_rect, screen)
+        if clicked and page > min_page:
+            if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
+                page -= 1
+                skin_nums_to_display = range(((page - 1) * skins_per_page) + 1, (page * skins_per_page) + 1)
+                clicked = False
+
+        ## -------------------- The skin selection --------------------
+        for y, num in zip(range(125, WH, gap), skin_nums_to_display):
+            # drawing skins
+            try:
+                ball_img = skins[num]
+                ball_img = pygame.transform.smoothscale(ball_img, (64, 64))
+            except IndexError:
+                ball_img = pygame.Surface((0, 0))
+                ball_img.set_alpha(0)
+            heading_rect = ball_img.get_rect()
+            heading_rect.center = (WW // 2, y)
+            screen.blit(ball_img, heading_rect.topleft)
+            ## selecting and hovering
+            hover(heading_rect, screen)
+            if clicked:
+                if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
+                    skin = num
+            ## Drawing a selection rectangle
+            if num == skin:
+                s_img = pygame.Surface(heading_rect.size)
+                s_img.set_alpha(100)
+                s_img.fill(select_rect_color)
+                screen.blit(s_img, heading_rect.topleft)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return ['quit']
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                clicked = True
+                mx, my = pygame.mouse.get_pos()
+
+        pygame.display.update()

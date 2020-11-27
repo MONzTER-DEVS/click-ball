@@ -47,6 +47,7 @@ def survival_mode(screen, current_level):
     clicked = False
 
     ## -------------------- Initializing Level --------------------
+    player.image = p_img    ## Player
     player.body.position = current_level.dict["player"][0]  ## Player
     player.body.velocity = (0, 0)  ## Player
     flag.rect.bottomleft = current_level.dict["victory"][0]  ## Flag
@@ -219,6 +220,7 @@ def campaign(screen, current_level):
     clicked = False
 
     ## -------------------- Initializing Level --------------------
+    player.image = p_img    ## Player
     player.body.position = current_level.dict["player"][0]  ## Player
     player.body.velocity = (0, 0)  ## Player
     flag.rect.bottomleft = current_level.dict["victory"][0]  ## Flag
@@ -410,8 +412,8 @@ while True:
         to_do = leaderboard_screen(screen)  # @todo add real content to leaderboard Screen
 
     elif to_do[0] == 'ball':
-        print("under Dev")
-        to_do = settings_screen(screen)  # @todo change this to ball Screen later
+        to_do = skin_select_screen(screen)  # @todo change this to ball Screen later
+        p_img = to_do[1]
 
     elif to_do[0] == 'quit':
         break
