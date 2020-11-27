@@ -43,7 +43,7 @@ t_load_data_while_loading_screen.start()
 # Starting to load data
 
 # starting screen
-screen_flags = pygame.FULLSCREEN | pygame.SCALED
+screen_flags = pygame.SCALED
 screen = pygame.display.set_mode((WW, WH), screen_flags)
 pygame.display.set_caption('Click Ball!')
 clock = pygame.time.Clock()

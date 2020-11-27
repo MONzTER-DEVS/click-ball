@@ -1,4 +1,5 @@
-import pygame, os
+import os
+import pygame
 
 WW, WH = pygame.display.Info().current_w, pygame.display.Info().current_h
 # WW,WH = 1200,720
