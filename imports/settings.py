@@ -1,5 +1,7 @@
 import pygame, os
-WW,WH = 1200,720
+
+WW, WH = pygame.display.Info().current_w, pygame.display.Info().current_h
+# WW,WH = 1200,720
 
 # Font
 tiny_font = pygame.font.Font('Roboto-Thin.ttf', 24)

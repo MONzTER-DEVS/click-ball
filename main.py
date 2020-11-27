@@ -4,8 +4,6 @@ from imports import *
 space = pymunk.Space()  # Create a Space which contain the simulation
 space.gravity = 0, GRAVITY  # Set its gravity
 
-screen_flags = pygame.SCALED | pygame.RESIZABLE
-screen = pygame.display.set_mode((WW, WH), screen_flags)
 # Game
 pygame.display.set_caption('Click Ball!')
 clock = pygame.time.Clock()
