@@ -28,7 +28,7 @@ def load_data_while_loading_screen():
     data = DB.load_all_data()
     Themes.set_active_by_name(data[0])
 
-    for x in range(1, len(os.listdir(os.path.join('assets', 'levels')))+1):
+    for x in range(1, len(os.listdir(os.path.join('assets', 'levels'))) + 1):
         f = open(os.path.join('assets', 'levels', f'level{x}.json'))
         Levels(name='placeholder', data=json.load(f))
         f.close()
@@ -43,7 +43,7 @@ t_load_data_while_loading_screen.start()
 # Starting to load data
 
 # starting screen
-screen_flags = pygame.SCALED | pygame.RESIZABLE
+screen_flags = pygame.FULLSCREEN | pygame.SCALED
 screen = pygame.display.set_mode((WW, WH), screen_flags)
 pygame.display.set_caption('Click Ball!')
 clock = pygame.time.Clock()
