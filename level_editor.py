@@ -24,17 +24,19 @@ MODES:
 
 '''
 
-from imports.settings import WW, WH
+from imports.settings import WW, WH, small_font, medium_font, big_font
+from imports.classes import Themes
 import pygame, math, json, os
 
 pygame.init()
 
 screen_flags = pygame.SCALED | pygame.RESIZABLE
 screen = pygame.display.set_mode((WW, WH), screen_flags)
-font = pygame.font.Font('Roboto-Thin.ttf', 32)
 
 GRID_SIZE = 20
-GRID_COLOR = (200, 200, 200)
+GRID_COLOR = (100, 100, 100)
+
+DRAG_OFFSET = 150
 
 SELECTED_LINE_COLOR = (255, 255, 50)
 LINE_COLOR = (100, 255, 255)
@@ -42,6 +44,21 @@ LINE_COLOR = (100, 255, 255)
 SELECTED_BALL_COLOR = (255, 255, 50)
 BALL_COLOR = (100, 255, 255)
 
+mouse_rect = pygame.Rect(0, 0, 10, 10)
+select_rect = pygame.Rect(0, 0, 0, 0)
+select_rect_color = Themes.active_theme.hover
+
+def hover(obj_rect, Screen):
+    mouse_rect.center = pygame.mouse.get_pos()
+    if mouse_rect.colliderect(obj_rect):
+        select_rect.topleft = obj_rect.topleft
+        select_rect.size = obj_rect.size
+
+        ## Not using pygame.draw.rect cuz usme opacity set nhi hoti
+        s_img = pygame.Surface(select_rect.size)
+        s_img.set_alpha(50)
+        s_img.fill(select_rect_color)
+        Screen.blit(s_img, select_rect.topleft)
 
 class Line:
     def __init__(self, x1, y1, x2, y2, width):
@@ -143,7 +160,7 @@ running = True
 clicked = False
 
 def save():
-    ## saving data in a variable for now
+    ## saving data
     start_positions = []
     end_positions = []
     widths = []
@@ -169,20 +186,6 @@ def save():
         portal_start_positions.append(portal.start_pos)
         portal_end_positions.append(portal.end_pos)
 
-    # printing the final result ;)
-    print('--------------------------------------------------')
-    print("level = {")
-    print("    \'start\' :", start_positions, ",")
-    print("    \'end\' :", end_positions, ",")
-    print("    \'thickness\' :", widths, ",")
-    print("    \'moves\' :", 5, ",", "## ;)")
-    print("    \'victory\' :", victory_position, ",")
-    print("    \'player\' :", player_position, ",")
-    print("    \'ball_center\' :", ball_positions, ",")
-    print("    \'ball_radius\' :", ball_radius)
-    print("}")
-    print('--------------------------------------------------')
-
     to_dump_dict = {
     'start':start_positions,
     'end':end_positions,
@@ -204,18 +207,21 @@ def save():
     print('saved at', f_path)
 
 
-
-## line / flag / player
+## line / flag / player / portal
 modes = ['line', 'flag', 'player', 'bouncing ball', 'portal']
 mode_index = 0
 mode = modes[mode_index]
 while running:
     
+    # Snapping to the grid
     mx, my = pygame.mouse.get_pos()
     mx = round(mx/GRID_SIZE)*GRID_SIZE
     my = round(my/GRID_SIZE)*GRID_SIZE
+    mouse_rect.center = pygame.mouse.get_pos()
 
-    screen.fill((255, 255, 255))
+    screen.fill(Themes.active_theme.background)
+
+    ## Events
     for e in pygame.event.get():
         if e.type == pygame.QUIT:
             running = False
@@ -312,6 +318,37 @@ while running:
                 if e.key == pygame.K_d:
                     portals.remove(selected_portal)
 
+    ## GUI STUFF
+    # mode indicator
+    mode_text = small_font.render("Mode: "+mode, True, Themes.active_theme.font_c)
+    mode_rect = mode_text.get_rect()
+    mode_rect.center = (WW//2, 50)
+    screen.blit(mode_text, mode_rect.topleft)
+
+    # Next mode
+    heading_text = small_font.render(' -> ', True, Themes.active_theme.font_c)
+    heading_rect = heading_text.get_rect()
+    heading_rect.center = (WW//2 + 175, 50)
+    screen.blit(heading_text, heading_rect.topleft)
+
+    hover(heading_rect, screen)
+    if clicked:
+        if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
+            mode_index += 1
+            clicked = False
+
+    # Previous mode
+    heading_text = small_font.render(' <- ', True, Themes.active_theme.font_c)
+    heading_rect = heading_text.get_rect()
+    heading_rect.center = (WW//2 - 175, 50)
+    screen.blit(heading_text, heading_rect.topleft)
+
+    hover(heading_rect, screen)
+    if clicked:
+        if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
+            mode_index -= 1
+            clicked = False
+
     ## Drawing the grid
     for x in range(0, WW, GRID_SIZE):
         pygame.draw.line(screen, GRID_COLOR, (x, 0), (x, WH))
@@ -337,8 +374,6 @@ while running:
         selected_portal_index = 0
 
     ## Defining mode
-    mode_indicator = font.render("Mode: "+mode, True, (0, 0, 0))     ## Indicating current mode
-    screen.blit(mode_indicator, (0, 0))
     try:
         mode = modes[mode_index]            ## Managing modes
     except IndexError:
@@ -350,6 +385,20 @@ while running:
         if line == selected_line and mode == 'line':
             line.color = SELECTED_LINE_COLOR
             if clicked and mode == 'line':
+                dist = math.sqrt(
+                    (line.start_pos[0] - mouse_rect.centerx)**2 + 
+                    (line.start_pos[1] - mouse_rect.centery)**2
+                )
+                if dist < DRAG_OFFSET:
+                    selected_line_end = 'start'
+
+                dist = math.sqrt(
+                    (line.end_pos[0] - mouse_rect.centerx)**2 + 
+                    (line.end_pos[1] - mouse_rect.centery)**2
+                )
+                if dist < DRAG_OFFSET:
+                    selected_line_end = 'end'
+
                 if selected_line_end == 'start':
                     line.start_pos = (mx, my)
                 if selected_line_end == 'end':
@@ -363,7 +412,12 @@ while running:
         if ball == selected_ball and mode == 'bouncing ball':
             ball.color = SELECTED_BALL_COLOR
             if clicked and mode == 'bouncing ball':
-                ball.center = (mx, my)
+                dist = math.sqrt(
+                    (ball.center[0] - mouse_rect.centerx)**2 + 
+                    (ball.center[1] - mouse_rect.centery)**2
+                )
+                if dist < DRAG_OFFSET:
+                    ball.center = (mx, my)
         else:
             ball.color = BALL_COLOR
 
@@ -372,6 +426,20 @@ while running:
         portal.draw()
         if portal == selected_portal and mode == 'portal':
             if clicked and mode == 'portal':
+                dist = math.sqrt(
+                    (portal.start_pos[0] - mouse_rect.centerx)**2 + 
+                    (portal.start_pos[1] - mouse_rect.centery)**2
+                )
+                if dist < DRAG_OFFSET:
+                    selected_portal_end = 'start'
+
+                dist = math.sqrt(
+                    (portal.end_pos[0] - mouse_rect.centerx)**2 + 
+                    (portal.end_pos[1] - mouse_rect.centery)**2
+                )
+                if dist < DRAG_OFFSET:
+                    selected_portal_end = 'end'
+
                 if selected_portal_end == 'start':
                     portal.start_pos = (mx, my)
                 if selected_portal_end == 'end':
@@ -379,17 +447,27 @@ while running:
 
     ## Drawing flag
     if clicked and mode == 'flag':
-        flag.rect.center = (mx, my)
+        dist = math.sqrt(
+            (flag.rect.centerx - mouse_rect.centerx)**2 + 
+            (flag.rect.centery - mouse_rect.centery)**2
+        )
+        if dist < DRAG_OFFSET:
+            flag.rect.center = (mx, my)
     flag.draw()
 
     ## Drawing player
     if clicked and mode == 'player':
-        player.rect.center = (mx, my)
+        dist = math.sqrt(
+            (player.rect.centerx - mouse_rect.centerx)**2 + 
+            (player.rect.centery - mouse_rect.centery)**2
+        )
+        if dist < DRAG_OFFSET:
+            player.rect.center = (mx, my)
     player.draw()
 
 
     pygame.display.update()
 
-save()
+# save()
 
 pygame.quit()

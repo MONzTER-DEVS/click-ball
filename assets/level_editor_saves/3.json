@@ -1,0 +1,41 @@
+{
+    "start": [
+        [
+            1300,
+            60
+        ]
+    ],
+    "end": [
+        [
+            683,
+            384
+        ]
+    ],
+    "thickness": [
+        10
+    ],
+    "moves": 5,
+    "victory": [
+        [
+            667,
+            400
+        ]
+    ],
+    "player": [
+        [
+            683,
+            384
+        ]
+    ],
+    "ball_center": [
+        [
+            683,
+            384
+        ]
+    ],
+    "ball_radius": [
+        10
+    ],
+    "portal_start": [],
+    "portal_end": []
+}
