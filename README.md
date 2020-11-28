@@ -1,2 +1,3 @@
-# Click Ball REMAKE !
-We are remaking the Click Ball game ;)
+# Click Ball !
+We are making a game named Click Ball :)
+
