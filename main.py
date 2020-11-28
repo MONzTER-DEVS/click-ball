@@ -84,6 +84,7 @@ def survival_mode(screen, current_level):
     except KeyError:
         pass
 
+    ## ---------------------------------------- MAIN LOOP ----------------------------------------
     while True:
         screen.fill(Themes.active_theme.background)
         ## -------------------- Time and stuff --------------------
@@ -130,7 +131,7 @@ def survival_mode(screen, current_level):
         if death_time != 0:
             if death_time - int(time.time()) + 10 <= 0:
                 lines = balls = remove_lines_and_balls_of_level_by_number(current_level.number, lines, balls)
-                return ['welcome']  # @todo make a Death screen
+                return ['survival']  # @todo make a Death screen
 
             # giving a 10 seconds timer and Auto reset if not colliding with the Flag
             if death_time != 0:
@@ -149,7 +150,20 @@ def survival_mode(screen, current_level):
                     lines = balls = remove_lines_and_balls_of_level_by_number(current_level.number, lines, balls)
                     current_level = load_level_by_num('noname', 1)
                     player.body.angular_velocity = 0
+                    return ['survival']
+                if event.key == pygame.K_ESCAPE:
+                    lines = balls = remove_lines_and_balls_of_level_by_number(current_level.number, lines, balls)
+                    current_level = load_level_by_num('noname', 1)
+                    player.body.angular_velocity = 0
                     return ['welcome']
+
+        ## -------------------- Events --------------------
+        if moves == 0:
+            heading_text = medium_font.render('PRESS \'R\' TO RESTART FROM LEVEL 1', True, Themes.active_theme.font_c)
+            heading_text.set_alpha(200)
+            heading_rect = heading_text.get_rect()
+            heading_rect.center = (WW // 2, WH // 2)
+            screen.blit(heading_text, heading_rect.topleft)
 
         ## -------------------- Player --------------------
         player.draw(screen)
@@ -263,6 +277,7 @@ def campaign(screen, current_level):
     except KeyError:
         pass
 
+    ## ---------------------------------------- MAIN LOOP ----------------------------------------
     while True:
         screen.fill(Themes.active_theme.background)
         ## -------------------- Time and stuff --------------------

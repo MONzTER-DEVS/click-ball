@@ -185,9 +185,9 @@ def score_screen(screen, score, data='None'):
         heading_rect.center = (WW // 2, 350)
         screen.blit(heading_text, heading_rect.topleft)
 
-        heading_text = medium_font.render('Continue', True, theme.font_c)
+        heading_text = medium_font.render('Next Level', True, theme.font_c)
         heading_rect = heading_text.get_rect()
-        heading_rect.center = (WW // 4, WH // 2 + 100)
+        heading_rect.center = (WW * 3 // 4, WH // 2 + 100)
         screen.blit(heading_text, heading_rect.topleft)
 
         hover(heading_rect, screen)
@@ -197,7 +197,7 @@ def score_screen(screen, score, data='None'):
 
         heading_text = medium_font.render('Save and go back', True, theme.font_c)
         heading_rect = heading_text.get_rect()
-        heading_rect.center = (int((WW * 3) // 4), WH // 2 + 100)
+        heading_rect.center = (WW // 4, WH // 2 + 100)
         screen.blit(heading_text, heading_rect.topleft)
 
         hover(heading_rect, screen)
@@ -407,7 +407,7 @@ def settings_screen(screen):
 
         if clicked:
             if rect.left < mx < rect.right and rect.top < my < rect.bottom:
-                return ['settings']
+                return ['welcome']
 
         clicked = False
         for event in pygame.event.get():
