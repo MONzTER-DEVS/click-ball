@@ -2,6 +2,7 @@ import threading
 from imports.classes import *
 from .extra_screen_functions import *
 from imports.db_functions import *
+
 # Declaring some Variables
 lboard_data = []
 
@@ -155,7 +156,7 @@ def theme_screen(screen):
                 if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
                     old = Themes.active_theme
                     them.set_to_active_theme()
-                    DB.change_cache_value('theme', Themes.active_theme.name, old.name)
+                    DB.Cache.change_value('theme', Themes.active_theme.name, old.name)
 
         clicked = False
         for event in pygame.event.get():
@@ -168,7 +169,7 @@ def theme_screen(screen):
         pygame.display.update()
 
 
-def score_screen(screen, score):
+def score_screen(screen, score, data='None'):
     theme = Themes.active_theme
     clicked = False
     mx, my = pygame.mouse.get_pos()
@@ -184,15 +185,26 @@ def score_screen(screen, score):
         heading_rect.center = (WW // 2, 350)
         screen.blit(heading_text, heading_rect.topleft)
 
-        heading_text = big_font.render('Continue', True, theme.font_c)
+        heading_text = medium_font.render('Continue', True, theme.font_c)
         heading_rect = heading_text.get_rect()
-        heading_rect.center = (WW // 2, 450)
+        heading_rect.center = (WW // 4, WH // 2 + 100)
         screen.blit(heading_text, heading_rect.topleft)
 
         hover(heading_rect, screen)
         if clicked:
             if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
                 return ['survival']
+
+        heading_text = medium_font.render('Save and go back', True, theme.font_c)
+        heading_rect = heading_text.get_rect()
+        heading_rect.center = (int((WW * 3) // 4), WH // 2 + 100)
+        screen.blit(heading_text, heading_rect.topleft)
+
+        hover(heading_rect, screen)
+        if clicked:
+            if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
+                DB.save_survival(data)
+                return ['welcome']
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -213,7 +225,7 @@ def leaderboard_screen(screen):
     mx, my = pygame.mouse.get_pos()
 
     def global_some_data():
-        global lboard_data;
+        global lboard_data
         lboard_data = get_data()
 
     t = threading.Thread(target=global_some_data)
@@ -395,7 +407,7 @@ def settings_screen(screen):
 
         if clicked:
             if rect.left < mx < rect.right and rect.top < my < rect.bottom:
-                return ['welcome']
+                return ['settings']
 
         clicked = False
         for event in pygame.event.get():
@@ -414,7 +426,7 @@ def skin_select_screen(screen):
     skins_per_page = 5
     gap = WH // skins_per_page
 
-    max_page, min_page = (len(skins) + skins_per_page)//skins_per_page, 1
+    max_page, min_page = (len(skins) + skins_per_page) // skins_per_page, 1
     page = 1  ## Default page
 
     skin_nums_to_display = range(((page - 1) * skins_per_page) + 1, (page * skins_per_page) + 1)
@@ -494,3 +506,62 @@ def skin_select_screen(screen):
                 mx, my = pygame.mouse.get_pos()
 
         pygame.display.update()
+
+# WIll come in handy when we will have Multiple Users :)
+
+# def users(screen):
+#     theme = Themes.active_theme
+#     clicked = False
+#     mx, my = pygame.mouse.get_pos()
+#
+#     def make_user(screen):
+#         inner_running = True
+#         theme = Themes.active_theme
+#         while inner_running:
+#             screen.fill(theme.background)
+#             screen.blit(small_font.render('check console', True, theme.font_c), (WW / 2, 100))
+#             pygame.display.update()
+#             for event in pygame.event.get():
+#                 if event.type == pygame.QUIT:
+#                     return ['QUIT']
+#
+#             DB.Users.make_user(input("Username: "), input("Password: "))
+#             inner_running = False
+#         DB.Cache.change_value('user', str())
+#         Users.update_class_from_db(Users.users[-1])
+#         data = DB.Cache.load()
+#         # make a user signup here
+#
+#     while True:
+#         screen.fill(theme.background)
+#
+#         heading_text = big_font.render('Users', True, theme.font_c)
+#         heading_rect = heading_text.get_rect()
+#         heading_rect.center = (WW // 2, 50)
+#
+#         if len(Users.users) == 0:
+#             make_user(screen)
+#         else:
+#             heading_text = big_font.render(f'Current user: {Users.active_user}', True, theme.font_c)
+#             heading_rect = heading_text.get_rect()
+#             heading_rect.center = (WW // 2, 350)
+#             screen.blit(heading_text, heading_rect.topleft)
+#
+#             heading_text = small_font.render('Create', True, theme.font_c)
+#             heading_rect = heading_text.get_rect()
+#             heading_rect.center = (WW // 2, 450)
+#             screen.blit(heading_text, heading_rect.topleft)
+#
+#             hover(heading_rect, screen)
+#             if clicked:
+#                 if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
+#                     make_user(screen)
+#
+#         for event in pygame.event.get():
+#             if event.type == pygame.QUIT:
+#                 return ['quit']
+#             if event.type == pygame.MOUSEBUTTONDOWN:
+#                 clicked = True
+#                 mx, my = pygame.mouse.get_pos()
+#
+#         pygame.display.update()

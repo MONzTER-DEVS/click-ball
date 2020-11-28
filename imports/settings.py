@@ -12,6 +12,7 @@ big_font = pygame.font.Font('Roboto-Thin.ttf', 64)
 GRAVITY = 350
 FPS = 60
 
+
 def game_font_generator(size):
     return pygame.font.Font('Roboto-Thin.ttf', size)
 

@@ -1,5 +1,7 @@
 import pygame
 import time
+import json
+import ast
 
 pygame.init()
 
@@ -25,8 +27,12 @@ def load_data_while_loading_screen():
     global can_start_game
     if not os.path.exists(os.path.join('assets', 'data.db')):
         DB.make_db()
-    data = DB.load_cache_data()
+    data = DB.Cache.load()
     Themes.set_active_by_name(data[0])
+
+    data = DB.load_user_progress()[0]
+    User_data.current_level = int(data[0])
+    User_data.save = ast.literal_eval(data[1])
 
     for x in range(1, len(os.listdir(os.path.join('assets', 'levels'))) + 1):
         f = open(os.path.join('assets', 'levels', f'level{x}.json'))
@@ -43,7 +49,7 @@ t_load_data_while_loading_screen.start()
 # Starting to load data
 
 # starting screen
-screen_flags = pygame.SCALED | pygame.RESIZABLE
+screen_flags = pygame.SCALED
 screen = pygame.display.set_mode((WW, WH), screen_flags)
 pygame.display.set_caption('Click Ball!')
 clock = pygame.time.Clock()
@@ -65,3 +71,5 @@ while loading_screen_running:
             loading_screen_running = False
             to_do = ['quit']
     pygame.display.update()
+
+# @todo handle DB errors

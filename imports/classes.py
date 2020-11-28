@@ -1,10 +1,11 @@
 # Imports
-import json
 import math
-import os
 import pygame
 import pymunk
+import os
+import sqlite3
 
+from .encryption import *
 # from settings import WW, WH
 
 GLOBAL_FRICTION = 0.5
@@ -178,3 +179,28 @@ class Levels:
         self.name = name
         self.number = len(Levels.levels) + 1
         Levels.levels.append(self)
+
+
+class User_data:
+    current_level = None
+    save = None
+
+    @staticmethod
+    def get_save():
+        """
+        Use this Function to get data
+        """
+
+        conn = sqlite3.connect(os.path.join('assets', 'data.db'))
+        c = conn.cursor()
+
+        to_return = User_data.save
+
+        query = f"UPDATE user_data SET save = '{Crypt.en('None')}'"
+        print(query)
+        c.execute(query)
+        User_data.save = None
+        conn.commit()
+
+        conn.close()
+        return to_return

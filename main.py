@@ -19,7 +19,7 @@ flag = VictoryFlag((WW - 100, WH - 100))
 ## -------------------- Some functions --------------------
 def load_level_by_num(name, i):
     try:
-        return Levels.levels[i-1]
+        return Levels.levels[i - 1]
     except IndexError:
         return Levels.levels[0]
 
@@ -40,14 +40,18 @@ def remove_lines_and_balls_of_level_by_number(i, lines, balls):
 
 ## ========================= Survival Mode =========================
 def survival_mode(screen, current_level):
-    ## -------------------- Initializing Game --------------------
     score = 0
+    if User_data.save is not None:
+        data = User_data.get_save()
+        score = data['score']
+        current_level = load_level_by_num('', int(data['level']))
+    ## -------------------- Initializing Game --------------------
     st_time = 0  # Time
     death_time = 0  # Death time
     clicked = False
 
     ## -------------------- Initializing Level --------------------
-    player.image = p_img    ## Player
+    player.image = p_img  ## Player
     player.body.position = current_level.dict["player"][0]  ## Player
     player.body.velocity = (0, 0)  ## Player
     flag.rect.bottomleft = current_level.dict["victory"][0]  ## Flag
@@ -63,7 +67,7 @@ def survival_mode(screen, current_level):
     line_number = 0
     ## Dummy Balls
     balls = []
-    try:        ## Incase there are no balls ;)
+    try:  ## Incase there are no balls ;)
         for p, r in zip(current_level.dict["ball_center"],
                         current_level.dict["ball_radius"]):  # can't use nested cuz it makes wierd things happen xD
             b = DynamicBallWithColor(p, 0, 0, r, space)
@@ -73,7 +77,8 @@ def survival_mode(screen, current_level):
     ## Portals
     portals = []
     try:
-        for s, e in zip(current_level.dict["portal_start"], current_level.dict["portal_end"]):  # can't use nested cuz it makes wierd things happen xD
+        for s, e in zip(current_level.dict["portal_start"],
+                        current_level.dict["portal_end"]):  # can't use nested cuz it makes wierd things happen xD
             p = Portal(s, e, 32)
             portals.append(p)
     except KeyError:
@@ -102,9 +107,10 @@ def survival_mode(screen, current_level):
             line_number = 0
             ## Dummy Balls
             balls = []
-            try:        ## Incase there are no balls ;)
+            try:  ## Incase there are no balls ;)
                 for p, r in zip(current_level.dict["ball_center"],
-                                current_level.dict["ball_radius"]):  # can't use nested cuz it makes wierd things happen xD
+                                current_level.dict[
+                                    "ball_radius"]):  # can't use nested cuz it makes wierd things happen xD
                     b = DynamicBallWithColor(p, 0, 0, r, space)
                     balls.append(b)
             except KeyError:
@@ -112,8 +118,9 @@ def survival_mode(screen, current_level):
             ## Portals
             portals = []
             try:
-                for s, e in zip(current_level.dict["portal_start"], 
-                                current_level.dict["portal_end"]):  # can't use nested cuz it makes wierd things happen xD
+                for s, e in zip(current_level.dict["portal_start"],
+                                current_level.dict[
+                                    "portal_end"]):  # can't use nested cuz it makes wierd things happen xD
                     p = Portal(s, e, 32)
                     portals.append(p)
             except KeyError:
@@ -191,9 +198,12 @@ def survival_mode(screen, current_level):
             current_level = load_level_by_num('noname', current_level.number + 1)
             lines = balls = remove_lines_and_balls_of_level_by_number(current_level.number, lines, balls)
             player.body.angular_velocity = 0
-            score_data = score_screen(screen, score)
-            if score_data[0] == 'quit':
-                return ['quit']
+
+            score_data = score_screen(screen, score, data={"score": score, "level": current_level.number})
+            # @todo Pass Real data here
+
+            if score_data[0] == 'quit': return ['quit']
+            if score_data[0] == 'welcome': return ['welcome']
 
         ## -------------------- In-game UI --------------------
         # Displaying the number of moves left
@@ -220,7 +230,7 @@ def campaign(screen, current_level):
     clicked = False
 
     ## -------------------- Initializing Level --------------------
-    player.image = p_img    ## Player
+    player.image = p_img  ## Player
     player.body.position = current_level.dict["player"][0]  ## Player
     player.body.velocity = (0, 0)  ## Player
     flag.rect.bottomleft = current_level.dict["victory"][0]  ## Flag
@@ -236,7 +246,7 @@ def campaign(screen, current_level):
     line_number = 0
     ## Dummy Balls
     balls = []
-    try:        ## Incase there are no balls ;)
+    try:  ## Incase there are no balls ;)
         for p, r in zip(current_level.dict["ball_center"],
                         current_level.dict["ball_radius"]):  # can't use nested cuz it makes wierd things happen xD
             b = DynamicBallWithColor(p, 0, 0, r, space)
@@ -246,7 +256,7 @@ def campaign(screen, current_level):
     ## Portals
     portals = []
     try:
-        for s, e in zip(current_level.dict["portal_start"], 
+        for s, e in zip(current_level.dict["portal_start"],
                         current_level.dict["portal_end"]):  # can't use nested cuz it makes wierd things happen xD
             p = Portal(s, e, 32)
             portals.append(p)
@@ -275,9 +285,10 @@ def campaign(screen, current_level):
             line_number = 0
             ## Dummy Balls
             balls = []
-            try:        ## Incase there are no balls ;)
+            try:  ## Incase there are no balls ;)
                 for p, r in zip(current_level.dict["ball_center"],
-                                current_level.dict["ball_radius"]):  # can't use nested cuz it makes wierd things happen xD
+                                current_level.dict[
+                                    "ball_radius"]):  # can't use nested cuz it makes wierd things happen xD
                     b = DynamicBallWithColor(p, 0, 0, r, space)
                     balls.append(b)
             except KeyError:
@@ -285,8 +296,9 @@ def campaign(screen, current_level):
             ## Portals
             portals = []
             try:
-                for s, e in zip(current_level.dict["portal_start"], 
-                                current_level.dict["portal_end"]):  # can't use nested cuz it makes wierd things happen xD
+                for s, e in zip(current_level.dict["portal_start"],
+                                current_level.dict[
+                                    "portal_end"]):  # can't use nested cuz it makes wierd things happen xD
                     p = Portal(s, e, 32)
                     portals.append(p)
             except KeyError:
@@ -406,13 +418,13 @@ while True:
             to_do = campaign(screen, load_level_by_num('noname', level_num))
 
     elif to_do[0] == 'themes':
-        to_do = theme_screen(screen)  # @todo change this to themes Screen later
+        to_do = theme_screen(screen)
 
     elif to_do[0] == 'leaderboard':
-        to_do = leaderboard_screen(screen)  # @todo add real content to leaderboard Screen
+        to_do = leaderboard_screen(screen)
 
     elif to_do[0] == 'ball':
-        to_do = skin_select_screen(screen)  # @todo change this to ball Screen later
+        to_do = skin_select_screen(screen)
         p_img = to_do[1]
 
     elif to_do[0] == 'quit':
