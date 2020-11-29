@@ -23,7 +23,8 @@ class DB:
             "CREATE TABLE user_data(level text, save text)",
             "CREATE TABLE cache(theme text)",
             "INSERT INTO cache values('Bright White')",
-            "INSERT INTO user_data values('1', '" + Crypt.en('None') + "')"
+            f"INSERT INTO user_data values('{Crypt.en('1')}','{Crypt.en('None')}')"
+
         ]
         DB.execute(commands)
 
@@ -56,7 +57,7 @@ class DB:
         conn = sqlite3.connect(os.path.join('assets', 'data.db'))
         c = conn.cursor()
 
-        c.execute(f"UPDATE user_data SET level = '{n}'")
+        c.execute(f"UPDATE user_data SET level = '{Crypt.en(n)}'")
         User_data.current_level = int(n)
 
         conn.commit()
@@ -72,5 +73,6 @@ class DB:
         vals[0] = list(vals[0])
         conn.commit()
         conn.close()
+        vals[0][0] = Crypt.de(vals[0][0])
         vals[0][-1] = Crypt.de(vals[0][-1])
         return vals
