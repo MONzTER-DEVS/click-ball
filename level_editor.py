@@ -21,6 +21,13 @@ MODES:
         > Click to place ball
         > use 'UP' and "DOWN" arrow keys to increase and decrease the radius of the selected ball
         > 'Enter' to change ball 
+    portal:
+        > 'N' to add a new pair of portals and 'D' to delete the current portal
+        > Click to place portal
+        > 'F' to change end of portal
+        > 'Enter' to change ball 
+
+EDIT : U can now select the end or individual objects using ur mouse ;)
 
 '''
 
@@ -47,6 +54,8 @@ BALL_COLOR = (100, 255, 255)
 mouse_rect = pygame.Rect(0, 0, 10, 10)
 select_rect = pygame.Rect(0, 0, 0, 0)
 select_rect_color = Themes.active_theme.hover
+
+obj_rect = pygame.Rect(0, 0, 0, 0)
 
 def hover(obj_rect, Screen):
     mouse_rect.center = pygame.mouse.get_pos()
@@ -95,9 +104,17 @@ class BouncingBall:
     def __init__(self, x, y, r, color):
         self.center = (x, y)
         self.radius = r
-        self.color = color
+        self.color = color          
+        self.rect = pygame.Rect(
+            self.center[0] - self.radius, 
+            self.center[1] - self.radius, 
+            self.radius * 2, 
+            self.radius * 2
+        )
     
     def draw(self):
+        self.rect.center = self.center
+        self.rect.size = (self.radius * 2, self.radius * 2)
         pygame.draw.circle(screen, self.color, self.center, self.radius)
 
 
@@ -215,6 +232,7 @@ while running:
     
     # Snapping to the grid
     mx, my = pygame.mouse.get_pos()
+    real_mx, real_my = pygame.mouse.get_pos()
     mx = round(mx/GRID_SIZE)*GRID_SIZE
     my = round(my/GRID_SIZE)*GRID_SIZE
     mouse_rect.center = pygame.mouse.get_pos()
@@ -231,6 +249,7 @@ while running:
         elif e.type == pygame.MOUSEBUTTONUP:
             clicked = False
 
+        ## Shortcuts (maybe will b removed in the future)
         if e.type == pygame.KEYDOWN:
             ## Will Run ALWAYS
             if e.key == pygame.K_m:
@@ -273,15 +292,11 @@ while running:
 
             ## Will only run if mode is bouncing ball
             if mode == 'bouncing ball':
-                ## iterating thru balls
-                if e.key == pygame.K_RETURN:
-                    selected_ball_index += 1
-
                 ## adding a new ball
                 if e.key == pygame.K_n:
                     b = BouncingBall(WW//2, WH//2, 10, BALL_COLOR)
                     balls.append(b)
-                    selected_ball_index = balls.index(b) 
+                    selected_ball = balls[-1]
                 
                 ## deleting the current ball
                 if e.key == pygame.K_d:
@@ -360,12 +375,6 @@ while running:
         selected_line = lines[selected_line_index]
     except IndexError:
         selected_line_index = 0
-
-    ## Defining the selected ball
-    try:
-        selected_ball = balls[selected_ball_index]
-    except IndexError:
-        selected_ball_index = 0
     
     ## Defining the selected portal
     try:
@@ -382,8 +391,23 @@ while running:
     ## Drawing lines
     for line in lines:
         line.draw()
+        ## Selecting line
+        # if mouse_rect.centerx in range(line.start_pos[0], line.end_pos[0] + 1):
+        #     if mouse_rect.centery in range(line.start_pos[1], line.end_pos[1] + 1):
+        #         # if clicked and mode == 'line':
+        #         selected_line = line
+        # dist_from_start = math.sqrt(
+        #     (line.start_pos[0] - mouse_rect.centerx)**2 + 
+        #     (line.start_pos[1] - mouse_rect.centery)**2
+        # )
+        # dist_from_end = math.sqrt(
+        #     (line.end_pos[0] - mouse_rect.centerx)**2 + 
+        #     (line.end_pos[1] - mouse_rect.centery)**2
+        # )
+
+        ## Selected line
         if line == selected_line and mode == 'line':
-            line.color = SELECTED_LINE_COLOR
+            # obj_rect = line.rect.copy()
             if clicked and mode == 'line':
                 dist = math.sqrt(
                     (line.start_pos[0] - mouse_rect.centerx)**2 + 
@@ -403,43 +427,46 @@ while running:
                     line.start_pos = (mx, my)
                 if selected_line_end == 'end':
                     line.end_pos = (mx, my)
-        else:
-            line.color = LINE_COLOR
     
     ## Drawing balls
     for ball in balls:
         ball.draw()
+        # Selecting ball
+        dist = math.sqrt(
+            (ball.center[0] - mouse_rect.centerx)**2 + 
+            (ball.center[1] - mouse_rect.centery)**2
+        )
+        if dist < DRAG_OFFSET:
+            selected_ball = ball
+
+        # Selected ball
         if ball == selected_ball and mode == 'bouncing ball':
-            ball.color = SELECTED_BALL_COLOR
+            obj_rect = ball.rect.copy()
             if clicked and mode == 'bouncing ball':
-                dist = math.sqrt(
-                    (ball.center[0] - mouse_rect.centerx)**2 + 
-                    (ball.center[1] - mouse_rect.centery)**2
-                )
                 if dist < DRAG_OFFSET:
                     ball.center = (mx, my)
-        else:
-            ball.color = BALL_COLOR
 
     ## Drawing portals
     for portal in portals:
         portal.draw()
         if portal == selected_portal and mode == 'portal':
+            dist = math.sqrt(
+                (portal.start_pos[0] - mouse_rect.centerx)**2 + 
+                (portal.start_pos[1] - mouse_rect.centery)**2
+            )
+            if dist < DRAG_OFFSET:
+                selected_portal_end = 'start'
+                obj_rect = portal.start_rect.copy()
+
+            dist = math.sqrt(
+                (portal.end_pos[0] - mouse_rect.centerx)**2 + 
+                (portal.end_pos[1] - mouse_rect.centery)**2
+            )
+            if dist < DRAG_OFFSET:
+                selected_portal_end = 'end'
+                obj_rect = portal.end_rect.copy()
+
             if clicked and mode == 'portal':
-                dist = math.sqrt(
-                    (portal.start_pos[0] - mouse_rect.centerx)**2 + 
-                    (portal.start_pos[1] - mouse_rect.centery)**2
-                )
-                if dist < DRAG_OFFSET:
-                    selected_portal_end = 'start'
-
-                dist = math.sqrt(
-                    (portal.end_pos[0] - mouse_rect.centerx)**2 + 
-                    (portal.end_pos[1] - mouse_rect.centery)**2
-                )
-                if dist < DRAG_OFFSET:
-                    selected_portal_end = 'end'
-
                 if selected_portal_end == 'start':
                     portal.start_pos = (mx, my)
                 if selected_portal_end == 'end':
@@ -447,6 +474,7 @@ while running:
 
     ## Drawing flag
     if clicked and mode == 'flag':
+        obj_rect = flag.rect.copy()
         dist = math.sqrt(
             (flag.rect.centerx - mouse_rect.centerx)**2 + 
             (flag.rect.centery - mouse_rect.centery)**2
@@ -457,6 +485,7 @@ while running:
 
     ## Drawing player
     if clicked and mode == 'player':
+        obj_rect = player.rect.copy()
         dist = math.sqrt(
             (player.rect.centerx - mouse_rect.centerx)**2 + 
             (player.rect.centery - mouse_rect.centery)**2
@@ -465,9 +494,11 @@ while running:
             player.rect.center = (mx, my)
     player.draw()
 
+    # Obj selection rect
+    pygame.draw.rect(screen, (200, 200, 200), obj_rect, 3)
 
     pygame.display.update()
 
-# save()
+save()
 
 pygame.quit()
