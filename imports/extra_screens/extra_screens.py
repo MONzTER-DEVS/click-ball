@@ -5,7 +5,7 @@ from imports.db_functions import *
 
 # Declaring some Variables
 lboard_data = []
-buttons = [pygame.image.load("assets/buttons/Yellow button/Play.png"),  pygame.image.load("assets/buttons/Yellow button/settings.png"), pygame.image.load("assets/buttons/Yellow button/Leaderboard.png"), pygame.image.load("assets/buttons/Yellow button/Exit.png"), pygame.image.load("assets/buttons/Glossy05.png"), pygame.image.load("assets/try.png"), pygame.image.load("assets/buttons/Glossy07.png"), pygame.image.load("assets/buttons/Glossy08.png"), pygame.image.load("assets/buttons/Glossy09.png"), pygame.image.load("assets/buttons/Glossy10.png")]
+buttons = [pygame.image.load("assets/buttons/Yellow button/Play.png"),  pygame.image.load("assets/buttons/Yellow button/settings.png"), pygame.image.load("assets/buttons/Yellow button/Leaderboard.png"), pygame.image.load("assets/buttons/Yellow button/Exit.png"), pygame.image.load("assets/buttons/Yellow button/Survival.png"), pygame.image.load("assets/buttons/Yellow button/Campaign.png"), pygame.image.load("assets/buttons/Glossy07.png"), pygame.image.load("assets/buttons/Glossy08.png"), pygame.image.load("assets/buttons/Glossy09.png"), pygame.image.load("assets/buttons/Glossy10.png")]
 
 
 def welcome_screen(screen):
@@ -87,25 +87,31 @@ def game_select_screen(screen):
     theme = Themes.active_theme
     while True:
         screen.fill(theme.background)
-
-        heading_text = big_font.render('Survival', True, theme.font_c)
-        heading_rect = heading_text.get_rect()
-        heading_rect.center = (WW / 4, WH / 2)
-        screen.blit(heading_text, heading_rect.topleft)
-
-        hover(heading_rect, screen)
+        heading_rect = (276, 395, 216, 75)
+        # 276, 395, 216, 75
+        if mouse_rect.colliderect(heading_rect):
+            survival_button = pygame.transform.scale(buttons[4], (232, 79))
+            screen.blit(survival_button, (266, 390))
+        else:
+            survival_button = pygame.transform.scale(buttons[4], (216, 75))
+            screen.blit(survival_button, (276, 395))
         if clicked:
-            if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
+            if 266 < mx < 498 and 390 < my < 469:
                 return ['survival']
 
         heading_text = big_font.render('Campaign', True, theme.font_c)
         heading_rect = heading_text.get_rect()
         heading_rect.center = (WW * 3 / 4, WH / 2)
-        screen.blit(heading_text, heading_rect.topleft)
-
+        # 1010, 395, 250, 75
+        if mouse_rect.colliderect(heading_rect):
+            survival_button = pygame.transform.scale(buttons[5], (260, 79))
+            screen.blit(survival_button, (1000, 390))
+        else:
+            survival_button = pygame.transform.scale(buttons[5], (250, 75))
+            screen.blit(survival_button, (1010, 395))
         hover(heading_rect, screen)
         if clicked:
-            if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
+            if 1000 < mx < 1260 and 390 < my < 469:
                 return ['campaign']
 
         heading_text = small_font.render('Back', True, theme.font_c)
