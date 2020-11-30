@@ -27,7 +27,7 @@ def hover(obj_rect, Screen):
 
         ## Not using pygame.draw.rect cuz usme opacity set nhi hoti
         s_img = pygame.Surface(select_rect.size)
-        s_img.set_alpha(50)
+        s_img.set_alpha(0)
         s_img.fill(select_rect_color)
         Screen.blit(s_img, select_rect.topleft)
 

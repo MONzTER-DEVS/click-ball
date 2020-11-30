@@ -5,6 +5,7 @@ from imports.db_functions import *
 
 # Declaring some Variables
 lboard_data = []
+buttons = [pygame.image.load("assets/buttons/Yellow button/Play.png"),  pygame.image.load("assets/buttons/Yellow button/settings.png"), pygame.image.load("assets/buttons/Yellow button/Leaderboard.png"), pygame.image.load("assets/buttons/Yellow button/Exit.png"), pygame.image.load("assets/buttons/Glossy05.png"), pygame.image.load("assets/try.png"), pygame.image.load("assets/buttons/Glossy07.png"), pygame.image.load("assets/buttons/Glossy08.png"), pygame.image.load("assets/buttons/Glossy09.png"), pygame.image.load("assets/buttons/Glossy10.png")]
 
 
 def welcome_screen(screen):
@@ -19,47 +20,55 @@ def welcome_screen(screen):
         heading_rect = heading_text.get_rect()
         heading_rect.center = (WW / 2, 50)
         screen.blit(heading_text, heading_rect.topleft)
-
-        heading_text = medium_font.render('Game', True, theme.font_c)
-        heading_rect = heading_text.get_rect()
-        heading_rect.center = (WW / 2, 250)
-        screen.blit(heading_text, heading_rect.topleft)
-
-        hover(heading_rect, screen)
+        heading_rect = (695, 220, 150, 65)
+        if mouse_rect.colliderect(heading_rect):
+            play_button = pygame.transform.scale(buttons[0], (177, 69))
+            screen.blit(play_button, (684, 215))
+        else:
+            play_button = pygame.transform.scale(buttons[0], (150, 65))
+            screen.blit(play_button, (695, 220))
         if clicked:
-            if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
+            if 684 < mx < 861 and 220 < my < 284:
                 return ['game']
 
-        # Themes Screen
-        heading_text = small_font.render('Settings', True, theme.font_c)
-        heading_rect = heading_text.get_rect()
-        heading_rect.center = (WW / 2, WH - 100)
-        screen.blit(heading_text, heading_rect.topleft)
-        hover(heading_rect, screen)
+        heading_rect = (696, 730, 145, 54)
+        if mouse_rect.colliderect(heading_rect):
+            settings_button = pygame.transform.scale(buttons[1], (160, 58))
+            screen.blit(settings_button, (690, 725))
+        else:
+            settings_button = pygame.transform.scale(buttons[1], (145, 54))
+            screen.blit(settings_button, (696, 730))
         if clicked:
-            if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
+            if 696 < mx < 841 and 730 < my < 783:
                 return ['settings']
 
-        # Leaderboard
-        heading_text = small_font.render('Leaderboard', True, theme.font_c)
-        heading_rect = heading_text.get_rect()
-        heading_rect.center = (WW / 2, WH - 50)
-        screen.blit(heading_text, heading_rect.topleft)
-        hover(heading_rect, screen)
+        heading_rect = (680, 800, 185, 56)
+        if mouse_rect.colliderect(heading_rect):
+            leaderboard_button = pygame.transform.scale(buttons[2], (200, 60))
+            screen.blit(leaderboard_button, (670, 795))
+        else:
+            leaderboard_button = pygame.transform.scale(buttons[2], (185, 56))
+            screen.blit(leaderboard_button, (680, 800))
         if clicked:
-            if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
+            if 670 < mx < 870 and 795 < my < 855:
                 return ['leaderboard']
 
         # Exit
+
+        heading_rect = (1450, 800, 80, 45)
+        if mouse_rect.colliderect(heading_rect):
+            exit_button = pygame.transform.scale(buttons[3], (90, 49))
+            screen.blit(exit_button, (1440, 795))
+        else:
+            exit_button = pygame.transform.scale(buttons[3], (80, 45))
+            screen.blit(exit_button, (1450, 800))
+        if clicked:
+            if 1440 < mx < 1530 and 795 < my < 844:
+                return ['quit']
         heading_text = small_font.render('Exit', True, theme.font_c)
         heading_rect = heading_text.get_rect()
         heading_rect.center = (WW - 50, WH - 50)
-        screen.blit(heading_text, heading_rect.topleft)
         hover(heading_rect, screen)
-        if clicked:
-            if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
-                return ['quit']
-
         # Events
         clicked = False
         for event in pygame.event.get():
