@@ -198,10 +198,23 @@ class User_data:
         to_return = User_data.save
 
         query = f"UPDATE user_data SET save = '{Crypt.en('None')}'"
-        print(query)
         c.execute(query)
         User_data.save = None
         conn.commit()
 
         conn.close()
         return to_return
+
+    @staticmethod
+    def increment_coins(number_of_coins_to_increment):
+        """
+        use this function to increment Value of coins
+        """
+
+        conn = sqlite3.connect(os.path.join('assets', 'data.db'))
+        c = conn.cursor()
+        query = f"UPDATE user_data SET coins = '{Crypt.en(str(User_data.coins+number_of_coins_to_increment))}'"
+        c.execute(query)
+        User_data.coins += number_of_coins_to_increment
+        conn.commit()
+        conn.close()
