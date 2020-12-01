@@ -20,11 +20,10 @@ class DB:
     @staticmethod
     def make_db():
         commands = [
-            "CREATE TABLE user_data(level text, save text)",
+            "CREATE TABLE user_data(level text, save text, coins text)",
             "CREATE TABLE cache(theme text)",
             "INSERT INTO cache values('Bright White')",
-            f"INSERT INTO user_data values('{Crypt.en('1')}','{Crypt.en('None')}')"
-
+            f"INSERT INTO user_data values('{Crypt.en('1')}','{Crypt.en('None')}', '{Crypt.en('0')}')"
         ]
         DB.execute(commands)
 
@@ -75,4 +74,5 @@ class DB:
         conn.close()
         vals[0][0] = Crypt.de(vals[0][0])
         vals[0][-1] = Crypt.de(vals[0][-1])
+        vals[0][-2] = Crypt.de(vals[0][-2])
         return vals

@@ -184,6 +184,7 @@ class Levels:
 class User_data:
     current_level = None
     save = None
+    coins = None
 
     @staticmethod
     def get_save():
