@@ -9,7 +9,7 @@ from .settings import *
 from .classes import *
 
 #                      name,               bg,       platform_c, mouse_line, font_c,  hover
-light_theme = Themes('Bright White', WHITE, L_BLUE, GREEN, BLACK, WHITE)
+light_theme = Themes('Bright White', WHITE, L_BLUE, GREEN, PINK, WHITE)
 violet_theme = Themes("Limited Voilet", PURPLE, WHITE, WHITE, WHITE, WHITE)
 dark_light_theme = Themes("Darkest Light", BLACK, WHITE, WHITE, L_BLUE, WHITE)
 dracula_theme = Themes("Dracula", BLACK, PINK, PINK, PINK, WHITE)
@@ -49,7 +49,7 @@ t_load_data_while_loading_screen.start()
 # Starting to load data
 
 # starting screen
-screen_flags = pygame.SCALED
+screen_flags = pygame.SCALED | pygame.FULLSCREEN
 screen = pygame.display.set_mode((WW, WH), screen_flags)
 pygame.display.set_caption('Click Ball!')
 clock = pygame.time.Clock()
