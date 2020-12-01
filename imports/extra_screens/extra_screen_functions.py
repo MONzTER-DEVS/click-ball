@@ -1,10 +1,10 @@
 import requests
-
 from imports.settings import *
 mouse_rect = pygame.Rect(0, 0, 10, 10)
 select_rect = pygame.Rect(0, 0, 0, 0)
 select_rect_color = GRAY
-
+coin = pygame.image.load("assets/dollar.png")
+coin = pygame.transform.scale(coin, (40, 40))
 
 def get_data():
     req = requests.get("http://cb-leaderboard.herokuapp.com/get", params={'game': 'physics'}, timeout=90)
@@ -30,4 +30,11 @@ def hover(obj_rect, Screen):
         s_img.set_alpha(0)
         s_img.fill(select_rect_color)
         Screen.blit(s_img, select_rect.topleft)
+
+
+def coin_display(screen):
+    screen.blit(coin, (WW-200, 10))
+    text = small_font.render(":", True, BLACK)
+    screen.blit(text, (WW-155, 10))
+
 

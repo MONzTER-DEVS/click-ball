@@ -29,7 +29,7 @@ def welcome_screen(screen):
     theme = Themes.active_theme
     while True:
         screen.fill(theme.background)
-
+        coin_display(screen)
         # display
         heading_text = big_font.render('Clicker Ball!', True, theme.font_c)
         heading_rect = heading_text.get_rect()
