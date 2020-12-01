@@ -44,7 +44,7 @@ def welcome_screen(screen):
             play_button = pygame.transform.smoothscale(buttons["play"], (150, 65))
             rect = play_button.get_rect(center = (WW//2, 215))
         if clicked and  mouse_rect.colliderect(rect):
-                return ['game']
+            return ['game']
         screen.blit(play_button, rect.topleft)
 
         # Settings Button
@@ -57,7 +57,7 @@ def welcome_screen(screen):
             settings_button = pygame.transform.smoothscale(buttons["settings"], (145, 54))
             rect = settings_button.get_rect(center = (WW//2, WH-150))
         if clicked and  mouse_rect.colliderect(rect):
-                return ['settings']
+            return ['settings']
         screen.blit(settings_button, rect.topleft)
 
         # Leaderboard Button
@@ -69,8 +69,8 @@ def welcome_screen(screen):
         else:
             leaderboard_button = pygame.transform.smoothscale(buttons["leaderboard"], (185, 56))
             rect = leaderboard_button.get_rect(center = (WW//2, WH-75))
-        if clicked and  mouse_rect.colliderect(rect):
-                return ['leaderboard']
+        if clicked and mouse_rect.colliderect(rect):
+            return ['leaderboard']
         screen.blit(leaderboard_button, rect.topleft)
 
         # Exit
@@ -82,8 +82,8 @@ def welcome_screen(screen):
         else:
             exit_button = pygame.transform.smoothscale(buttons["exit"], (80, 45))
             rect = exit_button.get_rect(center = (WW - 100, WH-75))
-        if clicked and  mouse_rect.colliderect(rect):
-                return ['exit']
+        if clicked and mouse_rect.colliderect(rect):
+            return ['quit']
         screen.blit(exit_button, rect.topleft)
 
         heading_text = small_font.render('Exit', True, theme.font_c)
