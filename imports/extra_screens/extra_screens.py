@@ -15,6 +15,7 @@ buttons = {
     "survival": pygame.image.load("assets/buttons/Yellow button/Survival.png"), 
     "campaign": pygame.image.load("assets/buttons/Yellow button/Campaign.png"),
     "theme":pygame.image.load("assets/buttons/Yellow button/Theme.png"),
+    "ball":pygame.image.load("assets/buttons/Yellow button/Ball.png"),
     "glossy07": pygame.image.load("assets/buttons/Glossy07.png"), 
     "glossy08": pygame.image.load("assets/buttons/Glossy08.png"), 
     "glossy09": pygame.image.load("assets/buttons/Glossy09.png"), 
@@ -433,11 +434,19 @@ def settings_screen(screen):
         heading_text = medium_font.render('Change Ball', True, theme.font_c)
         rect = heading_text.get_rect()
         rect.center = (WW // 2, 325)
-        screen.blit(heading_text, rect.topleft)
-        hover(rect, screen)
+        # 647, 297, 243, 57
+        if mouse_rect.colliderect(rect):
+            ball_button = pygame.transform.scale(buttons["ball"], (165, 61))
+            screen.blit(ball_button, (680, 292))
+        else:
+            ball_button = pygame.transform.scale(buttons["ball"], (150, 57))
+            screen.blit(ball_button, (690, 297))
+
+        # screen.blit(heading_text, rect.topleft)
+        # hover(rect, screen)
 
         if clicked:
-            if rect.left < mx < rect.right and rect.top < my < rect.bottom:
+            if 680 < mx < 845 and 292 < my < 353:
                 return ['ball']
 
         heading_text = small_font.render('Back', True, theme.font_c)
