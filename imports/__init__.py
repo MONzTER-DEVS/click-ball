@@ -33,6 +33,7 @@ def load_data_while_loading_screen():
     data = DB.load_user_progress()[0]
     User_data.current_level = int(data[0])
     User_data.save = ast.literal_eval(data[1])
+    User_data.coins = ast.literal_eval(data[2])
 
     for x in range(1, len(os.listdir(os.path.join('assets', 'levels'))) + 1):
         f = open(os.path.join('assets', 'levels', f'level{x}.json'))
