@@ -13,7 +13,9 @@ buttons = {
     "leaderboard": pygame.image.load("assets/buttons/Yellow button/Leaderboard.png"), 
     "exit": pygame.image.load("assets/buttons/Yellow button/Exit.png"), 
     "survival": pygame.image.load("assets/buttons/Yellow button/Survival.png"), 
-    "campaign": pygame.image.load("assets/buttons/Yellow button/Campaign.png"), 
+    "campaign": pygame.image.load("assets/buttons/Yellow button/Campaign.png"),
+    "theme":pygame.image.load("assets/buttons/Yellow button/Theme.png"),
+    "ball":pygame.image.load("assets/buttons/Yellow button/Ball.png"),
     "glossy07": pygame.image.load("assets/buttons/Glossy07.png"), 
     "glossy08": pygame.image.load("assets/buttons/Glossy08.png"), 
     "glossy09": pygame.image.load("assets/buttons/Glossy09.png"), 
@@ -415,25 +417,36 @@ def settings_screen(screen):
         heading_rect = heading_text.get_rect()
         heading_rect.center = (WW // 2, 50)
         screen.blit(heading_text, heading_rect.topleft)
-
         heading_text = medium_font.render('Change Theme', True, theme.font_c)
         rect = heading_text.get_rect()
         rect.center = (WW // 2, 250)
-        screen.blit(heading_text, rect.topleft)
-        hover(rect, screen)
+        if mouse_rect.colliderect(rect):
+            theme_button = pygame.transform.scale(buttons["theme"], (195, 61))
+            screen.blit(theme_button, (668, 217))
+        else:
+            theme_button = pygame.transform.scale(buttons["theme"], (180, 57))
+            screen.blit(theme_button, (678, 222))
 
         if clicked:
-            if rect.left < mx < rect.right and rect.top < my < rect.bottom:
+            if 668 < mx < 863 and 217 < my < 278:
                 return ['themes']
 
         heading_text = medium_font.render('Change Ball', True, theme.font_c)
         rect = heading_text.get_rect()
         rect.center = (WW // 2, 325)
-        screen.blit(heading_text, rect.topleft)
-        hover(rect, screen)
+        # 647, 297, 243, 57
+        if mouse_rect.colliderect(rect):
+            ball_button = pygame.transform.scale(buttons["ball"], (165, 61))
+            screen.blit(ball_button, (680, 292))
+        else:
+            ball_button = pygame.transform.scale(buttons["ball"], (150, 57))
+            screen.blit(ball_button, (690, 297))
+
+        # screen.blit(heading_text, rect.topleft)
+        # hover(rect, screen)
 
         if clicked:
-            if rect.left < mx < rect.right and rect.top < my < rect.bottom:
+            if 680 < mx < 845 and 292 < my < 353:
                 return ['ball']
 
         heading_text = small_font.render('Back', True, theme.font_c)
