@@ -1,10 +1,11 @@
 import requests
 from imports.settings import *
+from imports.classes import *
 mouse_rect = pygame.Rect(0, 0, 10, 10)
 select_rect = pygame.Rect(0, 0, 0, 0)
 select_rect_color = GRAY
-# coin = pygame.image.load("assets/dollar.png")
-coin = pygame.Surface((40, 40))
+coin = pygame.image.load("assets/imgs/dollar.png")
+# coin = pygame.Surface((40, 40))
 coin = pygame.transform.scale(coin, (40, 40))
 
 def get_data():
@@ -35,7 +36,5 @@ def hover(obj_rect, Screen):
 
 def coin_display(screen):
     screen.blit(coin, (WW-200, 10))
-    text = small_font.render(":", True, BLACK)
+    text = small_font.render(f": {User_data.coins}", True, Themes.active_theme.font_c)
     screen.blit(text, (WW-155, 10))
-
-

@@ -200,7 +200,6 @@ def survival_mode(screen, current_level):
         flag.draw(screen)
         # Checking collision b/w player and the victory flag
         if player.rect.colliderect(flag.rect):
-            User_data.increment_coins(50)
                 # Adding to Score and reset score Variables
             score += 100 + int(float(100 * current_level.dict['moves'] / (current_level.dict['moves'] - moves)) / float(
                 time.time() - st_time))
@@ -210,8 +209,7 @@ def survival_mode(screen, current_level):
             lines = balls = remove_lines_and_balls_of_level_by_number(current_level.number, lines, balls)
             player.body.angular_velocity = 0
 
-            score_data = score_screen(screen, score, data={"score": score, "level": current_level.number})
-            # @todo Pass Real data here
+            score_data = score_screen(screen, score, data={"score": score, "level": current_level.number}, coins=50)
 
             if score_data[0] == 'quit': return ['quit']
             if score_data[0] == 'welcome': return ['welcome']

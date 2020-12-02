@@ -1,24 +1,25 @@
-import threading, random
-from imports.classes import *
-from .extra_screen_functions import *
+import random
+import threading
+
 from imports.db_functions import *
+from .extra_screen_functions import *
 
 # Declaring some Variables
 lboard_data = []
 ## Size is 204 x 81
 ## Ratio is 51/20
 buttons = {
-    "play": pygame.image.load("assets/buttons/Yellow button/Play.png"),  
-    "settings": pygame.image.load("assets/buttons/Yellow button/settings.png"), 
-    "leaderboard": pygame.image.load("assets/buttons/Yellow button/Leaderboard.png"), 
-    "exit": pygame.image.load("assets/buttons/Yellow button/Exit.png"), 
-    "survival": pygame.image.load("assets/buttons/Yellow button/Survival.png"), 
+    "play": pygame.image.load("assets/buttons/Yellow button/Play.png"),
+    "settings": pygame.image.load("assets/buttons/Yellow button/settings.png"),
+    "leaderboard": pygame.image.load("assets/buttons/Yellow button/Leaderboard.png"),
+    "exit": pygame.image.load("assets/buttons/Yellow button/Exit.png"),
+    "survival": pygame.image.load("assets/buttons/Yellow button/Survival.png"),
     "campaign": pygame.image.load("assets/buttons/Yellow button/Campaign.png"),
-    "theme":pygame.image.load("assets/buttons/Yellow button/Theme.png"),
-    "ball":pygame.image.load("assets/buttons/Yellow button/Ball.png"),
-    "glossy07": pygame.image.load("assets/buttons/Glossy07.png"), 
-    "glossy08": pygame.image.load("assets/buttons/Glossy08.png"), 
-    "glossy09": pygame.image.load("assets/buttons/Glossy09.png"), 
+    "theme": pygame.image.load("assets/buttons/Yellow button/Theme.png"),
+    "ball": pygame.image.load("assets/buttons/Yellow button/Ball.png"),
+    "glossy07": pygame.image.load("assets/buttons/Glossy07.png"),
+    "glossy08": pygame.image.load("assets/buttons/Glossy08.png"),
+    "glossy09": pygame.image.load("assets/buttons/Glossy09.png"),
     "glossy10": pygame.image.load("assets/buttons/Glossy10.png")
 }
 
@@ -33,16 +34,15 @@ def welcome_screen(screen):
     NUM_OF_BALLS = 50
     balls = []
     for i in range(NUM_OF_BALLS):
-        x, y = random.randint(BORDERS, WW-BORDERS), -BORDERS
+        x, y = random.randint(BORDERS, WW - BORDERS), -BORDERS
         # x, y = WW//2, WH//2
         vx, vy = random.randint(0, 100), random.randint(0, 100)
         r = random.randint(10, 30)
         b = DynamicBallWithColor((x, y), vx, vy, r, space)
         balls.append(b)
-    
+
     while True:
         screen.fill(theme.background)
-        coin_display(screen)
 
         # Ball
         for ball in balls:
@@ -69,52 +69,52 @@ def welcome_screen(screen):
 
         # Play button
         play_button = buttons["play"]
-        rect = play_button.get_rect(center = (WW//2, 215))
+        rect = play_button.get_rect(center=(WW // 2, 215))
         if mouse_rect.colliderect(rect):
             play_button = pygame.transform.smoothscale(buttons["play"], (177, 69))
-            rect = play_button.get_rect(center = (WW//2, 215))
+            rect = play_button.get_rect(center=(WW // 2, 215))
         else:
             play_button = pygame.transform.smoothscale(buttons["play"], (150, 65))
-            rect = play_button.get_rect(center = (WW//2, 215))
-        if clicked and  mouse_rect.colliderect(rect):
+            rect = play_button.get_rect(center=(WW // 2, 215))
+        if clicked and mouse_rect.colliderect(rect):
             return ['game']
         screen.blit(play_button, rect.topleft)
 
         # Settings Button
         settings_button = buttons["settings"]
-        rect = settings_button.get_rect(center = (WW//2, WH-150))
+        rect = settings_button.get_rect(center=(WW // 2, WH - 150))
         if mouse_rect.colliderect(rect):
             settings_button = pygame.transform.smoothscale(buttons["settings"], (160, 58))
-            rect = settings_button.get_rect(center = (WW//2, WH-150))
+            rect = settings_button.get_rect(center=(WW // 2, WH - 150))
         else:
             settings_button = pygame.transform.smoothscale(buttons["settings"], (145, 54))
-            rect = settings_button.get_rect(center = (WW//2, WH-150))
-        if clicked and  mouse_rect.colliderect(rect):
+            rect = settings_button.get_rect(center=(WW // 2, WH - 150))
+        if clicked and mouse_rect.colliderect(rect):
             return ['settings']
         screen.blit(settings_button, rect.topleft)
 
         # Leaderboard Button
         leaderboard_button = buttons["leaderboard"]
-        rect = leaderboard_button.get_rect(center = (WW//2, WH-75))
+        rect = leaderboard_button.get_rect(center=(WW // 2, WH - 75))
         if mouse_rect.colliderect(rect):
             leaderboard_button = pygame.transform.smoothscale(buttons["leaderboard"], (200, 60))
-            rect = leaderboard_button.get_rect(center = (WW//2, WH-75))
+            rect = leaderboard_button.get_rect(center=(WW // 2, WH - 75))
         else:
             leaderboard_button = pygame.transform.smoothscale(buttons["leaderboard"], (185, 56))
-            rect = leaderboard_button.get_rect(center = (WW//2, WH-75))
+            rect = leaderboard_button.get_rect(center=(WW // 2, WH - 75))
         if clicked and mouse_rect.colliderect(rect):
             return ['leaderboard']
         screen.blit(leaderboard_button, rect.topleft)
 
         # Exit
         exit_button = buttons["exit"]
-        rect = exit_button.get_rect(center = (WW - 100, WH-75))
+        rect = exit_button.get_rect(center=(WW - 100, WH - 75))
         if mouse_rect.colliderect(rect):
             exit_button = pygame.transform.smoothscale(buttons["exit"], (90, 49))
-            rect = exit_button.get_rect(center = (WW - 100, WH-75))
+            rect = exit_button.get_rect(center=(WW - 100, WH - 75))
         else:
             exit_button = pygame.transform.smoothscale(buttons["exit"], (80, 45))
-            rect = exit_button.get_rect(center = (WW - 100, WH-75))
+            rect = exit_button.get_rect(center=(WW - 100, WH - 75))
         if clicked and mouse_rect.colliderect(rect):
             return ['quit']
         screen.blit(exit_button, rect.topleft)
@@ -123,6 +123,7 @@ def welcome_screen(screen):
         heading_rect = heading_text.get_rect()
         heading_rect.center = (WW - 50, WH - 50)
         hover(heading_rect, screen)
+        coin_display(screen)
 
         # Events
         clicked = False
@@ -133,7 +134,7 @@ def welcome_screen(screen):
                 clicked = True
                 mx, my = pygame.mouse.get_pos()
 
-        space.step(1.5/FPS)
+        space.step(1.5 / FPS)
         pygame.display.update()
 
 
@@ -240,10 +241,16 @@ def theme_screen(screen):
         pygame.display.update()
 
 
-def score_screen(screen, score, data='None'):
+def score_screen(screen, score, data='None', coins=0):
     theme = Themes.active_theme
     clicked = False
     mx, my = pygame.mouse.get_pos()
+
+    original_coins = User_data.coins
+    coins_shown = 0
+    to_increment = True
+    increase_coin = True
+    coin_sound = pygame.mixer.Sound(os.path.join('assets', 'sounds', 'Coin_sound.wav'))
     while True:
         screen.fill(theme.background)
         heading_text = big_font.render('You passed the Level!', True, theme.font_c)
@@ -264,6 +271,7 @@ def score_screen(screen, score, data='None'):
         hover(heading_rect, screen)
         if clicked:
             if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
+                coin_sound.stop()
                 return ['survival']
 
         heading_text = medium_font.render('Save and go back', True, theme.font_c)
@@ -275,10 +283,33 @@ def score_screen(screen, score, data='None'):
         if clicked:
             if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
                 DB.save_survival(data)
+                coin_sound.stop()
                 return ['welcome']
+
+        if coins_shown // 2 != coins:
+            coins_shown += 1
+            if increase_coin:
+                User_data.coins += 1
+                increase_coin = False
+                coin_sound.play()
+
+            else:
+                increase_coin = True
+
+        elif to_increment:
+            to_increment = False
+            User_data.coins = original_coins
+            User_data.increment_coins(50)
+        heading_text = medium_font.render(f'Coins Earned: {coins_shown // 2}', True, theme.font_c)
+        heading_rect = heading_text.get_rect()
+        heading_rect.center = (WW // 2, WH * 3 // 4)
+        screen.blit(heading_text, heading_rect.topleft)
+
+        coin_display(screen)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                coin_sound.stop()
                 return ['quit']
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 clicked = True
