@@ -1,4 +1,4 @@
-import threading
+import threading, random
 from imports.classes import *
 from .extra_screen_functions import *
 from imports.db_functions import *
@@ -27,9 +27,40 @@ def welcome_screen(screen):
     clicked = False
     mx, my = pygame.mouse.get_pos()
     theme = Themes.active_theme
+    space = pymunk.Space()
+
+    BORDERS = 50
+    NUM_OF_BALLS = 50
+    balls = []
+    for i in range(NUM_OF_BALLS):
+        x, y = random.randint(BORDERS, WW-BORDERS), -BORDERS
+        # x, y = WW//2, WH//2
+        vx, vy = random.randint(0, 100), random.randint(0, 100)
+        r = random.randint(10, 30)
+        b = DynamicBallWithColor((x, y), vx, vy, r, space)
+        balls.append(b)
+    
     while True:
         screen.fill(theme.background)
         coin_display(screen)
+
+        # Ball
+        for ball in balls:
+            ball.draw(screen, Themes.active_theme.bouncing_ball_c)
+            if ball.body.position.x >= WW + BORDERS:
+                x, y = -BORDERS, ball.body.position[1]
+                ball.body.position = (x, y)
+            elif ball.body.position.x <= -BORDERS:
+                x, y = WW + BORDERS, ball.body.position[1]
+                ball.body.position = (x, y)
+
+            if ball.body.position.y >= WH + BORDERS:
+                x, y = ball.body.position[0], -BORDERS
+                ball.body.position = (x, y)
+            elif ball.body.position.y <= - BORDERS:
+                x, y = ball.body.position[0], WH + BORDERS
+                ball.body.position = (x, y)
+
         # display
         heading_text = big_font.render('Clicker Ball!', True, theme.font_c)
         heading_rect = heading_text.get_rect()
@@ -102,6 +133,7 @@ def welcome_screen(screen):
                 clicked = True
                 mx, my = pygame.mouse.get_pos()
 
+        space.step(1.5/FPS)
         pygame.display.update()
 
 

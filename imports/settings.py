@@ -28,6 +28,7 @@ L_BLUE = (0, 255, 255)
 PINK = (255, 0, 255)
 PURPLE = (148, 0, 211)
 GRAY = (100, 100, 100)
+LIME = (191, 255, 0)
 
 ## Player Skins
 img_path = os.path.join('assets', 'imgs', 'skins_png')
