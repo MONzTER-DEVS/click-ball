@@ -200,7 +200,8 @@ def survival_mode(screen, current_level):
         flag.draw(screen)
         # Checking collision b/w player and the victory flag
         if player.rect.colliderect(flag.rect):
-            # Adding to Score and reset score Variables
+            User_data.increment_coins(50)
+                # Adding to Score and reset score Variables
             score += 100 + int(float(100 * current_level.dict['moves'] / (current_level.dict['moves'] - moves)) / float(
                 time.time() - st_time))
             st_time = 0
