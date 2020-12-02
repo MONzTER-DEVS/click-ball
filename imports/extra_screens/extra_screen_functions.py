@@ -4,6 +4,7 @@ mouse_rect = pygame.Rect(0, 0, 10, 10)
 select_rect = pygame.Rect(0, 0, 0, 0)
 select_rect_color = GRAY
 coin = pygame.image.load("assets/dollar.png")
+# coin = pygame.Surface((40, 40))
 coin = pygame.transform.scale(coin, (40, 40))
 
 def get_data():

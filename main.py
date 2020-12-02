@@ -30,11 +30,8 @@ def remove_lines_and_balls_of_level_by_number(i, lines, balls):
     '''
     for rl in lines:
         space.remove(rl.body, rl.shape)  # Extremely Necessary
-    # try:
     for rb in balls:
         space.remove(rb.body, rb.shape)  # Extremely Necessary
-    # except Exception:
-    #     pass
     return []  # Deleting the lines of the prev level
 
 
@@ -91,7 +88,6 @@ def survival_mode(screen, current_level):
         if st_time == 0:
 
             # load level
-            print(balls)
             lines = balls = remove_lines_and_balls_of_level_by_number(current_level.number, lines, balls)
             player.body.position = current_level.dict["player"][0]  ## Player
             player.body.velocity = (0, 0)  ## Player
@@ -193,7 +189,7 @@ def survival_mode(screen, current_level):
         for line in lines:
             line.draw(screen, Themes.active_theme.platform_c)
         for ball in balls:
-            ball.draw(screen, WHITE)
+            ball.draw(screen, Themes.active_theme.bouncing_ball_c)
         for portal in portals:
             portal.draw(screen, space)
             portal.teleport(player)
@@ -372,7 +368,7 @@ def campaign(screen, current_level):
         for line in lines:
             line.draw(screen, Themes.active_theme.platform_c)
         for ball in balls:
-            ball.draw(screen, WHITE)
+            ball.draw(screen, Themes.active_theme.bouncing_ball_c)
         for portal in portals:
             portal.draw(screen, space)
             portal.teleport(player)
