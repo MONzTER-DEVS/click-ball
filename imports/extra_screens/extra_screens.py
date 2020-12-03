@@ -18,7 +18,8 @@ buttons = {
     "theme": pygame.image.load("assets/buttons/Yellow button/Theme.png"),
     "ball": pygame.image.load("assets/buttons/Yellow button/Ball.png"),
     "back": pygame.image.load("assets/buttons/Yellow button/Back.png"),
-    "continue": pygame.image.load("assets/buttons/Yellow button/Continue.png")
+    "continue": pygame.image.load("assets/buttons/Yellow button/Continue.png"),
+    "next level": pygame.image.load("assets/buttons/Yellow button/Next Level.png"),
 }
 
 
@@ -76,7 +77,7 @@ def welcome_screen(screen):
         if clicked and mouse_rect.colliderect(rect):
             return ['game']
         screen.blit(play_button, rect.topleft)
-
+        hover(heading_rect, screen)
         # Settings Button
         settings_button = buttons["settings"]
         rect = settings_button.get_rect(center=(WW // 2, WH - 150))
@@ -89,7 +90,7 @@ def welcome_screen(screen):
         if clicked and mouse_rect.colliderect(rect):
             return ['settings']
         screen.blit(settings_button, rect.topleft)
-
+        hover(heading_rect, screen)
         # Leaderboard Button
         leaderboard_button = buttons["leaderboard"]
         rect = leaderboard_button.get_rect(center=(WW // 2, WH - 75))
@@ -102,7 +103,7 @@ def welcome_screen(screen):
         if clicked and mouse_rect.colliderect(rect):
             return ['leaderboard']
         screen.blit(leaderboard_button, rect.topleft)
-
+        hover(heading_rect, screen)
         # Exit
         exit_button = buttons["exit"]
         rect = exit_button.get_rect(center=(WW - 100, WH - 75))
@@ -152,7 +153,6 @@ def game_select_screen(screen):
         if clicked and mouse_rect.colliderect(rect):
             return ['survival']
         screen.blit(survival_button, rect.topleft)
-
         heading_text = big_font.render('Campaign', True, theme.font_c)
         heading_rect = heading_text.get_rect()
         heading_rect.center = (WW * 3 / 4, WH / 2)
@@ -268,29 +268,34 @@ def score_screen(screen, score, data='None', coins=0):
         heading_rect.center = (WW // 2, 350)
         screen.blit(heading_text, heading_rect.topleft)
 
-        heading_text = medium_font.render('Next Level', True, theme.font_c)
-        heading_rect = heading_text.get_rect()
-        heading_rect.center = (WW * 3 // 4, WH // 2 + 100)
-        screen.blit(heading_text, heading_rect.topleft)
-
         hover(heading_rect, screen)
-        if clicked:
-            if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
-                coin_sound.stop()
-                return ['survival']
-
-        heading_text = medium_font.render('Save and go back', True, theme.font_c)
-        heading_rect = heading_text.get_rect()
-        heading_rect.center = (WW // 4, WH // 2 + 100)
-        screen.blit(heading_text, heading_rect.topleft)
-
+        next_level_button = buttons["next level"]
+        rect = next_level_button.get_rect(center=(WW * 3 // 4, WH // 2 + 100))
+        if mouse_rect.colliderect(rect):
+            next_level_button = pygame.transform.smoothscale(buttons["next level"], (260, 79))
+            rect = next_level_button.get_rect(center=(WW * 3 // 4, WH // 2 + 100))
+        else:
+            next_level_button = pygame.transform.smoothscale(buttons["next level"], (250, 75))
+            rect = next_level_button.get_rect(center=(WW * 3 // 4, WH // 2 + 100))
         hover(heading_rect, screen)
-        if clicked:
-            if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
-                DB.save_survival(data)
-                coin_sound.stop()
-                return ['welcome']
-
+        if clicked and mouse_rect.colliderect(rect):
+            coin_sound.stop()
+            return ['survival']
+        screen.blit(next_level_button, rect.topleft)
+        exit_button = buttons["exit"]
+        rect = exit_button.get_rect(center=(WW // 4, WH // 2 + 100))
+        if mouse_rect.colliderect(rect):
+            exit_button = pygame.transform.smoothscale(buttons["exit"], (130, 79))
+            rect = exit_button.get_rect(center=(WW // 4, WH // 2 + 100))
+        else:
+            exit_button = pygame.transform.smoothscale(buttons["exit"], (120, 75))
+            rect = exit_button.get_rect(center=(WW // 4, WH // 2 + 100))
+        if clicked and mouse_rect.colliderect(rect):
+            DB.save_survival(data)
+            coin_sound.stop()
+            return ['welcome']
+        screen.blit(exit_button, rect.topleft)
+        hover(heading_rect, screen)
         if coins_shown // 2 != coins:
             coins_shown += 1
             if increase_coin:
@@ -419,11 +424,21 @@ def level_select_screen(screen):
         heading_rect = heading_text.get_rect()
         heading_rect.center = (WW - 100, WH - 50)
         screen.blit(heading_text, heading_rect.topleft)
-
+        continue_button = buttons["continue"]
+        rect = continue_button.get_rect(center=(WW - 100, WH - 50))
+        if mouse_rect.colliderect(rect):
+            continue_button = pygame.transform.smoothscale(buttons["continue"], (200, 79))
+            rect = continue_button.get_rect(center=(WW - 100, WH - 50))
+        else:
+            continue_button = pygame.transform.smoothscale(buttons["continue"], (190, 75))
+            rect = continue_button.get_rect(center=(WW - 100, WH - 50))
+        if clicked and mouse_rect.colliderect(rect):
+            return level
+        screen.blit(continue_button, rect.topleft)
         hover(heading_rect, screen)
-        if clicked:
-            if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
-                return level
+        # if clicked:
+        #     if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
+        #         return level
 
         ## Next Page
         heading_text = medium_font.render('->', True, theme.font_c)
