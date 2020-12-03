@@ -121,7 +121,7 @@ def welcome_screen(screen):
         heading_rect = heading_text.get_rect()
         heading_rect.center = (WW - 50, WH - 50)
         hover(heading_rect, screen)
-        coin_display(screen)
+        coin_display(screen, coins=User_data.coins)
 
         # Events
         clicked = False
@@ -143,13 +143,13 @@ def game_select_screen(screen):
     while True:
         screen.fill(theme.background)
         survival_button = buttons["survival"]
-        rect = survival_button.get_rect(center=(WW/4, WH/2))
+        rect = survival_button.get_rect(center=(WW / 4, WH / 2))
         if mouse_rect.colliderect(rect):
             survival_button = pygame.transform.smoothscale(buttons["survival"], (232, 79))
-            rect = survival_button.get_rect(center=(WW/4, WH/2))
+            rect = survival_button.get_rect(center=(WW / 4, WH / 2))
         else:
             survival_button = pygame.transform.smoothscale(buttons["survival"], (216, 75))
-            rect = survival_button.get_rect(center=(WW/4, WH/2))
+            rect = survival_button.get_rect(center=(WW / 4, WH / 2))
         if clicked and mouse_rect.colliderect(rect):
             return ['survival']
         screen.blit(survival_button, rect.topleft)
@@ -157,22 +157,22 @@ def game_select_screen(screen):
         heading_rect = heading_text.get_rect()
         heading_rect.center = (WW * 3 / 4, WH / 2)
         campaign_button = buttons["campaign"]
-        rect = campaign_button.get_rect(center=(WW - 400, WH/2))
+        rect = campaign_button.get_rect(center=(WW - 400, WH / 2))
         if mouse_rect.colliderect(rect):
             survival_button = pygame.transform.smoothscale(buttons["campaign"], (260, 79))
-            rect = survival_button.get_rect(center=(WW - 400, WH/2))
+            rect = survival_button.get_rect(center=(WW - 400, WH / 2))
         else:
             survival_button = pygame.transform.smoothscale(buttons["campaign"], (250, 75))
-            rect = survival_button.get_rect(center=(WW - 400, WH/2))
+            rect = survival_button.get_rect(center=(WW - 400, WH / 2))
         hover(heading_rect, screen)
         if clicked and mouse_rect.colliderect(rect):
             return ['campaign']
         screen.blit(survival_button, rect.topleft)
         back_button = buttons["back"]
-        rect = back_button.get_rect(center=(10, WH-50))
+        rect = back_button.get_rect(center=(10, WH - 50))
         if mouse_rect.colliderect(rect):
             back_button = pygame.transform.smoothscale(buttons["back"], (110, 64))
-            rect = back_button.get_rect(center=(60, WH-50))
+            rect = back_button.get_rect(center=(60, WH - 50))
         else:
             back_button = pygame.transform.smoothscale(buttons["back"], (100, 60))
             rect = back_button.get_rect(center=(60, WH - 50))
@@ -251,10 +251,10 @@ def score_screen(screen, score, data='None', coins=0):
     clicked = False
     mx, my = pygame.mouse.get_pos()
 
-    original_coins = User_data.coins
-    coins_shown = 0
-    to_increment = True
-    increase_coin = True
+    coin_state = "ongoing"
+    step = 0
+    coins_shown = 0  # show Number of coins
+
     coin_sound = pygame.mixer.Sound(os.path.join('assets', 'sounds', 'Coin_sound.wav'))
     while True:
         screen.fill(theme.background)
@@ -296,26 +296,26 @@ def score_screen(screen, score, data='None', coins=0):
             return ['welcome']
         screen.blit(exit_button, rect.topleft)
         hover(heading_rect, screen)
-        if coins_shown // 2 != coins:
-            coins_shown += 1
-            if increase_coin:
-                User_data.coins += 1
-                increase_coin = False
-                coin_sound.play()
 
-            else:
-                increase_coin = True
+        if coin_state == "ongoing":
+            print(step, coins_shown, User_data.coins)
+            step += 1
+            if step % 2 == 0:
+                coins_shown += 1
+                step = 0
+            if coins_shown == coins:
+                coin_state = "finished"
+                User_data.increment_coins(coins)
 
-        elif to_increment:
-            to_increment = False
-            User_data.coins = original_coins
-            User_data.increment_coins(50)
-        heading_text = medium_font.render(f'Coins Earned: {coins_shown // 2}', True, theme.font_c)
+        heading_text = medium_font.render(f'Coins Earned: {coins_shown}', True, theme.font_c)
         heading_rect = heading_text.get_rect()
         heading_rect.center = (WW // 2, WH * 3 // 4)
         screen.blit(heading_text, heading_rect.topleft)
 
-        coin_display(screen)
+        if coin_state == "ongoing":
+            coin_display(screen, coins=coins_shown+User_data.coins)
+        else:
+            coin_display(screen, coins=User_data.coins)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
