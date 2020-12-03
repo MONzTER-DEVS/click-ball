@@ -29,7 +29,7 @@ def welcome_screen(screen):
     theme = Themes.active_theme
     space = pymunk.Space()
     BORDERS = 50
-    NUM_OF_BALLS = 50
+    NUM_OF_BALLS = 100
     balls = []
     for i in range(NUM_OF_BALLS):
         x, y = random.randint(BORDERS, WW - BORDERS), -BORDERS
@@ -39,10 +39,13 @@ def welcome_screen(screen):
         b = DynamicBallWithColor((x, y), vx, vy, r, space)
         balls.append(b)
 
+    mouse_ball = DynamicBallWithColor((mx, my), 0, 0, 100, space)
+
     while True:
         screen.fill(theme.background)
 
         # Ball
+        mouse_ball.body.position = mx, my
         for ball in balls:
             ball.draw(screen, Themes.active_theme.bouncing_ball_c)
             if ball.body.position.x >= WW + BORDERS:
@@ -124,6 +127,7 @@ def welcome_screen(screen):
         coin_display(screen, coins=User_data.coins)
 
         # Events
+        mx, my = pygame.mouse.get_pos()
         clicked = False
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -213,8 +217,6 @@ def theme_screen(screen):
             back_button = pygame.transform.smoothscale(buttons["back"], (100, 60))
             rect = back_button.get_rect(center=(60, WH - 50))
         hover(heading_rect, screen)
-        if clicked:
-            return ['welcome']
         screen.blit(back_button, rect.topleft)
 
         if clicked and mouse_rect.colliderect(rect):
@@ -511,14 +513,15 @@ def settings_screen(screen):
         rect.center = (WW // 2, 250)
         if mouse_rect.colliderect(rect):
             theme_button = pygame.transform.scale(buttons["theme"], (195, 61))
-            screen.blit(theme_button, (668, 217))
+            rect = theme_button.get_rect(center=(WW // 2, 250))
         else:
             theme_button = pygame.transform.scale(buttons["theme"], (180, 57))
-            screen.blit(theme_button, (678, 222))
+            rect = theme_button.get_rect(center=(WW // 2, 250))
 
-        if clicked:
-            if 668 < mx < 863 and 217 < my < 278:
-                return ['themes']
+        screen.blit(theme_button, rect.topleft)
+
+        if clicked and mouse_rect.colliderect(rect):
+            return ['themes']
 
         heading_text = medium_font.render('Change Ball', True, theme.font_c)
         rect = heading_text.get_rect()
@@ -526,10 +529,12 @@ def settings_screen(screen):
         # 647, 297, 243, 57
         if mouse_rect.colliderect(rect):
             ball_button = pygame.transform.scale(buttons["ball"], (165, 61))
-            screen.blit(ball_button, (680, 292))
+            rect = ball_button.get_rect(center=(WW//2, 325))
         else:
             ball_button = pygame.transform.scale(buttons["ball"], (150, 57))
-            screen.blit(ball_button, (690, 297))
+            rect = ball_button.get_rect(center=(WW//2, 325))
+
+        screen.blit(ball_button, rect.topleft)
 
         # screen.blit(heading_text, rect.topleft)
         # hover(rect, screen)
@@ -635,6 +640,7 @@ def skin_select_screen(screen):
             if clicked:
                 if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
                     skin = num
+                    clicked = False
             ## Drawing a selection rectangle
             if num == skin:
                 s_img = pygame.Surface(heading_rect.size)
