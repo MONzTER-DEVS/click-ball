@@ -19,7 +19,7 @@ buttons = {
     "ball": pygame.image.load("assets/buttons/Yellow button/Ball.png"),
     "back": pygame.image.load("assets/buttons/Yellow button/Back.png"),
     "continue": pygame.image.load("assets/buttons/Yellow button/Continue.png"),
-    "next level": pygame.image.load("assets/buttons/Yellow button/Next Level.png"),
+    "next level": pygame.image.load("assets/buttons/Yellow button/Next level.png"),
 }
 
 
