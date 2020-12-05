@@ -135,6 +135,8 @@ def welcome_screen(screen):
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 clicked = True
                 mx, my = pygame.mouse.get_pos()
+            if event.type == pygame.MOUSEBUTTONUP:
+                clicked = False
 
         space.step(1.5 / FPS)
         pygame.display.update()
@@ -192,6 +194,8 @@ def game_select_screen(screen):
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 clicked = True
                 mx, my = pygame.mouse.get_pos()
+            if event.type == pygame.MOUSEBUTTONUP:
+                clicked = False
 
         pygame.display.update()
 
@@ -244,6 +248,8 @@ def theme_screen(screen):
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 clicked = True
                 mx, my = pygame.mouse.get_pos()
+            if event.type == pygame.MOUSEBUTTONUP:
+                clicked = False
 
         pygame.display.update()
 
@@ -326,6 +332,8 @@ def score_screen(screen, score, data='None', coins=0):
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 clicked = True
                 mx, my = pygame.mouse.get_pos()
+            if event.type == pygame.MOUSEBUTTONUP:
+                clicked = False
 
         pygame.display.update()
 
@@ -398,6 +406,8 @@ def leaderboard_screen(screen):
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 clicked = True
                 mx, my = pygame.mouse.get_pos()
+            if event.type == pygame.MOUSEBUTTONUP:
+                clicked = False
 
         pygame.display.update()
 
@@ -410,7 +420,7 @@ def level_select_screen(screen):
     levels_per_page = 5
     gap = WH // levels_per_page
 
-    max_page, min_page = 10, 1
+    max_page, min_page = 5, 1
     page = 1  ## Default page
 
     level_nums_to_display = range(((page - 1) * levels_per_page) + 1, (page * levels_per_page) + 1)
@@ -422,10 +432,6 @@ def level_select_screen(screen):
         heading_rect.center = (WW // 2, 50)
         screen.blit(heading_text, heading_rect.topleft)
 
-        heading_text = medium_font.render('Continue', True, theme.font_c)
-        heading_rect = heading_text.get_rect()
-        heading_rect.center = (WW - 100, WH - 50)
-        screen.blit(heading_text, heading_rect.topleft)
         continue_button = buttons["continue"]
         rect = continue_button.get_rect(center=(WW - 100, WH - 50))
         if mouse_rect.colliderect(rect):
@@ -437,6 +443,21 @@ def level_select_screen(screen):
         if clicked and mouse_rect.colliderect(rect):
             return level
         screen.blit(continue_button, rect.topleft)
+
+        back_button = buttons["back"]
+        rect = back_button.get_rect(center=(10, WH - 50))
+        if mouse_rect.colliderect(rect):
+            back_button = pygame.transform.smoothscale(buttons["back"], (110, 64))
+            rect = back_button.get_rect(center=(60, WH - 50))
+        else:
+            back_button = pygame.transform.smoothscale(buttons["back"], (100, 60))
+            rect = back_button.get_rect(center=(60, WH - 50))
+        hover(heading_rect, screen)
+        if clicked and mouse_rect.colliderect(rect):
+            clicked = False
+            return ['game']
+        screen.blit(back_button, rect.toxpleft)
+
         hover(heading_rect, screen)
         # if clicked:
         #     if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
@@ -490,9 +511,11 @@ def level_select_screen(screen):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return 'quit'
-            elif event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.MOUSEBUTTONDOWN:
                 clicked = True
                 mx, my = pygame.mouse.get_pos()
+            if event.type == pygame.MOUSEBUTTONUP:
+                clicked = False
 
         pygame.display.update()
 
@@ -561,6 +584,8 @@ def settings_screen(screen):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 clicked = True
                 mx, my = pygame.mouse.get_pos()
+            if event.type == pygame.MOUSEBUTTONUP:
+                clicked = False
         pygame.display.update()
 
 
@@ -654,6 +679,8 @@ def skin_select_screen(screen):
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 clicked = True
                 mx, my = pygame.mouse.get_pos()
+            if event.type == pygame.MOUSEBUTTONUP:
+                clicked = False
 
         pygame.display.update()
 
@@ -713,5 +740,7 @@ def skin_select_screen(screen):
 #             if event.type == pygame.MOUSEBUTTONDOWN:
 #                 clicked = True
 #                 mx, my = pygame.mouse.get_pos()
+            # if event.type == pygame.MOUSEBUTTONUP:
+            #     clicked = False
 #
 #         pygame.display.update()

@@ -318,7 +318,7 @@ def campaign(screen, current_level):
         if death_time != 0:
             if death_time - int(time.time()) + 10 <= 0:
                 lines = balls = remove_lines_and_balls_of_level_by_number(current_level.number, lines, balls)
-                return ['welcome']  # @todo make a Death screen
+                return ['campaign']  # @todo make a Death screen
 
             # giving a 10 seconds timer and Auto reset if not colliding with the Flag
             if death_time != 0:
@@ -337,7 +337,7 @@ def campaign(screen, current_level):
                     lines = balls = remove_lines_and_balls_of_level_by_number(current_level, lines, balls)
                     current_level = load_level_by_num('noname', 1)
                     player.body.angular_velocity = 0
-                    return ['welcome']
+                    return ['campaign']
 
         ## -------------------- Player --------------------
         player.draw(screen)
