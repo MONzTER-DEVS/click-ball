@@ -456,7 +456,7 @@ def level_select_screen(screen):
         if clicked and mouse_rect.colliderect(rect):
             clicked = False
             return ['game']
-        screen.blit(back_button, rect.toxpleft)
+        screen.blit(back_button, rect.topleft)
 
         hover(heading_rect, screen)
         # if clicked:

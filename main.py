@@ -34,6 +34,11 @@ def remove_lines_and_balls_of_level_by_number(i, lines, balls):
         space.remove(rb.body, rb.shape)  # Extremely Necessary
     return []  # Deleting the lines of the prev level
 
+def reset_player_pos(player, WW, WH, current_level):
+    if player.body.position[0] > WW or player.body.position[0] < 0:
+        player.body.position = current_level.dict["player"][0]  ## Player
+    if player.body.position[1] > WH:
+        player.body.position = current_level.dict["player"][0]  ## Player
 
 ## ========================= Survival Mode =========================
 def survival_mode(screen, current_level):
@@ -184,6 +189,9 @@ def survival_mode(screen, current_level):
             distx = max_speed
         if disty > max_speed:
             disty = max_speed
+        
+        # reseting player's
+        reset_player_pos(player, WW, WH, current_level)
 
         ## -------------------- Lines, balls and Portals --------------------
         for line in lines:
@@ -362,6 +370,9 @@ def campaign(screen, current_level):
             distx = max_speed
         if disty > max_speed:
             disty = max_speed
+
+        # reseting player's position
+        reset_player_pos(player, WW, WH, current_level)
 
         ## -------------------- Lines, balls and Portals --------------------
         for line in lines:
