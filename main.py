@@ -44,9 +44,10 @@ def remove_lines_and_balls_of_level_by_number(i, lines, balls):
 def reset_player_pos(player, WW, WH, current_level):
     if player.body.position[0] > WW or player.body.position[0] < 0:
         player.body.position = current_level.dict["player"][0]  ## Player
+        player.body.velocity = (0, 0)
     if player.body.position[1] > WH:
         player.body.position = current_level.dict["player"][0]  ## Player
-
+        player.body.velocity = (0, 0)
 
 ## ========================= Survival Mode =========================
 def survival_mode(screen, current_level):

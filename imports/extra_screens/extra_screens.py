@@ -354,7 +354,7 @@ def leaderboard_screen(screen):
     t.start()
     clicked = False
     while True:
-        initial_coordinates = [50, 100]
+        initial_coordinates = [WW // 2 - 200, 100]
         screen.fill(theme.background)
         heading_text = big_font.render('Click Ball Leaderboard!', True, theme.font_c)
         heading_rect = heading_text.get_rect()
@@ -364,12 +364,12 @@ def leaderboard_screen(screen):
         if len(lboard_data) != 0:
             heading_text = medium_font.render('Name', True, theme.font_c)
             heading_rect = heading_text.get_rect()
-            heading_rect.topleft = (50, 100)
+            heading_rect.topleft = (WW // 2 - 200, 100)
             screen.blit(heading_text, heading_rect.topleft)
 
-            heading_text = medium_font.render('score', True, theme.font_c)
+            heading_text = medium_font.render('Score', True, theme.font_c)
             heading_rect = heading_text.get_rect()
-            heading_rect.topleft = (350, 100)
+            heading_rect.topleft = (WW // 2 + 100, 100)
             screen.blit(heading_text, heading_rect.topleft)
 
             for obj in lboard_data:
@@ -716,6 +716,7 @@ def death_screen(screen, status, score):
             if clicked:
                 def sending_thread():
                     send_data_to_leaderboard(User_data.name, score)
+
                 sending_thread()
                 return ['welcome']
         clicked = False
@@ -738,7 +739,7 @@ def name_screen(screen):
                 return 'quit'
 
         pygame.display.update()
-        DB.save_name(input('name'))
+        DB.save_name(input('name: '))
         break
 # WIll come in handy when we will have Multiple Users :)
 
