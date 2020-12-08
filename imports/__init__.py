@@ -23,10 +23,18 @@ from .db_functions import *
 can_start_game = False
 
 
+errors = []
+
 def load_data_while_loading_screen():
     global can_start_game
     if not os.path.exists(os.path.join('assets', 'data.db')):
         DB.make_db()
+
+    if DB.check_name() == "no name":
+        errors.append("no name")
+    else:
+        User_data.name = DB.fetch_name()
+    st_time = time.time()
     data = DB.Cache.load()
     Themes.set_active_by_name(data[0])
 
@@ -39,9 +47,9 @@ def load_data_while_loading_screen():
         f = open(os.path.join('assets', 'levels', f'level{x}.json'))
         Levels(name='placeholder', data=json.load(f))
         f.close()
-    time.sleep(2)
+    time.sleep(3 - float(time.time() - st_time))
 
-    # change this at the absolute end else conflicts will happen
+    # change this at the absolute end else conflicts would take place
     can_start_game = True
 
 
@@ -50,7 +58,7 @@ t_load_data_while_loading_screen.start()
 # Starting to load data
 
 # starting screen
-screen_flags = pygame.SCALED
+screen_flags = pygame.SCALED | pygame.RESIZABLE
 screen = pygame.display.set_mode((WW, WH), screen_flags)
 pygame.display.set_caption('Click Ball!')
 clock = pygame.time.Clock()

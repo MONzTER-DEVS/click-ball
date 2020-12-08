@@ -321,7 +321,7 @@ def score_screen(screen, score, data='None', coins=0):
         screen.blit(heading_text, heading_rect.topleft)
 
         if coin_state == "ongoing":
-            coin_display(screen, coins=coins_shown+User_data.coins)
+            coin_display(screen, coins=coins_shown + User_data.coins)
         else:
             coin_display(screen, coins=User_data.coins)
 
@@ -552,10 +552,10 @@ def settings_screen(screen):
         # 647, 297, 243, 57
         if mouse_rect.colliderect(rect):
             ball_button = pygame.transform.scale(buttons["ball"], (165, 61))
-            rect = ball_button.get_rect(center=(WW//2, 325))
+            rect = ball_button.get_rect(center=(WW // 2, 325))
         else:
             ball_button = pygame.transform.scale(buttons["ball"], (150, 57))
-            rect = ball_button.get_rect(center=(WW//2, 325))
+            rect = ball_button.get_rect(center=(WW // 2, 325))
 
         screen.blit(ball_button, rect.topleft)
 
@@ -684,6 +684,62 @@ def skin_select_screen(screen):
 
         pygame.display.update()
 
+
+def death_screen(screen, status, score):
+    theme = Themes.active_theme
+    clicked = False
+    mx, my = pygame.mouse.get_pos()
+
+    if status == "completed":
+        header_text = big_font.render('Well played! You completed the Game', True, theme.font_c)
+    else:
+        header_text = big_font.render('Better luck next time', True, theme.font_c)
+    header_rect = header_text.get_rect()
+    header_rect.center = (WW // 2, 50)
+
+    send_data_text = small_font.render('Send Data to Leaderboard', True, theme.font_c)
+    send_data_rect = send_data_text.get_rect()
+    send_data_rect.center = (WW // 2, 350)
+
+    while True:
+        screen.fill(theme.background)
+        mx, my = pygame.mouse.get_pos()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return ['quit']
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                clicked = True
+
+        screen.blit(header_text, header_rect)
+        screen.blit(send_data_text, send_data_rect)
+        if send_data_rect.left < mx < send_data_rect.right and send_data_rect.top < my < send_data_rect.bottom:
+            if clicked:
+                def sending_thread():
+                    send_data_to_leaderboard(User_data.name, score)
+                sending_thread()
+                return ['welcome']
+        clicked = False
+
+        pygame.display.update()
+
+
+def name_screen(screen):
+    theme = Themes.active_theme
+    name_text = big_font.render("Enter your Name (in console for now)", True, theme.font_c)
+    name_rect = name_text.get_rect()
+    name_rect.center = WW // 2, 50
+
+    while True:
+        screen.fill(theme.background)
+        screen.blit(name_text, name_rect)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return 'quit'
+
+        pygame.display.update()
+        DB.save_name(input('name'))
+        break
 # WIll come in handy when we will have Multiple Users :)
 
 # def users(screen):
@@ -740,7 +796,7 @@ def skin_select_screen(screen):
 #             if event.type == pygame.MOUSEBUTTONDOWN:
 #                 clicked = True
 #                 mx, my = pygame.mouse.get_pos()
-            # if event.type == pygame.MOUSEBUTTONUP:
-            #     clicked = False
+# if event.type == pygame.MOUSEBUTTONUP:
+#     clicked = False
 #
 #         pygame.display.update()

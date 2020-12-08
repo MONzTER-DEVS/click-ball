@@ -17,11 +17,17 @@ flag = VictoryFlag((WW - 100, WH - 100))
 
 
 ## -------------------- Some functions --------------------
-def load_level_by_num(name, i):
-    try:
-        return Levels.levels[i - 1]
-    except IndexError:
-        return Levels.levels[0]
+def load_level_by_num(name, i, is_survival=False):
+    if not is_survival:
+        try:
+            return Levels.levels[i - 1]
+        except IndexError:
+            return Levels.levels[0]
+    elif is_survival:
+        try:
+            return Levels.levels[i - 1]
+        except IndexError:
+            return "finish"
 
 
 def remove_lines_and_balls_of_level_by_number(i, lines, balls):
@@ -34,11 +40,13 @@ def remove_lines_and_balls_of_level_by_number(i, lines, balls):
         space.remove(rb.body, rb.shape)  # Extremely Necessary
     return []  # Deleting the lines of the prev level
 
+
 def reset_player_pos(player, WW, WH, current_level):
     if player.body.position[0] > WW or player.body.position[0] < 0:
         player.body.position = current_level.dict["player"][0]  ## Player
     if player.body.position[1] > WH:
         player.body.position = current_level.dict["player"][0]  ## Player
+
 
 ## ========================= Survival Mode =========================
 def survival_mode(screen, current_level):
@@ -132,7 +140,7 @@ def survival_mode(screen, current_level):
         if death_time != 0:
             if death_time - int(time.time()) + 10 <= 0:
                 lines = balls = remove_lines_and_balls_of_level_by_number(current_level.number, lines, balls)
-                return ['survival']  # @todo make a Death screen
+                return ['death', 'dead', score]
 
             # giving a 10 seconds timer and Auto reset if not colliding with the Flag
             if death_time != 0:
@@ -151,16 +159,11 @@ def survival_mode(screen, current_level):
                     lines = balls = remove_lines_and_balls_of_level_by_number(current_level.number, lines, balls)
                     current_level = load_level_by_num('noname', 1)
                     player.body.angular_velocity = 0
-                    return ['survival']
-                if event.key == pygame.K_ESCAPE:
-                    lines = balls = remove_lines_and_balls_of_level_by_number(current_level.number, lines, balls)
-                    current_level = load_level_by_num('noname', 1)
-                    player.body.angular_velocity = 0
-                    return ['welcome']
+                    return ['death', 'dead', score]
 
         ## -------------------- Events --------------------
         if moves == 0:
-            heading_text = medium_font.render('PRESS \'R\' TO RESTART FROM LEVEL 1', True, Themes.active_theme.font_c)
+            heading_text = medium_font.render("PRESS 'R' TO quit", True, Themes.active_theme.font_c)
             heading_text.set_alpha(200)
             heading_rect = heading_text.get_rect()
             heading_rect.center = (WW // 2, WH // 2)
@@ -189,7 +192,7 @@ def survival_mode(screen, current_level):
             distx = max_speed
         if disty > max_speed:
             disty = max_speed
-        
+
         # reseting player's
         reset_player_pos(player, WW, WH, current_level)
 
@@ -208,12 +211,12 @@ def survival_mode(screen, current_level):
         flag.draw(screen)
         # Checking collision b/w player and the victory flag
         if player.rect.colliderect(flag.rect):
-                # Adding to Score and reset score Variables
+            # Adding to Score and reset score Variables
             score += 100 + int(float(100 * current_level.dict['moves'] / (current_level.dict['moves'] - moves)) / float(
                 time.time() - st_time))
             st_time = 0
             death_time = 0
-            current_level = load_level_by_num('noname', current_level.number + 1)
+            current_level = load_level_by_num('noname', current_level.number + 1, is_survival=True)
             lines = balls = remove_lines_and_balls_of_level_by_number(current_level.number, lines, balls)
             player.body.angular_velocity = 0
 
@@ -221,6 +224,7 @@ def survival_mode(screen, current_level):
 
             if score_data[0] == 'quit': return ['quit']
             if score_data[0] == 'welcome': return ['welcome']
+            if current_level == "finish": return ['death', 'completed', score]
 
         ## -------------------- In-game UI --------------------
         # Displaying the number of moves left
@@ -417,6 +421,12 @@ def campaign(screen, current_level):
         pygame.display.update()
 
 
+for error in errors:
+    if error == "no name":
+        temp_to_do = name_screen(screen)
+        if temp_to_do == 'quit':
+            to_do[0] = 'quit'
+            User_data.name = DB.fetch_name()
 # Main Loop
 while True:
     if to_do[0] == 'game':
@@ -443,6 +453,9 @@ while True:
 
     elif to_do[0] == 'leaderboard':
         to_do = leaderboard_screen(screen)
+
+    elif to_do[0] == 'death':
+        to_do = death_screen(screen, to_do[1], to_do[2])
 
     elif to_do[0] == 'ball':
         to_do = skin_select_screen(screen)

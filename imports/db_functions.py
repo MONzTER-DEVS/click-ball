@@ -22,6 +22,7 @@ class DB:
         commands = [
             "CREATE TABLE user_data(level text, save text, coins text)",
             "CREATE TABLE cache(theme text)",
+            "CREATE TABLE user_name(name text)",
             "INSERT INTO cache values('Bright White')",
             f"INSERT INTO user_data values('{Crypt.en('1')}','{Crypt.en('None')}', '{Crypt.en('0')}')"
         ]
@@ -76,3 +77,37 @@ class DB:
         vals[0][-1] = Crypt.de(vals[0][-1])
         vals[0][-2] = Crypt.de(vals[0][-2])
         return vals
+
+    @staticmethod
+    def check_name():
+        to_return = None
+        conn = sqlite3.connect(os.path.join('assets', 'data.db'))
+        c = conn.cursor()
+
+        c.execute("""SELECT * FROM user_name""")
+        values = c.fetchall()
+        if len(values) == 0:
+            to_return = "no name"
+        conn.commit()
+        conn.close()
+        return to_return
+
+    @staticmethod
+    def save_name(name):
+        conn = sqlite3.connect('assets/data.db')
+        c = conn.cursor()
+
+        c.execute(f"""INSERT into user_name values ('{name}')""")
+
+        conn.commit()
+        conn.close()
+
+    @staticmethod
+    def fetch_name():
+        conn = sqlite3.connect('assets/data.db')
+        c = conn.cursor()
+        c.execute("""SELECT * from user_name""")
+        to_return = c.fetchall()[0][0]
+        conn.commit()
+        conn.close()
+        return to_return

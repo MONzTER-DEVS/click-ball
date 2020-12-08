@@ -10,6 +10,17 @@ coin = pygame.image.load("assets/imgs/dollar.png")
 coin = pygame.transform.scale(coin, (40, 40))
 
 
+def send_data_to_leaderboard(name, score):
+    params = {
+        'game': 'physics',
+        'name': name,
+        'score': score
+    }
+
+    req = requests.get("http://cb-leaderboard.herokuapp.com/", params=params, timeout=90)
+    req = req.json()
+
+
 def get_data():
     req = requests.get("http://cb-leaderboard.herokuapp.com/get", params={'game': 'physics'}, timeout=90)
     req = req.json()
