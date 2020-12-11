@@ -565,9 +565,9 @@ def settings_screen(screen):
         # screen.blit(heading_text, rect.topleft)
         # hover(rect, screen)
 
-        if clicked:
-            if 680 < mx < 845 and 292 < my < 353:
-                return ['ball']
+        if clicked and mouse_rect.colliderect(rect):
+
+            return ['ball']
 
         back_button = buttons["back"]
         rect = back_button.get_rect(center=(10, WH - 50))
