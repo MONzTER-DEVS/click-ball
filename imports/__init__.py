@@ -22,8 +22,8 @@ from .db_functions import *
 
 can_start_game = False
 
-
 errors = []
+
 
 def load_data_while_loading_screen():
     global can_start_game
@@ -47,7 +47,10 @@ def load_data_while_loading_screen():
         f = open(os.path.join('assets', 'levels', f'level{x}.json'))
         Levels(name='placeholder', data=json.load(f))
         f.close()
-    time.sleep(3 - float(time.time() - st_time))
+    try:
+        time.sleep(3 - float(time.time() - st_time))
+    except Exception as e:
+        print(e)
 
     # change this at the absolute end else conflicts would take place
     can_start_game = True
