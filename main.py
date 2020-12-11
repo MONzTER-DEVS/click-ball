@@ -427,6 +427,7 @@ for error in errors:
         temp_to_do = name_screen(screen)
         if temp_to_do == 'quit':
             to_do[0] = 'quit'
+        else:
             User_data.name = DB.fetch_name()
 # Main Loop
 while True:
@@ -444,10 +445,13 @@ while True:
 
     elif to_do[0] == 'campaign':
         level_num = level_select_screen(screen)
-        if level_num == 'quit':
-            to_do = ['quit']
+        if level_num == ['game']:
+            to_do = ['game']
         else:
-            to_do = campaign(screen, load_level_by_num('noname', level_num))
+            if level_num == 'quit':
+                to_do = ['quit']
+            else:
+                to_do = campaign(screen, load_level_by_num('noname', level_num))
 
     elif to_do[0] == 'themes':
         to_do = theme_screen(screen)

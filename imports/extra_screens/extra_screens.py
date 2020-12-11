@@ -146,9 +146,11 @@ def game_select_screen(screen):
     clicked = False
     mx, my = pygame.mouse.get_pos()
     theme = Themes.active_theme
+    survival_button = buttons["survival"]
+
     while True:
         screen.fill(theme.background)
-        survival_button = buttons["survival"]
+
         rect = survival_button.get_rect(center=(WW / 4, WH / 2))
         if mouse_rect.colliderect(rect):
             survival_button = pygame.transform.smoothscale(buttons["survival"], (232, 79))
@@ -159,20 +161,23 @@ def game_select_screen(screen):
         if clicked and mouse_rect.colliderect(rect):
             return ['survival']
         screen.blit(survival_button, rect.topleft)
+
         heading_text = big_font.render('Campaign', True, theme.font_c)
         heading_rect = heading_text.get_rect()
         heading_rect.center = (WW * 3 / 4, WH / 2)
+
         campaign_button = buttons["campaign"]
-        rect = campaign_button.get_rect(center=(WW - 400, WH / 2))
+        rect = campaign_button.get_rect(center=(WW * 3 / 4, WH / 2))
         if mouse_rect.colliderect(rect):
             survival_button = pygame.transform.smoothscale(buttons["campaign"], (260, 79))
-            rect = survival_button.get_rect(center=(WW - 400, WH / 2))
+            rect = survival_button.get_rect(center=(WW * 3 / 4, WH / 2))
         else:
             survival_button = pygame.transform.smoothscale(buttons["campaign"], (250, 75))
-            rect = survival_button.get_rect(center=(WW - 400, WH / 2))
+            rect = survival_button.get_rect(center=(WW * 3/4, WH / 2))
         hover(heading_rect, screen)
         if clicked and mouse_rect.colliderect(rect):
             return ['campaign']
+
         screen.blit(survival_button, rect.topleft)
         back_button = buttons["back"]
         rect = back_button.get_rect(center=(10, WH - 50))
@@ -183,7 +188,7 @@ def game_select_screen(screen):
             back_button = pygame.transform.smoothscale(buttons["back"], (100, 60))
             rect = back_button.get_rect(center=(60, WH - 50))
         hover(heading_rect, screen)
-        if clicked:
+        if clicked and mouse_rect.colliderect(rect):
             return ['welcome']
         screen.blit(back_button, rect.topleft)
         # Events
@@ -306,7 +311,6 @@ def score_screen(screen, score, data='None', coins=0):
         hover(heading_rect, screen)
 
         if coin_state == "ongoing":
-            print(step, coins_shown, User_data.coins)
             step += 1
             if step % 2 == 0:
                 coins_shown += 1
@@ -329,11 +333,10 @@ def score_screen(screen, score, data='None', coins=0):
             if event.type == pygame.QUIT:
                 coin_sound.stop()
                 return ['quit']
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                clicked = True
-                mx, my = pygame.mouse.get_pos()
-            if event.type == pygame.MOUSEBUTTONUP:
-                clicked = False
+            if coin_state != "ongoing":
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    clicked = True
+                    mx, my = pygame.mouse.get_pos()
 
         pygame.display.update()
 
@@ -714,10 +717,10 @@ def death_screen(screen, status, score):
         screen.blit(send_data_text, send_data_rect)
         if send_data_rect.left < mx < send_data_rect.right and send_data_rect.top < my < send_data_rect.bottom:
             if clicked:
-                def sending_thread():
-                    send_data_to_leaderboard(User_data.name, score)
+                def sending_thread(name, score):
+                    send_data_to_leaderboard(name, score)
 
-                sending_thread()
+                threading.Thread(target=sending_thread, args=(User_data.name, score)).start()  # sends Score
                 return ['welcome']
         clicked = False
 
@@ -725,22 +728,49 @@ def death_screen(screen, status, score):
 
 
 def name_screen(screen):
+    name = ""
     theme = Themes.active_theme
-    name_text = big_font.render("Enter your Name (in console for now)", True, theme.font_c)
+    name_text = big_font.render("Enter your Name", True, theme.font_c)
     name_rect = name_text.get_rect()
     name_rect.center = WW // 2, 50
 
-    while True:
+    running = True
+    rect_border_gap = 2
+    while running:
         screen.fill(theme.background)
         screen.blit(name_text, name_rect)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return 'quit'
+            elif event.type == pygame.KEYDOWN:
+                name += event.unicode
+
+                if event.key == pygame.K_RETURN:
+                    if name != "":
+                        DB.save_name(name)
+                        running = False
+                elif event.key == pygame.K_BACKSPACE:
+                    name = name[:-1]
+
+        if len(name) >= 1:
+            if name[0] == " ":
+                name = name[1:]
+            elif name[-1] == " ":
+                name = name[:-1]
+
+        input_name_text = small_font.render(name, True, theme.font_c)
+        input_name_rect = input_name_text.get_rect()
+        input_name_rect.center = (WW // 2, 400)
+        screen.blit(input_name_text, input_name_rect)
+
+        pygame.draw.rect(screen, (255, 0, 0), (input_name_rect.x - rect_border_gap, input_name_rect.y - rect_border_gap,
+                         input_name_rect.width + (rect_border_gap * 2),input_name_rect.height + (rect_border_gap * 2)),
+                         width=2
+                         )
 
         pygame.display.update()
-        DB.save_name(input('name: '))
-        break
+
 # WIll come in handy when we will have Multiple Users :)
 
 # def users(screen):
