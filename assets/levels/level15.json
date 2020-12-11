@@ -77,19 +77,12 @@
     ],
     "player": [
         [
-            600,
+            700,
             360
         ]
     ],
-    "ball_center": [
-        [
-            600,
-            360
-        ]
-    ],
-    "ball_radius": [
-        10
-    ],
+    "ball_center": [],
+    "ball_radius": [],
     "portal_start": [],
     "portal_end": []
 }
