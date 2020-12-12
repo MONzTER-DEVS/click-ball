@@ -43,7 +43,6 @@ class DB:
         @staticmethod
         def change_value(field, value, old=None):
             command = "UPDATE cache SET " + field + "= '" + value + "'"
-            print(command)
             DB.execute([command])
 
     @staticmethod

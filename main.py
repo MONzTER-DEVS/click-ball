@@ -171,7 +171,7 @@ def survival_mode(screen, current_level):
             screen.blit(heading_text, heading_rect.topleft)
 
         ## -------------------- Player --------------------
-        player.draw(screen)
+
         # Drawing the direction in which a force will b applied
         mx, my = pygame.mouse.get_pos()
         distx = mx - player.body.position.x
@@ -210,6 +210,7 @@ def survival_mode(screen, current_level):
 
         ## -------------------- Flag --------------------
         flag.draw(screen)
+        player.draw(screen)
         # Checking collision b/w player and the victory flag
         if player.rect.colliderect(flag.rect):
             # Adding to Score and reset score Variables
@@ -402,8 +403,8 @@ def campaign(screen, current_level):
             current_level = load_level_by_num('noname', current_level.number + 1)
             lines = balls = remove_lines_and_balls_of_level_by_number(current_level, lines, balls)
             player.body.angular_velocity = 0
-            score_data = score_screen(screen, score)
-            if score_data[0] == 'quit':
+            next_data = score_screen(screen, score)
+            if next_data[0] == 'quit':
                 return ['quit']
 
         ## -------------------- In-game UI --------------------
@@ -444,14 +445,17 @@ while True:
         to_do = settings_screen(screen)
 
     elif to_do[0] == 'campaign':
-        level_num = level_select_screen(screen)
-        if level_num == ['game']:
-            to_do = ['game']
+        if to_do[1] == 'continue':
+            level_num = to_do[2]
         else:
-            if level_num == 'quit':
-                to_do = ['quit']
-            else:
-                to_do = campaign(screen, load_level_by_num('noname', level_num))
+            level_num = level_select_screen(screen, number_buttons)
+
+        if level_num == 'back':
+            to_do = ['game']
+        elif level_num == 'quit':
+            to_do = ['quit']
+        else:
+            to_do = campaign(screen, load_level_by_num('noname', level_num))
 
     elif to_do[0] == 'themes':
         to_do = theme_screen(screen)

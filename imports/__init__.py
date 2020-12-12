@@ -24,9 +24,12 @@ can_start_game = False
 
 errors = []
 
+number_buttons = []
+
 
 def load_data_while_loading_screen():
     global can_start_game
+    global number_buttons
     if not os.path.exists(os.path.join('assets', 'data.db')):
         DB.make_db()
 
@@ -38,6 +41,11 @@ def load_data_while_loading_screen():
     data = DB.Cache.load()
     Themes.set_active_by_name(data[0])
 
+    number_buttons_path = os.path.join('assets', 'buttons', 'level number buttons')
+    counter = 0
+    for img in os.listdir(number_buttons_path):
+        counter += 1
+        number_buttons.append(pygame.image.load(f"{number_buttons_path}\\{img}"))
     data = DB.load_user_progress()[0]
     User_data.current_level = int(data[0])
     User_data.save = ast.literal_eval(data[1])
@@ -49,8 +57,8 @@ def load_data_while_loading_screen():
         f.close()
     try:
         time.sleep(3 - float(time.time() - st_time))
-    except Exception as e:
-        print(e)
+    except:
+        pass
 
     # change this at the absolute end else conflicts would take place
     can_start_game = True

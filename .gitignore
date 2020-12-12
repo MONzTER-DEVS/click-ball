@@ -2,4 +2,4 @@
 /venv/
 /.idea/
 *.pyc
-assets/level_editor_saves
+/assets/level_editor_saves

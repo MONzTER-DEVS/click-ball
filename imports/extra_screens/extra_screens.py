@@ -173,10 +173,10 @@ def game_select_screen(screen):
             rect = survival_button.get_rect(center=(WW * 3 / 4, WH / 2))
         else:
             survival_button = pygame.transform.smoothscale(buttons["campaign"], (250, 75))
-            rect = survival_button.get_rect(center=(WW * 3/4, WH / 2))
+            rect = survival_button.get_rect(center=(WW * 3 / 4, WH / 2))
         hover(heading_rect, screen)
         if clicked and mouse_rect.colliderect(rect):
-            return ['campaign']
+            return ['campaign', 'map']
 
         screen.blit(survival_button, rect.topleft)
         back_button = buttons["back"]
@@ -415,110 +415,93 @@ def leaderboard_screen(screen):
         pygame.display.update()
 
 
-def level_select_screen(screen):
+def level_select_screen(screen, number_buttons):
     theme = Themes.active_theme
     clicked = False
     mx, my = pygame.mouse.get_pos()
-    level = 1  ## Default level
-    levels_per_page = 5
-    gap = WH // levels_per_page
-
-    max_page, min_page = 5, 1
-    page = 1  ## Default page
-
-    level_nums_to_display = range(((page - 1) * levels_per_page) + 1, (page * levels_per_page) + 1)
-
     while True:
+        mx, my = pygame.mouse.get_pos()
         screen.fill(theme.background)
-        heading_text = big_font.render('Level Select!', True, theme.font_c)
+        heading_text = big_font.render('Level Map!', True, theme.font_c)
         heading_rect = heading_text.get_rect()
         heading_rect.center = (WW // 2, 50)
         screen.blit(heading_text, heading_rect.topleft)
 
-        continue_button = buttons["continue"]
-        rect = continue_button.get_rect(center=(WW - 100, WH - 50))
-        if mouse_rect.colliderect(rect):
-            continue_button = pygame.transform.smoothscale(buttons["continue"], (200, 79))
-            rect = continue_button.get_rect(center=(WW - 100, WH - 50))
-        else:
-            continue_button = pygame.transform.smoothscale(buttons["continue"], (190, 75))
-            rect = continue_button.get_rect(center=(WW - 100, WH - 50))
-        if clicked and mouse_rect.colliderect(rect):
-            return level
-        screen.blit(continue_button, rect.topleft)
-
         back_button = buttons["back"]
         rect = back_button.get_rect(center=(10, WH - 50))
-        if mouse_rect.colliderect(rect):
+        if rect.left < mx < rect.right and rect.top < my < rect.bottom:
             back_button = pygame.transform.smoothscale(buttons["back"], (110, 64))
             rect = back_button.get_rect(center=(60, WH - 50))
         else:
             back_button = pygame.transform.smoothscale(buttons["back"], (100, 60))
             rect = back_button.get_rect(center=(60, WH - 50))
-        hover(heading_rect, screen)
-        if clicked and mouse_rect.colliderect(rect):
-            clicked = False
-            return ['game']
+
+        if clicked and rect.left < mx < rect.right and rect.top < my < rect.bottom:
+            return 'back'
         screen.blit(back_button, rect.topleft)
 
-        hover(heading_rect, screen)
+        counter = 0
+        for i in range(1, 6):
+            for j in range(1, 6):
+                counter += 1
+                temp_img = number_buttons[int(counter-1)]
+                _rect = temp_img.get_rect()
+                _rect.center = (j * WW / 6, i * WH / 6 + 50)
+                screen.blit(temp_img, _rect.topleft)
+
+                if _rect.left < mx < _rect.right and _rect.top < my < _rect.bottom:
+                    if clicked:
+                        return counter
+
         # if clicked:
         #     if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
-        #         return level
+        # #         return level
+        #
+        # ## Next Page
+        # heading_text = medium_font.render('->', True, theme.font_c)
+        # heading_rect = heading_text.get_rect()
+        # heading_rect.center = (WW // 2 + 150, WH // 2)
+        # screen.blit(heading_text, heading_rect.topleft)
+        #
+        # hover(heading_rect, screen)
+        # if clicked and page < max_page:
+        #     if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
+        #         page += 1
+        #         level_nums_to_display = range(((page - 1) * levels_per_page) + 1, (page * levels_per_page) + 1)
+        #         clicked = False
+        #
+        # ## Prev Page
+        # heading_text = medium_font.render('<-', True, theme.font_c)
+        # heading_rect = heading_text.get_rect()
+        # heading_rect.center = (WW // 2 - 150, WH // 2)
+        # screen.blit(heading_text, heading_rect.topleft)
+        #
+        # hover(heading_rect, screen)
+        # if clicked and page > min_page:
+        #     if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
+        #         page -= 1
+        #         level_nums_to_display = range(((page - 1) * levels_per_page) + 1, (page * levels_per_page) + 1)
+        #         clicked = False
+        #
+        # ## -------------------- The level selection --------------------
+        # for y, num in zip(range(125, WH, gap), level_nums_to_display):
+        #     # drawing levels
+        #     heading_text = medium_font.render('LEVEL ' + str(num), True, theme.font_c)
+        #     heading_rect = heading_text.get_rect()
+        #     heading_rect.center = (WW // 2, y)
+        #     screen.blit(heading_text, heading_rect.topleft)
+        #     ## selecting and hovering
+        #     hover(heading_rect, screen)
+        #     if clicked:
+        #         if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
+        #             level = num
 
-        ## Next Page
-        heading_text = medium_font.render('->', True, theme.font_c)
-        heading_rect = heading_text.get_rect()
-        heading_rect.center = (WW // 2 + 150, WH // 2)
-        screen.blit(heading_text, heading_rect.topleft)
-
-        hover(heading_rect, screen)
-        if clicked and page < max_page:
-            if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
-                page += 1
-                level_nums_to_display = range(((page - 1) * levels_per_page) + 1, (page * levels_per_page) + 1)
-                clicked = False
-
-        ## Prev Page
-        heading_text = medium_font.render('<-', True, theme.font_c)
-        heading_rect = heading_text.get_rect()
-        heading_rect.center = (WW // 2 - 150, WH // 2)
-        screen.blit(heading_text, heading_rect.topleft)
-
-        hover(heading_rect, screen)
-        if clicked and page > min_page:
-            if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
-                page -= 1
-                level_nums_to_display = range(((page - 1) * levels_per_page) + 1, (page * levels_per_page) + 1)
-                clicked = False
-
-        ## -------------------- The level selection --------------------
-        for y, num in zip(range(125, WH, gap), level_nums_to_display):
-            # drawing levels
-            heading_text = medium_font.render('LEVEL ' + str(num), True, theme.font_c)
-            heading_rect = heading_text.get_rect()
-            heading_rect.center = (WW // 2, y)
-            screen.blit(heading_text, heading_rect.topleft)
-            ## selecting and hovering
-            hover(heading_rect, screen)
-            if clicked:
-                if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
-                    level = num
-            ## Drawing a selection rectangle
-            if num == level:
-                s_img = pygame.Surface(heading_rect.size)
-                s_img.set_alpha(100)
-                s_img.fill(select_rect_color)
-                screen.blit(s_img, heading_rect.topleft)
-
+        clicked = False
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return 'quit'
             if event.type == pygame.MOUSEBUTTONDOWN:
                 clicked = True
-                mx, my = pygame.mouse.get_pos()
-            if event.type == pygame.MOUSEBUTTONUP:
-                clicked = False
 
         pygame.display.update()
 
@@ -566,7 +549,6 @@ def settings_screen(screen):
         # hover(rect, screen)
 
         if clicked and mouse_rect.colliderect(rect):
-
             return ['ball']
 
         back_button = buttons["back"]
@@ -765,7 +747,8 @@ def name_screen(screen):
         screen.blit(input_name_text, input_name_rect)
 
         pygame.draw.rect(screen, (255, 0, 0), (input_name_rect.x - rect_border_gap, input_name_rect.y - rect_border_gap,
-                         input_name_rect.width + (rect_border_gap * 2),input_name_rect.height + (rect_border_gap * 2)),
+                                               input_name_rect.width + (rect_border_gap * 2),
+                                               input_name_rect.height + (rect_border_gap * 2)),
                          width=2
                          )
 
