@@ -444,7 +444,7 @@ def level_select_screen(screen, number_buttons):
         for i in range(1, 6):
             for j in range(1, 6):
                 counter += 1
-                temp_img = number_buttons[int(counter-1)]
+                temp_img = number_buttons[int(counter - 1)]
                 _rect = temp_img.get_rect()
                 _rect.center = (j * WW / 6, i * WH / 6 + 50)
                 if _rect.left < mx < _rect.right and _rect.top < my < _rect.bottom:
@@ -757,6 +757,56 @@ def name_screen(screen):
                                                input_name_rect.height + (rect_border_gap * 2)),
                          width=2
                          )
+
+        pygame.display.update()
+
+
+def campaign_continue_screen(screen):
+    theme = Themes.active_theme
+    clicked = False
+
+    running = True
+
+    heading_text = big_font.render('Congratulations! You passed the Level', True, theme.font_c)
+    heading_rect = heading_text.get_rect()
+    heading_rect.center = (WW // 2, 50)
+
+    continue_text = small_font.render('Continue', True, theme.font_c)
+    continue_rect = continue_text.get_rect()
+    continue_rect.center = (WW // 4, WH // 2)
+
+    map_text = small_font.render('Level Map', True, theme.font_c)
+    map_rect = map_text.get_rect()
+    map_rect.center = (int(WW * 3) // 4, WH // 2)
+
+    while running:
+        mx, my = pygame.mouse.get_pos()
+        screen.fill(theme.background)
+
+        screen.blit(heading_text, heading_rect.topleft)
+
+        rect = continue_rect
+        screen.blit(continue_text, rect.topleft)
+        if rect.left < mx < rect.right and rect.top < my < rect.bottom:
+            # todo make Hover Effect
+            if clicked:
+                return ['continue']
+
+        rect = map_rect
+
+        if rect.left < mx < rect.right and rect.top < my < rect.bottom:
+            # todo make Hover Effect
+            if clicked:
+                return ['level_map']
+
+        screen.blit(map_text, map_rect.topleft)
+
+        clicked = False
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return ['quit']
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                clicked = True
 
         pygame.display.update()
 
