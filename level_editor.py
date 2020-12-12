@@ -20,7 +20,7 @@ MODES:
         > 'N' to add a new ball and 'D' to delete the current ball 
         > Click to place ball
         > use 'UP' and "DOWN" arrow keys to increase and decrease the radius of the selected ball
-        > 'Enter' to change ball 
+        > 'Enter' to change ball
     portal:
         > 'N' to add a new pair of portals and 'D' to delete the current portal
         > Click to place portal
