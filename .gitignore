@@ -1,0 +1,5 @@
+/assets/data.db
+/venv/
+/.idea/
+*.pyc
+assets/level_editor_saves
