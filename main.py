@@ -403,9 +403,14 @@ def campaign(screen, current_level):
             current_level = load_level_by_num('noname', current_level.number + 1)
             lines = balls = remove_lines_and_balls_of_level_by_number(current_level, lines, balls)
             player.body.angular_velocity = 0
-            next_data = score_screen(screen, score)
+
+            next_data = campaign_continue_screen(screen)
             if next_data[0] == 'quit':
                 return ['quit']
+            if next_data[0] == 'level_map':
+                return ['campaign', 'select']
+            if next_data[0] == 'continue':
+                return ['campaign', 'continue', current_level.number]
 
         ## -------------------- In-game UI --------------------
         # Displaying the number of moves left
