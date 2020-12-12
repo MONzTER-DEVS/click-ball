@@ -24,7 +24,7 @@ can_start_game = False
 
 errors = []
 
-number_buttons = []
+number_buttons = [pygame.image.load(os.path.join('assets', 'buttons', 'level number buttons', 'lock.png'))]
 
 
 def load_data_while_loading_screen():
@@ -42,10 +42,11 @@ def load_data_while_loading_screen():
     Themes.set_active_by_name(data[0])
 
     number_buttons_path = os.path.join('assets', 'buttons', 'level number buttons')
-    counter = 0
-    for img in os.listdir(number_buttons_path):
-        counter += 1
-        number_buttons.append(pygame.image.load(f"{number_buttons_path}\\{img}"))
+
+    for counter in range(1, 101):
+        path = os.path.join(number_buttons_path, f'{int(4 - len(str(counter))) * "0"}{counter}.png')
+        number_buttons.append(pygame.image.load(path))
+
     data = DB.load_user_progress()[0]
     User_data.current_level = int(data[0])
     User_data.save = ast.literal_eval(data[1])

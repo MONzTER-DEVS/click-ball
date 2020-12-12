@@ -49,6 +49,7 @@ def reset_player_pos(player, WW, WH, current_level):
         player.body.position = current_level.dict["player"][0]  ## Player
         player.body.velocity = (0, 0)
 
+
 ## ========================= Survival Mode =========================
 def survival_mode(screen, current_level):
     score = 0
@@ -400,6 +401,8 @@ def campaign(screen, current_level):
                 time.time() - st_time))
             st_time = 0
             death_time = 0
+            if current_level.number == User_data.current_level:
+                DB.update_level_progress(str(current_level.number + 1))
             current_level = load_level_by_num('noname', current_level.number + 1)
             lines = balls = remove_lines_and_balls_of_level_by_number(current_level, lines, balls)
             player.body.angular_velocity = 0

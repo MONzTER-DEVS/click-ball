@@ -444,20 +444,27 @@ def level_select_screen(screen, number_buttons):
         for i in range(1, 6):
             for j in range(1, 6):
                 counter += 1
-                temp_img = number_buttons[int(counter - 1)]
-                _rect = temp_img.get_rect()
-                _rect.center = (j * WW / 6, i * WH / 6 + 50)
-                if _rect.left < mx < _rect.right and _rect.top < my < _rect.bottom:
-                    temp_img = pygame.transform.smoothscale(temp_img, (70, 70))
-                    _rect = temp_img.get_rect(center=(j * WW / 6, i * WH / 6 + 50))
-                else:
-                    temp_img = pygame.transform.smoothscale(temp_img, (65, 65))
-                    _rect = temp_img.get_rect(center=(j * WW / 6, i * WH / 6 + 50))
 
-                if _rect.left < mx < _rect.right and _rect.top < my < _rect.bottom:
-                    if clicked:
-                        return counter
-                screen.blit(temp_img, _rect.topleft)
+                if counter <= User_data.current_level:
+                    temp_img = number_buttons[counter]
+                    _rect = temp_img.get_rect()
+                    _rect.center = (j * WW / 6, i * WH / 6 + 50)
+                    if _rect.left < mx < _rect.right and _rect.top < my < _rect.bottom:
+                        temp_img = pygame.transform.smoothscale(temp_img, (70, 70))
+                        _rect = temp_img.get_rect(center=(j * WW / 6, i * WH / 6 + 50))
+                    else:
+                        temp_img = pygame.transform.smoothscale(temp_img, (65, 65))
+                        _rect = temp_img.get_rect(center=(j * WW / 6, i * WH / 6 + 50))
+
+                    if _rect.left < mx < _rect.right and _rect.top < my < _rect.bottom:
+                        if clicked:
+                            return counter
+                    screen.blit(temp_img, _rect.topleft)
+                else:
+                    temp_img = number_buttons[0]
+                    _rect = temp_img.get_rect()
+                    _rect.center = (j * WW / 6, i * WH / 6 + 50)
+                    screen.blit(temp_img, _rect.topleft)
 
         # if clicked:
         #     if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
