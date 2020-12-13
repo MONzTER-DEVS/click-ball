@@ -188,8 +188,8 @@ if n != 0:
         b = BouncingBall(level_dict["ball_center"][i][0],
                          level_dict["ball_center"][i][1], 10, BALL_COLOR)
         balls.append(b)
-    selected_ball_index = 0
-    selected_ball = balls[selected_ball_index]
+        selected_ball_index = 0
+        selected_ball = balls[selected_ball_index]
 
 elif n == 0:
     flag = Flag(WW//2, WH//2)
