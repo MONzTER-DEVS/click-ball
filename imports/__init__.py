@@ -9,10 +9,12 @@ from .settings import *
 from .classes import *
 
 #                      name,               bg,       platform_c, mouse_line, font_c,  hover, bouncing_ball_c
-light_theme = Themes('Bright White', WHITE, L_BLUE, GREEN, PINK, WHITE, EMRALD)
+light_theme = Themes('Bright White', WHITE, L_BLUE, GREEN, PINK, WHITE, GREEN)
 violet_theme = Themes("Limited Voilet", PURPLE, WHITE, WHITE, WHITE, WHITE, WHITE)
 dark_light_theme = Themes("Darkest Light", BLACK, WHITE, WHITE, L_BLUE, WHITE, EMRALD)
 dracula_theme = Themes("Dracula", BLACK, PINK, PINK, PINK, WHITE, EMRALD)
+green_theme = Themes("Grass", (81,204,64), (121,234,125), (201,242,199), (36,49,25), WHITE, (121,234,125))
+hot_chilli_theme = Themes("Hot Chilli", (157,2,8), (232,93,4), WHITE, (255,186,8), WHITE, (220,47,2))
 light_theme.set_to_active_theme()
 
 from .extra_screens import *

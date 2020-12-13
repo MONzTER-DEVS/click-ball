@@ -22,7 +22,7 @@ def game_font_generator(size):
 BLACK = (35,51,41)
 WHITE = (255, 255, 255)
 RED = (255, 100, 100)
-GREEN = (100, 255, 100)
+GREEN = (201,242,199)
 BLUE = (105,255,241)
 L_BLUE = (0, 255, 255)
 PINK = (255,105,125)
