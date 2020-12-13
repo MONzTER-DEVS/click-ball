@@ -145,6 +145,52 @@ class Portal:
 if n != 0:
     flag = Flag(level_dict["victory"][0][0], level_dict["victory"][0][1])
     player = Player(level_dict["player"][0][0], level_dict["player"][0][1])
+    num_of_lines = len(level_dict["start"])
+    lines = []
+    for i in range(num_of_lines):
+
+        # l = Line(WW // 2, WH // 2, WW // 2, WH // 2, 10)
+        l = Line(level_dict["start"][i][0],
+                 level_dict["start"][i][1],
+                 level_dict["end"][i][0],
+                 level_dict["end"][i][1], 10)
+        lines.append(l)
+
+    selected_line_index = 0
+    selected_line = lines[selected_line_index]
+    selected_line_end = 'start'
+    if len(level_dict['portal_start']):
+        num_of_portals = len(level_dict["portal_start"])
+    else:
+        num_of_portals = 0
+    portals = []
+    if level_dict["portal_start"]:
+        for i in range(num_of_portals):
+            # p = Portal((WW // 2, 100), (WW // 2, WH - 100), 10)
+            p = Portal(level_dict["portal_start"][i],
+                       level_dict["portal_end"][i], 10)
+            portals.append(p)
+
+    selected_portal_index = 0
+    selected_portal_end = 'start'
+    try:
+        selected_portal = portals[selected_portal_index]
+    except IndexError:
+        pass
+    if level_dict["ball_radius"]:
+        num_of_balls = len(level_dict["ball_radius"])
+    else:
+        num_of_balls = 0
+    balls = []
+
+    for i in range(num_of_balls):
+        # b = BouncingBall(WW // 2, WH // 2, 10, BALL_COLOR)
+        b = BouncingBall(level_dict["ball_center"][i][0],
+                         level_dict["ball_center"][i][1], 10, BALL_COLOR)
+        balls.append(b)
+    selected_ball_index = 0
+    selected_ball = balls[selected_ball_index]
+
 elif n == 0:
     flag = Flag(WW//2, WH//2)
     player = Player(WW//2, WH//2)
@@ -160,8 +206,8 @@ elif n == 0:
     ## lines
     num_of_lines = 1
     lines = []
-
     for i in range(num_of_lines):
+
         l = Line(WW // 2, WH // 2, WW // 2, WH // 2, 10)
         lines.append(l)
 
