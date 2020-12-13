@@ -19,16 +19,16 @@ def game_font_generator(size):
 
 #################   General Settings    #################
 # Colors
-BLACK = (0, 0, 0)
+BLACK = (35,51,41)
 WHITE = (255, 255, 255)
 RED = (255, 100, 100)
 GREEN = (100, 255, 100)
-BLUE = (100, 100, 255)
+BLUE = (105,255,241)
 L_BLUE = (0, 255, 255)
-PINK = (255, 0, 255)
-PURPLE = (148, 0, 211)
+PINK = (255,105,125)
+PURPLE = (195,65,177)
 GRAY = (100, 100, 100)
-LIME = (191, 255, 0)
+EMRALD = (99,212,113)
 
 ## Player Skins
 img_path = os.path.join('assets', 'imgs', 'skins_png')
