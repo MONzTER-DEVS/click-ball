@@ -397,7 +397,7 @@ def leaderboard_screen(screen):
             back_button = pygame.transform.smoothscale(buttons["back"], (100, 60))
             rect = back_button.get_rect(center=(60, WH - 50))
         hover(heading_rect, screen)
-        if clicked:
+        if clicked and mouse_rect.colliderect(rect):
             return ['welcome']
         screen.blit(back_button, rect.topleft)
 
@@ -619,7 +619,7 @@ def skin_select_screen(screen):
         hover(heading_rect, screen)
         screen.blit(back_button, rect.topleft)
         if clicked and mouse_rect.colliderect(rect):
-            return ['welcome', skins[skin]]
+            return ['settings', skins[skin]]
 
         ## Next Page
         heading_text = medium_font.render('->', True, theme.font_c)
