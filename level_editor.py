@@ -33,9 +33,14 @@ EDIT : U can now select the end or individual objects using ur mouse ;)
 
 from imports.settings import WW, WH, small_font, medium_font, big_font
 from imports.classes import Themes
+from imports.classes import Levels
 import pygame, math, json, os
+n = int(input("Which level do you want to edit(Press 0 to create a new level):"))
 
 pygame.init()
+
+level_dict = Levels.levels[n - 1].dict
+# print(level_dict)
 
 screen_flags = pygame.SCALED | pygame.RESIZABLE
 screen = pygame.display.set_mode((WW, WH), screen_flags)
@@ -135,43 +140,51 @@ class Portal:
         screen.blit(self.end_img, self.end_rect.topleft)
 
 
-flag = Flag(WW//2, WH//2)
-player = Player(WW//2, WH//2)
+# flag = Flag(WW//2, WH//2)
+# player = Player(WW//2, WH//2)
+if n != 0:
+    flag = Flag(level_dict["victory"][0][0], level_dict["victory"][0][1])
+    player = Player(level_dict["player"][0][0], level_dict["player"][0][1])
+elif n == 0:
+    flag = Flag(WW//2, WH//2)
+    player = Player(WW//2, WH//2)
+    num_of_balls = 1
+    balls = []
+    for i in range(num_of_balls):
+        b = BouncingBall(WW // 2, WH // 2, 10, BALL_COLOR)
+        balls.append(b)
 
+    selected_ball_index = 0
+    selected_ball = balls[selected_ball_index]
+
+    ## lines
+    num_of_lines = 1
+    lines = []
+
+    for i in range(num_of_lines):
+        l = Line(WW // 2, WH // 2, WW // 2, WH // 2, 10)
+        lines.append(l)
+
+    selected_line_index = 0
+    selected_line = lines[selected_line_index]
+    selected_line_end = 'start'
+
+    ## portals
+    num_of_portals = 0
+    portals = []
+    for i in range(num_of_portals):
+        p = Portal((WW // 2, 100), (WW // 2, WH - 100), 10)
+        portals.append(p)
+
+    selected_portal_index = 0
+    selected_portal_end = 'start'
+    try:
+        selected_portal = portals[selected_portal_index]
+    except IndexError:
+        pass
+print(level_dict["ball_center"])
 ## balls
-num_of_balls = 1
-balls = []
-for i in range(num_of_balls):
-    b = BouncingBall(WW//2, WH//2, 10, BALL_COLOR)
-    balls.append(b)
 
-selected_ball_index = 0
-selected_ball = balls[selected_ball_index]
-
-## lines
-num_of_lines = 1
-lines = []
-for i in range(num_of_lines):
-    l = Line(WW//2, WH//2, WW//2, WH//2, 10)
-    lines.append(l)
-
-selected_line_index = 0
-selected_line = lines[selected_line_index]
-selected_line_end = 'start'
-
-## portals
-num_of_portals = 0
-portals = []
-for i in range(num_of_portals):
-    p = Portal((WW//2, 100), (WW//2, WH-100), 10)
-    portals.append(p)
-
-selected_portal_index = 0
-selected_portal_end = 'start'
-try:
-    selected_portal = portals[selected_portal_index]
-except IndexError:
-    pass
 
 running = True
 clicked = False
