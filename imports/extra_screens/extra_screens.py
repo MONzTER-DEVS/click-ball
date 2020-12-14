@@ -818,6 +818,56 @@ def campaign_continue_screen(screen):
 
         pygame.display.update()
 
+
+def campaign_death_screen(screen):
+    theme = Themes.active_theme
+    clicked = False
+
+    running = True
+
+    heading_text = big_font.render('You Died!', True, theme.font_c)
+    heading_rect = heading_text.get_rect()
+    heading_rect.center = (WW // 2, 50)
+
+    restart_text = small_font.render('Restart', True, theme.font_c)
+    restart_rect = restart_text.get_rect()
+    restart_rect.center = (WW // 4, WH // 2)
+
+    map_text = small_font.render('Level Map', True, theme.font_c)
+    map_rect = map_text.get_rect()
+    map_rect.center = (int(WW * 3) // 4, WH // 2)
+
+    while running:
+        mx, my = pygame.mouse.get_pos()
+        screen.fill(theme.background)
+
+        screen.blit(heading_text, heading_rect.topleft)
+
+        rect = restart_rect
+        screen.blit(restart_text, rect.topleft)
+        if rect.left < mx < rect.right and rect.top < my < rect.bottom:
+            # todo make Hover Effect
+            if clicked:
+                return ['restart']
+
+        rect = map_rect
+
+        if rect.left < mx < rect.right and rect.top < my < rect.bottom:
+            # todo make Hover Effect
+            if clicked:
+                return ['level_map']
+
+        screen.blit(map_text, map_rect.topleft)
+
+        clicked = False
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return ['quit']
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                clicked = True
+
+        pygame.display.update()
+
 # WIll come in handy when we will have Multiple Users :)
 
 # def users(screen):

@@ -215,8 +215,7 @@ def survival_mode(screen, current_level):
         # Checking collision b/w player and the victory flag
         if player.rect.colliderect(flag.rect):
             # Adding to Score and reset score Variables
-            score += 100 + int(float(100 * current_level.dict['moves'] / (current_level.dict['moves'] - moves)) / float(
-                time.time() - st_time))
+            score += 100 + int(25 * moves) + int(25 - (time.time() - st_time))*4
             st_time = 0
             death_time = 0
             current_level = load_level_by_num('noname', current_level.number + 1, is_survival=True)
@@ -333,7 +332,13 @@ def campaign(screen, current_level):
         if death_time != 0:
             if death_time - int(time.time()) + 10 <= 0:
                 lines = balls = remove_lines_and_balls_of_level_by_number(current_level.number, lines, balls)
-                return ['campaign']  # @todo make a Death screen
+                temp_death_data = campaign_death_screen(screen)
+                if temp_death_data[0] == 'quit':
+                    return ['quit']
+                elif temp_death_data[0] == 'level_map':
+                    return ['campaign', 'select']
+                if temp_death_data[0] == 'restart':
+                    return ['campaign', 'continue', current_level.number]
 
             # giving a 10 seconds timer and Auto reset if not colliding with the Flag
             if death_time != 0:
@@ -350,9 +355,14 @@ def campaign(screen, current_level):
             if event.type == pygame.KEYDOWN:
                 if moves == 0 and event.key == pygame.K_r:
                     lines = balls = remove_lines_and_balls_of_level_by_number(current_level, lines, balls)
-                    current_level = load_level_by_num('noname', 1)
                     player.body.angular_velocity = 0
-                    return ['campaign']
+                    temp_death_data = campaign_death_screen(screen)
+                    if temp_death_data[0] == 'quit':
+                        return ['quit']
+                    elif temp_death_data[0] == 'level_map':
+                        return ['campaign', 'select']
+                    if temp_death_data[0] == 'restart':
+                        return ['campaign', 'continue', current_level.number]
 
         ## -------------------- Player --------------------
         player.draw(screen)
