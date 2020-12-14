@@ -66,5 +66,6 @@
     "ball_center": [],
     "ball_radius": [],
     "portal_start": [],
-    "portal_end": []
+    "portal_end": [],
+    "coin_pos": []
 }

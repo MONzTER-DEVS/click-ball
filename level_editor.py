@@ -25,8 +25,11 @@ MODES:
         > 'N' to add a new pair of portals and 'D' to delete the current portal
         > Click to place portal
         > 'F' to change end of portal
-        > 'Enter' to change ball 
-
+        > 'Enter' to change ball
+    coin:
+        > 'N' to add a new coin and 'D' to delete the current coin
+        > 'Enter' to change coin
+        > Click to place coin
 EDIT : U can now select the end or individual objects using ur mouse ;)
 
 '''
@@ -140,6 +143,17 @@ class Portal:
         screen.blit(self.end_img, self.end_rect.topleft)
 
 
+class Coin:
+    def __init__(self, x, y):
+        self.image = pygame.image.load('assets/imgs/dollar.png')
+        self.image = pygame.transform.scale(self.image, (40, 40))
+        self.rect = self.image.get_rect()
+        self.rect.center = (x, y)
+
+    def draw(self):
+        screen.blit(self.image, self.rect.topleft)
+
+
 # flag = Flag(WW//2, WH//2)
 # player = Player(WW//2, WH//2)
 if n != 0:
@@ -190,7 +204,18 @@ if n != 0:
         balls.append(b)
         selected_ball_index = 0
         selected_ball = balls[selected_ball_index]
-
+    if level_dict["coin_pos"]:
+        num_of_coins = len(level_dict["coin_pos"])
+    else:
+        num_of_coins = 0
+    coins = []
+    if level_dict["coin_pos"]:
+        for i in range(num_of_coins):
+            c = Coin(level_dict["coin_pos"][i][0], level_dict["coin_pos"][i][1])
+            coins.append(c)
+    if level_dict["coin_pos"]:
+        selected_coin_index = 0
+        selected_coin = coins[selected_coin_index]
 elif n == 0:
     flag = Flag(WW//2, WH//2)
     player = Player(WW//2, WH//2)
@@ -228,7 +253,16 @@ elif n == 0:
         selected_portal = portals[selected_portal_index]
     except IndexError:
         pass
-print(level_dict["ball_center"])
+    num_of_coins = 1
+    coins = []
+    for i in range(num_of_coins):
+        c = Coin(WW//2, WH//2)
+        coins.append(c)
+    selected_coin_index = 0
+    selected_coin = coins[selected_coin_index]
+
+
+
 ## balls
 
 
@@ -244,6 +278,7 @@ def save():
     ball_radius = []
     portal_start_positions = []
     portal_end_positions = []
+    coin_positions = []
     ## Lines
     for line in lines:
         start_positions.append(line.start_pos)
@@ -261,6 +296,8 @@ def save():
     for portal in portals:
         portal_start_positions.append(portal.start_pos)
         portal_end_positions.append(portal.end_pos)
+    for coin in coins:
+        coin_positions.append(coin.rect.center)
 
     to_dump_dict = {
     'start':start_positions,
@@ -272,7 +309,8 @@ def save():
     'ball_center':ball_positions,
     'ball_radius':ball_radius, 
     'portal_start':portal_start_positions, 
-    'portal_end':portal_end_positions
+    'portal_end':portal_end_positions,
+    'coin_pos':coin_positions
     }
 
     f_name = str(len(os.listdir(os.path.join('assets', 'level_editor_saves'))))
@@ -284,7 +322,7 @@ def save():
 
 
 ## line / flag / player / portal
-modes = ['line', 'flag', 'player', 'bouncing ball', 'portal']
+modes = ['line', 'flag', 'player', 'bouncing ball', 'portal', 'coin']
 mode_index = 0
 mode = modes[mode_index]
 while running:
@@ -317,6 +355,18 @@ while running:
             ## To save press S
             if e.key == pygame.K_s:
                 save()
+
+            ## Will only run if mode is coin
+            if mode == 'coin':
+                if e.key == pygame.K_RETURN:
+                    selected_coin_index += 1
+                if e.key == pygame.K_n:
+                    c = Coin(WW//2, WH//2)
+                    coins.append(c)
+                    selected_coin_index = coins.index(c)
+                    selected_coin = coins[selected_coin_index]
+                if e.key == pygame.K_d:
+                    coins.remove(selected_coin)
 
             ## Will only run if mode is line
             if mode == 'line':
@@ -441,11 +491,30 @@ while running:
     except IndexError:
         selected_portal_index = 0
 
+    ## Defining the selected coin
+    if level_dict["coin_pos"]:
+        try:
+            selected_coin = coins[selected_coin_index]
+        except IndexError:
+            selected_coin_index = 0
     ## Defining mode
     try:
         mode = modes[mode_index]            ## Managing modes
     except IndexError:
         mode_index = 0
+
+    ## Drawing coins
+    for coin in coins:
+        coin.draw()
+        if clicked and mode == "coin":
+            obj_rect = coin.rect.copy()
+            dist = math.sqrt(
+                (coin.rect.centerx - mouse_rect.centerx) ** 2 +
+                (coin.rect.centery - mouse_rect.centery) ** 2
+            )
+            if dist < DRAG_OFFSET:
+                coin.rect.center = (mx, my)
+
 
     ## Drawing lines
     for line in lines:
