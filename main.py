@@ -95,6 +95,14 @@ def survival_mode(screen, current_level):
             portals.append(p)
     except KeyError:
         pass
+    ## Coins
+    coins = []
+    try:
+        for p in current_level.dict["coin_pos"]:
+            c = Coins(p)
+            coins.append(c)
+    except KeyError:
+        pass
 
     ## ---------------------------------------- MAIN LOOP ----------------------------------------
     while True:
@@ -227,6 +235,11 @@ def survival_mode(screen, current_level):
             if score_data[0] == 'quit': return ['quit']
             if score_data[0] == 'welcome': return ['welcome']
             if current_level == "finish": return ['death', 'completed', score]
+
+        ## -------------------- Coins --------------------
+        for coin in coins:
+            coin.draw(screen)
+            coin.collect(player.rect)           ## Go to it's definition to add the coin increment system
 
         ## -------------------- In-game UI --------------------
         # Displaying the number of moves left

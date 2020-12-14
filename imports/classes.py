@@ -158,18 +158,23 @@ class Portal:
             obj.body.position = self.end_rect.center
 
 
-class Particle():
-    particles = []
-
-    def __init__(self, pos, ran, num):
-        self.pos = pygame.Vector2(pos)
-        self.ran = ran
-        for p in range(num):
-            Particle.particles.append(self)
-
-    @staticmethod
-    def do_particle_thingy():
-        pass
+class Coins:
+    def __init__(self, pos):
+        self.x = pos[0]
+        self.y = pos[1]
+        self.image = pygame.image.load(os.path.join("assets", "imgs", "dollar.png"))
+        self.rect = self.image.get_rect()
+        self.rect.center = (self.x, self.y)
+        self.collected = False
+    
+    def draw(self, screen):
+        if not self.collected:
+            self.rect.center = (self.x, self.y)
+            screen.blit(self.image, self.rect.topleft)
+    
+    def collect(self, player_rect):
+        if self.rect.colliderect(player_rect):
+            self.collected = True
 
 
 class Levels:
