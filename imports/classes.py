@@ -171,10 +171,15 @@ class Coins:
         if not self.collected:
             self.rect.center = (self.x, self.y)
             screen.blit(self.image, self.rect.topleft)
+        else:
+            self.rect.center = (-100, -100)     ## Making sure that the coins don't trigger collisions as well as ME xD
+            screen.blit(self.image, self.rect.topleft)
     
     def collect(self, player_rect):
-        if self.rect.colliderect(player_rect):
+        if self.rect.colliderect(player_rect) and not self.collected:
             self.collected = True
+            return 10
+        return 0
 
 
 class Levels:

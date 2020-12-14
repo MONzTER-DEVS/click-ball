@@ -97,6 +97,7 @@ def survival_mode(screen, current_level):
         pass
     ## Coins
     coins = []
+    coins_collected_in_current_level = 0
     try:
         for p in current_level.dict["coin_pos"]:
             c = Coins(p)
@@ -230,7 +231,8 @@ def survival_mode(screen, current_level):
             lines = balls = remove_lines_and_balls_of_level_by_number(current_level.number, lines, balls)
             player.body.angular_velocity = 0
 
-            score_data = score_screen(screen, score, data={"score": score, "level": current_level.number}, coins=50)
+            score_data = score_screen(screen, score, data={"score": score, "level": current_level.number}, 
+                                                     coins=coins_collected_in_current_level)
 
             if score_data[0] == 'quit': return ['quit']
             if score_data[0] == 'welcome': return ['welcome']
@@ -238,8 +240,10 @@ def survival_mode(screen, current_level):
 
         ## -------------------- Coins --------------------
         for coin in coins:
+            coins_collected_in_current_level += coin.collect(player.rect)
             coin.draw(screen)
-            coin.collect(player.rect)           ## Go to it's definition to add the coin increment system
+            # coins_collected_in_current_level += coin.collect(player.rect)           ## Go to it's definition to add the coin increment system
+            # print(coins_collected_in_current_level)
 
         ## -------------------- In-game UI --------------------
         # Displaying the number of moves left
@@ -298,6 +302,15 @@ def campaign(screen, current_level):
             portals.append(p)
     except KeyError:
         pass
+    # ## Coins
+    # coins = []
+    # coins_collected_in_current_level = 0
+    # try:
+    #     for p in current_level.dict["coin_pos"]:
+    #         c = Coins(p)
+    #         coins.append(c)
+    # except KeyError:
+    #     pass
 
     ## ---------------------------------------- MAIN LOOP ----------------------------------------
     while True:
@@ -437,6 +450,10 @@ def campaign(screen, current_level):
                 return ['campaign', 'select']
             if next_data[0] == 'continue':
                 return ['campaign', 'continue', current_level.number]
+        ## -------------------- Coins --------------------
+        # for coin in coins:
+        #     coins_collected_in_current_level += coin.collect(player.rect
+        #     coin.draw(screen)
 
         ## -------------------- In-game UI --------------------
         # Displaying the number of moves left
