@@ -31,6 +31,10 @@ def welcome_screen(screen):
     BORDERS = 50
     NUM_OF_BALLS = 100
     balls = []
+    name_text = medium_font.render(f"Name: {DB.fetch_name()}", True, theme.font_c)
+    name_rect = name_text.get_rect()
+    name_rect.midleft = (10, WH - 50)
+
     for i in range(NUM_OF_BALLS):
         x, y = random.randint(BORDERS, WW - BORDERS), -BORDERS
         # x, y = WW//2, WH//2
@@ -67,6 +71,7 @@ def welcome_screen(screen):
         heading_rect = heading_text.get_rect()
         heading_rect.center = (WW / 2, 50)
         screen.blit(heading_text, heading_rect.topleft)
+        screen.blit(name_text, name_rect.topleft)
 
         # Play button
         play_button = buttons["play"]
@@ -742,6 +747,9 @@ def name_screen(screen):
 
     running = True
     rect_border_gap = 2
+    error = medium_font.render("", True, theme.font_c)
+    error_rect = error.get_rect()
+    error_rect.center = (WW // 2, 500)
     while running:
         screen.fill(theme.background)
         screen.blit(name_text, name_rect)
@@ -753,11 +761,22 @@ def name_screen(screen):
                 name += event.unicode
 
                 if event.key == pygame.K_RETURN:
-                    if name != "":
+                    if len(name) > 32:
+                        error = medium_font.render("Name Too long", True, theme.font_c)
+                        error_rect = error.get_rect()
+                        error_rect.center = (WW//2, 500)
+
+                    elif name == "":
+                        error = medium_font.render("Empty Name", True, theme.font_c)
+                        error_rect = error.get_rect()
+                        error_rect.center = (WW//2, 500)
+
+                    else:
                         while name[-1] == " ":
                             name = name[:-1]
                         DB.save_name(name)
                         running = False
+
                 elif event.key == pygame.K_BACKSPACE:
                     name = name[:-1]
 
@@ -765,6 +784,7 @@ def name_screen(screen):
             if name[0] == " ":
                 name = name[1:]
 
+        screen.blit(error, error_rect.topleft)
         input_name_text = small_font.render(name, True, theme.font_c)
         input_name_rect = input_name_text.get_rect()
         input_name_rect.center = (WW // 2, 400)
@@ -772,9 +792,7 @@ def name_screen(screen):
 
         pygame.draw.rect(screen, (255, 0, 0), (input_name_rect.x - rect_border_gap, input_name_rect.y - rect_border_gap,
                                                input_name_rect.width + (rect_border_gap * 2),
-                                               input_name_rect.height + (rect_border_gap * 2)),
-                         width=2
-                         )
+                                               input_name_rect.height + (rect_border_gap * 2)),width=2)
 
         pygame.display.update()
 
