@@ -698,7 +698,11 @@ def death_screen(screen, status, score):
 
     send_data_text = small_font.render('Send Data to Leaderboard', True, theme.font_c)
     send_data_rect = send_data_text.get_rect()
-    send_data_rect.center = (WW // 2, 350)
+    send_data_rect.center = (WW// 4, 350)
+
+    exit_text = small_font.render('Exit', True, theme.font_c)
+    exit_rect = exit_text.get_rect()
+    exit_rect.center = (WW*3 // 4, 350)
 
     while True:
         screen.fill(theme.background)
@@ -711,15 +715,21 @@ def death_screen(screen, status, score):
 
         screen.blit(header_text, header_rect)
         screen.blit(send_data_text, send_data_rect)
+        screen.blit(exit_text, exit_rect.topleft)
         if send_data_rect.left < mx < send_data_rect.right and send_data_rect.top < my < send_data_rect.bottom:
+            # todo Replace with Button
             if clicked:
                 def sending_thread(name, score):
                     send_data_to_leaderboard(name, score)
 
                 threading.Thread(target=sending_thread, args=(User_data.name, score)).start()  # sends Score
                 return ['welcome']
-        clicked = False
 
+        if exit_rect.left < mx < exit_rect.right and exit_rect.top < my < exit_rect.bottom:
+            if clicked:
+                return ['welcome']
+
+        clicked = False
         pygame.display.update()
 
 
@@ -744,6 +754,8 @@ def name_screen(screen):
 
                 if event.key == pygame.K_RETURN:
                     if name != "":
+                        while name[-1] == " ":
+                            name = name[:-1]
                         DB.save_name(name)
                         running = False
                 elif event.key == pygame.K_BACKSPACE:
@@ -752,8 +764,6 @@ def name_screen(screen):
         if len(name) >= 1:
             if name[0] == " ":
                 name = name[1:]
-            elif name[-1] == " ":
-                name = name[:-1]
 
         input_name_text = small_font.render(name, True, theme.font_c)
         input_name_rect = input_name_text.get_rect()
@@ -772,7 +782,6 @@ def name_screen(screen):
 def campaign_continue_screen(screen):
     theme = Themes.active_theme
     clicked = False
-
     running = True
 
     heading_text = big_font.render('Congratulations! You passed the Level', True, theme.font_c)
