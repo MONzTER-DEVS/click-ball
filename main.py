@@ -99,6 +99,7 @@ def survival_mode(screen, current_level):
     coins = []
     coins_collected_in_current_level = 0
     try:
+        print(current_level)
         for p in current_level.dict["coin_pos"]:
             c = Coins(p)
             coins.append(c)
@@ -118,6 +119,7 @@ def survival_mode(screen, current_level):
             flag.rect.bottomleft = current_level.dict["victory"][0]  ## Flag
             moves = current_level.dict["moves"]  ## Moves
             ## Lines
+
             lines = []
             line_number = 0
             for s, e in zip(current_level.dict["start"],
@@ -134,6 +136,14 @@ def survival_mode(screen, current_level):
                                     "ball_radius"]):  # can't use nested cuz it makes wierd things happen xD
                     b = DynamicBallWithColor(p, 0, 0, r, space)
                     balls.append(b)
+            except KeyError:
+                pass
+            ## coins
+            coins = []
+            try:
+                for p in current_level.dict["coin_pos"]:
+                    c = Coins(p)
+                    coins.append(c)
             except KeyError:
                 pass
             ## Portals
