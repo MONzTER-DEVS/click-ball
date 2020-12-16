@@ -8,19 +8,6 @@ from .extra_screen_functions import *
 lboard_data = []
 ## Size is 204 x 81
 ## Ratio is 51/20
-buttons = {
-    "play": pygame.image.load("assets/buttons/Yellow button/Play.png"),
-    "settings": pygame.image.load("assets/buttons/Yellow button/settings.png"),
-    "leaderboard": pygame.image.load("assets/buttons/Yellow button/Leaderboard.png"),
-    "exit": pygame.image.load("assets/buttons/Yellow button/Exit.png"),
-    "survival": pygame.image.load("assets/buttons/Yellow button/Survival.png"),
-    "campaign": pygame.image.load("assets/buttons/Yellow button/Campaign.png"),
-    "theme": pygame.image.load("assets/buttons/Yellow button/Theme.png"),
-    "ball": pygame.image.load("assets/buttons/Yellow button/Ball.png"),
-    "back": pygame.image.load("assets/buttons/Yellow button/Back.png"),
-    "continue": pygame.image.load("assets/buttons/Yellow button/Continue.png"),
-    "next level": pygame.image.load("assets/buttons/Yellow button/Next level.png"),
-}
 
 
 def welcome_screen(screen):
@@ -394,10 +381,10 @@ def leaderboard_screen(screen):
         back_button = theme.button_c["back"]
         rect = back_button.get_rect(center=(10, WH - 50))
         if mouse_rect.colliderect(rect):
-            back_button = pygame.transform.smoothscale(theme.font_c["back"], (110, 64))
+            back_button = pygame.transform.smoothscale(theme.button_c["back"], (110, 64))
             rect = back_button.get_rect(center=(60, WH - 50))
         else:
-            back_button = pygame.transform.smoothscale(theme.font_c["back"], (100, 60))
+            back_button = pygame.transform.smoothscale(theme.button_c["back"], (100, 60))
             rect = back_button.get_rect(center=(60, WH - 50))
         hover(heading_rect, screen)
         if clicked and mouse_rect.colliderect(rect):
