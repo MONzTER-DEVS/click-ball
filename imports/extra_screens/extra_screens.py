@@ -416,13 +416,13 @@ def level_select_screen(screen, number_buttons):
         heading_rect.center = (WW // 2, 50)
         screen.blit(heading_text, heading_rect.topleft)
 
-        back_button = theme.font_c["back"]
+        back_button = theme.button_c["back"]
         rect = back_button.get_rect(center=(10, WH - 50))
         if rect.left < mx < rect.right and rect.top < my < rect.bottom:
-            back_button = pygame.transform.smoothscale(theme.font_c["back"], (110, 64))
+            back_button = pygame.transform.smoothscale(theme.button_c["back"], (110, 64))
             rect = back_button.get_rect(center=(60, WH - 50))
         else:
-            back_button = pygame.transform.smoothscale(theme.font_c["back"], (100, 60))
+            back_button = pygame.transform.smoothscale(theme.button_c["back"], (100, 60))
             rect = back_button.get_rect(center=(60, WH - 50))
 
         if clicked and rect.left < mx < rect.right and rect.top < my < rect.bottom:
@@ -851,7 +851,7 @@ def campaign_death_screen(screen):
 
     running = True
 
-    heading_text = big_font.render('You Died!', True, theme.font_c)
+    heading_text = big_font.render('Game Over!', True, theme.font_c)
     heading_rect = heading_text.get_rect()
     heading_rect.center = (WW // 2, 50)
 
