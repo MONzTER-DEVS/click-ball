@@ -32,11 +32,7 @@ def welcome_screen(screen):
 
     mouse_ball = DynamicBallWithColor((mx, my), 0, 0, 100, space)
 
-    title_text = pygame.image.load(os.path.join('assets', 'imgs', 'ClickBall.png'))
-    # title_text = pygame.Surface((228, 157))
-    title_rect = title_text.get_rect()
-    title_rect.center = (WW / 2, 75)
-    zoom = '+'
+    # zoom = '+'
 
     while True:
         screen.fill(theme.background)
@@ -75,9 +71,11 @@ def welcome_screen(screen):
         #     title_text = pygame.transform.scale(title_text, (title_rect.width-5, title_rect.height-5))
 
         # title_text = pygame.transform.scale(title_text, (title_rect.width+5, title_rect.height+5))
-        title_rect.center = (WW / 2, 75)
+        heading_text = pygame.image.load(os.path.join('assets', 'imgs', 'ClickBall.png'))
+        heading_rect = heading_text.get_rect()
+        heading_rect.center = (WW / 2, 75)
         
-        screen.blit(title_text, title_rect.topleft)
+        screen.blit(heading_text, heading_rect.topleft)
         screen.blit(name_text, name_rect.topleft)
 
         # Play button
@@ -92,7 +90,7 @@ def welcome_screen(screen):
         if clicked and mouse_rect.colliderect(rect):
             return ['game']
         screen.blit(play_button, rect.topleft)
-        # hover(heading_rect, screen)
+        hover(heading_rect, screen)
         # Settings Button
         settings_button = theme.button_c["settings"]
         rect = settings_button.get_rect(center=(WW // 2, WH - 150))
@@ -105,7 +103,7 @@ def welcome_screen(screen):
         if clicked and mouse_rect.colliderect(rect):
             return ['settings']
         screen.blit(settings_button, rect.topleft)
-        # hover(heading_rect, screen)
+        hover(heading_rect, screen)
         # Leaderboard Button
         leaderboard_button = theme.button_c["leaderboard"]
         rect = leaderboard_button.get_rect(center=(WW // 2, WH - 75))
@@ -118,7 +116,7 @@ def welcome_screen(screen):
         if clicked and mouse_rect.colliderect(rect):
             return ['leaderboard']
         screen.blit(leaderboard_button, rect.topleft)
-        # hover(heading_rect, screen)
+        hover(heading_rect, screen)
         # Exit
         exit_button = theme.button_c["exit"]
         rect = exit_button.get_rect(center=(WW - 100, WH - 75))
@@ -135,7 +133,7 @@ def welcome_screen(screen):
         heading_text = small_font.render('Exit', True, theme.font_c)
         heading_rect = heading_text.get_rect()
         heading_rect.center = (WW - 50, WH - 50)
-        # hover(heading_rect, screen)
+        hover(heading_rect, screen)
         coin_display(screen, coins=User_data.coins)
 
         # Events
