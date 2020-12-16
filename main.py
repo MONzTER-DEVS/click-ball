@@ -61,6 +61,7 @@ def survival_mode(screen, current_level):
     st_time = 0  # Time
     death_time = 0  # Death time
     clicked = False
+    coin_collect_sound = pygame.mixer.Sound(os.path.join('assets', 'sounds', 'coin_appear.wav'))
 
     ## -------------------- Initializing Level --------------------
     player.image = p_img  ## Player
@@ -156,6 +157,7 @@ def survival_mode(screen, current_level):
                     portals.append(p)
             except KeyError:
                 pass
+            coins_collected_in_current_level = 0
 
             st_time = time.time()
         if death_time != 0:
@@ -181,7 +183,6 @@ def survival_mode(screen, current_level):
                     current_level = load_level_by_num('noname', 1)
                     player.body.angular_velocity = 0
                     return ['death', 'dead', score]
-
 
         ## -------------------- Player --------------------
 
@@ -236,15 +237,15 @@ def survival_mode(screen, current_level):
         # Checking collision b/w player and the victory flag
         if player.rect.colliderect(flag.rect):
             # Adding to Score and reset score Variables
-            score += 100 + int(25 * moves) + int(25 - (time.time() - st_time))*4
+            score += 100 + int(25 * moves) + int(25 - (time.time() - st_time)) * 4
             st_time = 0
             death_time = 0
             current_level = load_level_by_num('noname', current_level.number + 1, is_survival=True)
             lines = balls = remove_lines_and_balls_of_level_by_number(current_level.number, lines, balls)
             player.body.angular_velocity = 0
 
-            score_data = score_screen(screen, score, data={"score": score, "level": current_level.number}, 
-                                                     coins=coins_collected_in_current_level)
+            score_data = score_screen(screen, score, data={"score": score, "level": current_level.number},
+                                      coins=coins_collected_in_current_level)
 
             if score_data[0] == 'quit': return ['quit']
             if score_data[0] == 'welcome': return ['welcome']
@@ -252,7 +253,10 @@ def survival_mode(screen, current_level):
 
         ## -------------------- Coins --------------------
         for coin in coins:
-            coins_collected_in_current_level += coin.collect(player.rect)
+            if coin.collect(player.rect) == 10:
+                coins.remove(coin)
+                coins_collected_in_current_level += 10
+                coin_collect_sound.play()
             coin.draw(screen)
             # coins_collected_in_current_level += coin.collect(player.rect)           ## Go to it's definition to add the coin increment system
             # print(coins_collected_in_current_level)
@@ -329,7 +333,7 @@ def campaign(screen, current_level):
         screen.fill(Themes.active_theme.background)
         ## -------------------- Time and stuff --------------------
         if st_time == 0:
-
+            coins_collected_in_current_level = 0
             # load level
             lines = balls = remove_lines_and_balls_of_level_by_number(current_level.number, lines, balls)
             player.body.position = current_level.dict["player"][0]  ## Player
