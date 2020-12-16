@@ -1,14 +1,15 @@
 from .classes import *
 from .encryption import *
+from .settings import *
 import ast
 
 
 class DB:
-    path = os.path.join('assets', 'data.db')
+    db_path = db_path
 
     @staticmethod
     def execute(commands):
-        conn = sqlite3.connect(os.path.join('assets', 'data.db'))
+        conn = sqlite3.connect(DB.db_path)
         c = conn.cursor()
 
         for command in commands:
@@ -32,7 +33,7 @@ class DB:
 
         @staticmethod
         def load():
-            conn = sqlite3.connect(os.path.join('assets', 'data.db'))
+            conn = sqlite3.connect(DB.db_path)
             c = conn.cursor()
             c.execute("SELECT * FROM cache")
             values = c.fetchall()
@@ -53,7 +54,7 @@ class DB:
 
     @staticmethod
     def update_level_progress(n):
-        conn = sqlite3.connect(os.path.join('assets', 'data.db'))
+        conn = sqlite3.connect(DB.db_path)
         c = conn.cursor()
 
         c.execute(f"UPDATE user_data SET level = '{Crypt.en(n)}'")
@@ -64,7 +65,7 @@ class DB:
 
     @staticmethod
     def load_user_progress():
-        conn = sqlite3.connect(os.path.join('assets', 'data.db'))
+        conn = sqlite3.connect(DB.db_path)
         c = conn.cursor()
 
         c.execute("SELECT * FROM user_data")
@@ -80,7 +81,8 @@ class DB:
     @staticmethod
     def check_name():
         to_return = None
-        conn = sqlite3.connect(os.path.join('assets', 'data.db'))
+        print(DB.db_path)
+        conn = sqlite3.connect(DB.db_path)
         c = conn.cursor()
 
         c.execute("""SELECT * FROM user_name""")
@@ -93,7 +95,7 @@ class DB:
 
     @staticmethod
     def save_name(name):
-        conn = sqlite3.connect('assets/data.db')
+        conn = sqlite3.connect(DB.db_path)
         c = conn.cursor()
 
         c.execute(f"""INSERT into user_name values ('{name}')""")
@@ -103,7 +105,7 @@ class DB:
 
     @staticmethod
     def fetch_name():
-        conn = sqlite3.connect('assets/data.db')
+        conn = sqlite3.connect(DB.db_path)
         c = conn.cursor()
         c.execute("""SELECT * from user_name""")
         to_return = c.fetchall()[0][0]

@@ -4,7 +4,7 @@ import pygame
 import pymunk
 import os
 import sqlite3
-
+from .settings import *
 from .encryption import *
 # from settings import WW, WH
 
@@ -172,7 +172,7 @@ class Coins:
             self.rect.center = (self.x, self.y)
             screen.blit(self.image, self.rect.topleft)
         else:
-            self.rect.center = (-100, -100)     ## Making sure that the coins don't trigger collisions as well as ME xD
+            # self.rect.center = (-100, -100)     ## Making sure that the coins don't trigger collisions as well as ME xD
             screen.blit(self.image, self.rect.topleft)
     
     def collect(self, player_rect):
@@ -204,7 +204,7 @@ class User_data:
         Use this Function to get data
         """
 
-        conn = sqlite3.connect(os.path.join('assets', 'data.db'))
+        conn = sqlite3.connect(db_path)
         c = conn.cursor()
 
         to_return = User_data.save
@@ -223,7 +223,7 @@ class User_data:
         use this function to increment Value of coins
         """
 
-        conn = sqlite3.connect(os.path.join('assets', 'data.db'))
+        conn = sqlite3.connect(db_path)
         c = conn.cursor()
         query = f"UPDATE user_data SET coins = '{Crypt.en(str(User_data.coins+number_of_coins_to_increment))}'"
         c.execute(query)

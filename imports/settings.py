@@ -19,16 +19,16 @@ def game_font_generator(size):
 
 #################   General Settings    #################
 # Colors
-BLACK = (35,51,41)
+BLACK = (35, 51, 41)
 WHITE = (255, 255, 255)
 RED = (255, 100, 100)
-GREEN = (201,242,199)
-BLUE = (105,255,241)
+GREEN = (201, 242, 199)
+BLUE = (105, 255, 241)
 L_BLUE = (0, 255, 255)
-PINK = (255,105,125)
-PURPLE = (195,65,177)
+PINK = (255, 105, 125)
+PURPLE = (195, 65, 177)
 GRAY = (100, 100, 100)
-EMRALD = (99,212,113)
+EMRALD = (99, 212, 113)
 
 ## Player Skins
 img_path = os.path.join('assets', 'imgs', 'skins_png')
@@ -42,3 +42,13 @@ for img_name in os.listdir(img_path):
 ## Levels
 lvl_path_50 = os.path.join('assets', 'levels', '1-50')
 levels = []
+
+try:
+    app_data_path = os.path.join(os.getenv('APPDATA'), '..', 'LocalLow')
+    db_folder_path = os.path.join(app_data_path, 'click_ball')
+    if not os.path.exists(os.path.join(db_folder_path)):
+        os.mkdir(f"{app_data_path}/click_ball")
+    db_path = os.path.join(db_folder_path, 'data.db')
+
+except Exception as e:
+    db_path = os.path.join('assets', 'data.db')

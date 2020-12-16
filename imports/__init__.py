@@ -32,7 +32,7 @@ number_buttons = [pygame.image.load(os.path.join('assets', 'buttons', 'level num
 def load_data_while_loading_screen():
     global can_start_game
     global number_buttons
-    if not os.path.exists(os.path.join('assets', 'data.db')):
+    if not os.path.exists(DB.db_path):
         DB.make_db()
 
     if DB.check_name() == "no name":

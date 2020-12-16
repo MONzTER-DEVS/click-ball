@@ -234,6 +234,16 @@ def survival_mode(screen, current_level):
             heading_rect.center = (WW // 2, WH // 2)
             screen.blit(heading_text, heading_rect.topleft)
 
+        ## -------------------- Coins --------------------
+        for coin in coins:
+            if coin.collect(player.rect) == 10:
+                coins.remove(coin)
+                coins_collected_in_current_level += 10
+                coin_collect_sound.play()
+            else:
+                coin.draw(screen)
+
+
         # Checking collision b/w player and the victory flag
         if player.rect.colliderect(flag.rect):
             # Adding to Score and reset score Variables
@@ -250,16 +260,6 @@ def survival_mode(screen, current_level):
             if score_data[0] == 'quit': return ['quit']
             if score_data[0] == 'welcome': return ['welcome']
             if current_level == "finish": return ['death', 'completed', score]
-
-        ## -------------------- Coins --------------------
-        for coin in coins:
-            if coin.collect(player.rect) == 10:
-                coins.remove(coin)
-                coins_collected_in_current_level += 10
-                coin_collect_sound.play()
-            coin.draw(screen)
-            # coins_collected_in_current_level += coin.collect(player.rect)           ## Go to it's definition to add the coin increment system
-            # print(coins_collected_in_current_level)
 
         ## -------------------- In-game UI --------------------
         # Displaying the number of moves left
