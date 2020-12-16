@@ -22,7 +22,7 @@ yellow_buttons = {
 }
 
 blue_button = {
-    "play": pygame.image.load("assets/buttons/Yellow button/Play.png"),
+    "play": pygame.image.load("assets/buttons/Blue button/Play.png"),
     "settings": pygame.image.load("assets/buttons/Blue button/settings.png"),
     "leaderboard": pygame.image.load("assets/buttons/Blue button/Leaderboard.png"),
     "exit": pygame.image.load("assets/buttons/Blue button/Exit.png"),

@@ -391,7 +391,7 @@ def leaderboard_screen(screen):
             heading_rect.center = (WW / 2, 400)
             screen.blit(heading_text, heading_rect.topleft)
 
-        back_button = theme.font_c["back"]
+        back_button = theme.button_c["back"]
         rect = back_button.get_rect(center=(10, WH - 50))
         if mouse_rect.colliderect(rect):
             back_button = pygame.transform.smoothscale(theme.font_c["back"], (110, 64))
