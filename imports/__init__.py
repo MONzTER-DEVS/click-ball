@@ -160,6 +160,7 @@ t_load_data_while_loading_screen.start()
 # starting screen
 screen_flags = pygame.SCALED | pygame.RESIZABLE
 screen = pygame.display.set_mode((WW, WH), screen_flags)
+pygame.display.set_icon(pygame.image.load(os.path.join('assets', 'imgs', 'ClickBall.png')))
 pygame.display.set_caption('Click Ball!')
 clock = pygame.time.Clock()
 loading_screen_running = True
