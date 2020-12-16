@@ -7,14 +7,97 @@ pygame.init()
 
 from .settings import *
 from .classes import *
+yellow_buttons = {
+    "play": pygame.image.load("assets/buttons/Yellow button/Play.png"),
+    "settings": pygame.image.load("assets/buttons/Yellow button/settings.png"),
+    "leaderboard": pygame.image.load("assets/buttons/Yellow button/Leaderboard.png"),
+    "exit": pygame.image.load("assets/buttons/Yellow button/Exit.png"),
+    "survival": pygame.image.load("assets/buttons/Yellow button/Survival.png"),
+    "campaign": pygame.image.load("assets/buttons/Yellow button/Campaign.png"),
+    "theme": pygame.image.load("assets/buttons/Yellow button/Theme.png"),
+    "ball": pygame.image.load("assets/buttons/Yellow button/Ball.png"),
+    "back": pygame.image.load("assets/buttons/Yellow button/Back.png"),
+    "continue": pygame.image.load("assets/buttons/Yellow button/Continue.png"),
+    "next level": pygame.image.load("assets/buttons/Yellow button/Next level.png"),
+}
+
+blue_button = {
+    "play": pygame.image.load("assets/buttons/Yellow button/Play.png"),
+    "settings": pygame.image.load("assets/buttons/Blue button/settings.png"),
+    "leaderboard": pygame.image.load("assets/buttons/Blue button/Leaderboard.png"),
+    "exit": pygame.image.load("assets/buttons/Blue button/Exit.png"),
+    "survival": pygame.image.load("assets/buttons/Blue button/Survival.png"),
+    "campaign": pygame.image.load("assets/buttons/Blue button/Campaign.png"),
+    "theme": pygame.image.load("assets/buttons/Blue button/Theme.png"),
+    "ball": pygame.image.load("assets/buttons/Blue button/Ball.png"),
+    "back": pygame.image.load("assets/buttons/Blue button/Back.png"),
+    "continue": pygame.image.load("assets/buttons/Blue button/Continue.png"),
+    "next level": pygame.image.load("assets/buttons/Blue button/Next level.png"),
+}
+
+green_button = {
+    "play": pygame.image.load("assets/buttons/Green button/Play.png"),
+    "settings": pygame.image.load("assets/buttons/Green button/settings.png"),
+    "leaderboard": pygame.image.load("assets/buttons/Green button/Leaderboard.png"),
+    "exit": pygame.image.load("assets/buttons/Green button/Exit.png"),
+    "survival": pygame.image.load("assets/buttons/Green button/Survival.png"),
+    "campaign": pygame.image.load("assets/buttons/Green button/Campaign.png"),
+    "theme": pygame.image.load("assets/buttons/Green button/Theme.png"),
+    "ball": pygame.image.load("assets/buttons/Green button/Ball.png"),
+    "back": pygame.image.load("assets/buttons/Green button/Back.png"),
+    "continue": pygame.image.load("assets/buttons/Green button/Continue.png"),
+    "next level": pygame.image.load("assets/buttons/Green button/Next level.png"),
+}
+
+pink_button = {
+    "play": pygame.image.load("assets/buttons/Pink button/Play.png"),
+    "settings": pygame.image.load("assets/buttons/Pink button/settings.png"),
+    "leaderboard": pygame.image.load("assets/buttons/Pink button/Leaderboard.png"),
+    "exit": pygame.image.load("assets/buttons/Pink button/Exit.png"),
+    "survival": pygame.image.load("assets/buttons/Pink button/Survival.png"),
+    "campaign": pygame.image.load("assets/buttons/Pink button/Campaign.png"),
+    "theme": pygame.image.load("assets/buttons/Pink button/Theme.png"),
+    "ball": pygame.image.load("assets/buttons/Pink button/Ball.png"),
+    "back": pygame.image.load("assets/buttons/Pink button/Back.png"),
+    "continue": pygame.image.load("assets/buttons/Pink button/Continue.png"),
+    "next level": pygame.image.load("assets/buttons/Pink button/Next level.png"),
+}
+
+purple_button = {
+    "play": pygame.image.load("assets/buttons/Purple button/Play.png"),
+    "settings": pygame.image.load("assets/buttons/Purple button/settings.png"),
+    "leaderboard": pygame.image.load("assets/buttons/Purple button/Leaderboard.png"),
+    "exit": pygame.image.load("assets/buttons/Purple button/Exit.png"),
+    "survival": pygame.image.load("assets/buttons/Purple button/Survival.png"),
+    "campaign": pygame.image.load("assets/buttons/Purple button/Campaign.png"),
+    "theme": pygame.image.load("assets/buttons/Purple button/Theme.png"),
+    "ball": pygame.image.load("assets/buttons/Purple button/Ball.png"),
+    "back": pygame.image.load("assets/buttons/Purple button/Back.png"),
+    "continue": pygame.image.load("assets/buttons/Purple button/Continue.png"),
+    "next level": pygame.image.load("assets/buttons/Purple button/Next level.png"),
+}
+
+red_button = {
+    "play": pygame.image.load("assets/buttons/Red button/Play.png"),
+    "settings": pygame.image.load("assets/buttons/Red button/settings.png"),
+    "leaderboard": pygame.image.load("assets/buttons/Red button/Leaderboard.png"),
+    "exit": pygame.image.load("assets/buttons/Red button/Exit.png"),
+    "survival": pygame.image.load("assets/buttons/Red button/Survival.png"),
+    "campaign": pygame.image.load("assets/buttons/Red button/Campaign.png"),
+    "theme": pygame.image.load("assets/buttons/Red button/Theme.png"),
+    "ball": pygame.image.load("assets/buttons/Red button/Ball.png"),
+    "back": pygame.image.load("assets/buttons/Red button/Back.png"),
+    "continue": pygame.image.load("assets/buttons/Red button/Continue.png"),
+    "next level": pygame.image.load("assets/buttons/Red button/Next level.png"),
+}
 
 #                      name,               bg,       platform_c, mouse_line, font_c,  hover, bouncing_ball_c
-light_theme = Themes('Bright White', WHITE, L_BLUE, GREEN, PINK, WHITE, GREEN)
-violet_theme = Themes("Limited Voilet", PURPLE, WHITE, WHITE, WHITE, WHITE, WHITE)
-dark_light_theme = Themes("Darkest Light", BLACK, WHITE, WHITE, L_BLUE, WHITE, EMRALD)
-dracula_theme = Themes("Dracula", BLACK, PINK, PINK, PINK, WHITE, EMRALD)
-green_theme = Themes("Grass", (81,204,64), (121,234,125), (201,242,199), (36,49,25), WHITE, (121,234,125))
-hot_chilli_theme = Themes("Hot Chilli", (157,2,8), (232,93,4), WHITE, (255,186,8), WHITE, (220,47,2))
+light_theme = Themes('Bright White', WHITE, L_BLUE, GREEN, PINK, WHITE, GREEN, yellow_buttons)
+violet_theme = Themes("Limited Voilet", PURPLE, WHITE, WHITE, WHITE, WHITE, WHITE, blue_button)
+dark_light_theme = Themes("Darkest Light", BLACK, WHITE, WHITE, L_BLUE, WHITE, EMRALD, green_button)
+dracula_theme = Themes("Dracula", BLACK, PINK, PINK, PINK, WHITE, EMRALD, pink_button)
+green_theme = Themes("Grass", (81,204,64), (121,234,125), (201,242,199), (36,49,25), WHITE, (121,234,125), purple_button)
+hot_chilli_theme = Themes("Hot Chilli", (157,2,8), (232,93,4), WHITE, (255,186,8), WHITE, (220,47,2), red_button)
 light_theme.set_to_active_theme()
 
 from .extra_screens import *
