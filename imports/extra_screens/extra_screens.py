@@ -316,10 +316,11 @@ def score_screen(screen, score, data='None', coins=0):
         hover(heading_rect, screen)
 
         if coin_state == "ongoing":
-            coins_shown += 1
             if coins_shown == coins:
                 coin_state = "finished"
                 User_data.increment_coins(coins)
+            else:
+                coins_shown += 1
 
         heading_text = medium_font.render(f'Coins Earned: {coins_shown}', True, theme.font_c)
         heading_rect = heading_text.get_rect()
