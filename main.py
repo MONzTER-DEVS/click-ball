@@ -182,13 +182,6 @@ def survival_mode(screen, current_level):
                     player.body.angular_velocity = 0
                     return ['death', 'dead', score]
 
-        ## -------------------- Events --------------------
-        if moves == 0:
-            heading_text = medium_font.render("PRESS 'R' TO quit", True, Themes.active_theme.font_c)
-            heading_text.set_alpha(200)
-            heading_rect = heading_text.get_rect()
-            heading_rect.center = (WW // 2, WH // 2)
-            screen.blit(heading_text, heading_rect.topleft)
 
         ## -------------------- Player --------------------
 
@@ -231,6 +224,15 @@ def survival_mode(screen, current_level):
         ## -------------------- Flag --------------------
         flag.draw(screen)
         player.draw(screen)
+
+        ## -------------------- Events --------------------
+        if moves == 0:
+            heading_text = medium_font.render("PRESS 'R' TO quit", True, Themes.active_theme.font_c)
+            heading_text.set_alpha(200)
+            heading_rect = heading_text.get_rect()
+            heading_rect.center = (WW // 2, WH // 2)
+            screen.blit(heading_text, heading_rect.topleft)
+
         # Checking collision b/w player and the victory flag
         if player.rect.colliderect(flag.rect):
             # Adding to Score and reset score Variables
