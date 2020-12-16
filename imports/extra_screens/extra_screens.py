@@ -156,8 +156,6 @@ def game_select_screen(screen):
         heading_text = big_font.render('Campaign', True, theme.font_c)
         heading_rect = heading_text.get_rect()
         heading_rect.center = (WW * 3 / 4, WH / 2)
-
-        campaign_button = buttons["campaign"]
         campaign_button = theme.button_c["campaign"]
         rect = campaign_button.get_rect(center=(WW * 3 / 4, WH / 2))
         if mouse_rect.colliderect(rect):
