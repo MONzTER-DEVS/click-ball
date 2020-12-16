@@ -54,10 +54,13 @@ def load_data_while_loading_screen():
     User_data.save = ast.literal_eval(data[1])
     User_data.coins = ast.literal_eval(data[2])
 
-    for x in range(1, len(os.listdir(os.path.join('assets', 'levels'))) + 1):
-        f = open(os.path.join('assets', 'levels', f'level{x}.json'))
-        Levels(name='placeholder', data=json.load(f))
-        f.close()
+    try:
+        for x in range(1, len(os.listdir(os.path.join('assets', 'levels'))) + 1):
+            f = open(os.path.join('assets', 'levels', f'level{x}.json'))
+            Levels(name='placeholder', data=json.load(f))
+            f.close()
+    except:
+        pass
     try:
         time.sleep(3 - float(time.time() - st_time))
     except:
