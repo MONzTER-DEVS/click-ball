@@ -273,7 +273,9 @@ def score_screen(screen, score, data='None', coins=0):
     step = 0
     coins_shown = 0  # show Number of coins
 
-    coin_sound = pygame.mixer.Sound(os.path.join('assets', 'sounds', 'Coin_sound.wav'))
+    coin_sound = pygame.mixer.Sound(os.path.join('assets', 'sounds', 'coin_appear.wav'))
+    coin_sound.set_volume(0.01)
+
     while True:
         screen.fill(theme.background)
         heading_text = big_font.render('You passed the Level!', True, theme.font_c)
