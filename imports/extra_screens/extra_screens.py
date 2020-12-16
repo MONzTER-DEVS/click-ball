@@ -316,11 +316,7 @@ def score_screen(screen, score, data='None', coins=0):
         hover(heading_rect, screen)
 
         if coin_state == "ongoing":
-            step += 1
-            if step % 2 == 0:
-                coins_shown += 1
-                coin_sound.play()
-                step = 0
+            coins_shown += 1
             if coins_shown == coins:
                 coin_state = "finished"
                 User_data.increment_coins(coins)
