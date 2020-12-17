@@ -446,7 +446,8 @@ def campaign(screen, current_level):
         mx, my = pygame.mouse.get_pos()
         distx = mx - player.body.position.x
         disty = my - player.body.position.y
-        pygame.draw.aaline(screen, Themes.active_theme.mouse_line, player.body.position, (mx, my), 10)
+        # pygame.draw.aaline(screen, Themes.active_theme.mouse_line, player.body.position, (mx, my), 10)
+        draw_dashed_line(screen, Themes.active_theme.mouse_line, player.body.position, (mx, my), 10, 10)
 
         # Adding a velocity to the ball if it clicked
         if clicked:
