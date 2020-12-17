@@ -19,6 +19,7 @@ yellow_buttons = {
     "back": pygame.image.load("assets/buttons/Yellow button/Back.png"),
     "continue": pygame.image.load("assets/buttons/Yellow button/Continue.png"),
     "next level": pygame.image.load("assets/buttons/Yellow button/Next level.png"),
+    "music": pygame.image.load("assets/buttons/Yellow button/music.png"),
 }
 
 blue_button = {
@@ -33,6 +34,7 @@ blue_button = {
     "back": pygame.image.load("assets/buttons/Blue button/Back.png"),
     "continue": pygame.image.load("assets/buttons/Blue button/Continue.png"),
     "next level": pygame.image.load("assets/buttons/Blue button/Next level.png"),
+    "music": pygame.image.load("assets/buttons/Blue button/music.png"),
 }
 
 green_button = {
@@ -47,6 +49,7 @@ green_button = {
     "back": pygame.image.load("assets/buttons/Green button/Back.png"),
     "continue": pygame.image.load("assets/buttons/Green button/Continue.png"),
     "next level": pygame.image.load("assets/buttons/Green button/Next level.png"),
+    "music": pygame.image.load("assets/buttons/Green button/music.png"),
 }
 
 pink_button = {
@@ -61,6 +64,7 @@ pink_button = {
     "back": pygame.image.load("assets/buttons/Pink button/Back.png"),
     "continue": pygame.image.load("assets/buttons/Pink button/Continue.png"),
     "next level": pygame.image.load("assets/buttons/Pink button/Next level.png"),
+    "music": pygame.image.load("assets/buttons/Pink button/music.png"),
 }
 
 purple_button = {
@@ -75,6 +79,7 @@ purple_button = {
     "back": pygame.image.load("assets/buttons/Purple button/Back.png"),
     "continue": pygame.image.load("assets/buttons/Purple button/Continue.png"),
     "next level": pygame.image.load("assets/buttons/Purple button/Next level.png"),
+    "music": pygame.image.load("assets/buttons/Purple button/music.png"),
 }
 
 red_button = {
@@ -89,6 +94,7 @@ red_button = {
     "back": pygame.image.load("assets/buttons/Red button/Back.png"),
     "continue": pygame.image.load("assets/buttons/Red button/Continue.png"),
     "next level": pygame.image.load("assets/buttons/Red button/Next level.png"),
+    "music": pygame.image.load("assets/buttons/Red button/music.png"),
 }
 
 #                      name,               bg,       platform_c, mouse_line, font_c,  hover, bouncing_ball_c

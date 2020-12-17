@@ -6,11 +6,14 @@ from .extra_screen_functions import *
 
 # Declaring some Variables
 lboard_data = []
+
 ## Size is 204 x 81
 ## Ratio is 51/20
-
+bg_sound = pygame.mixer.Sound("assets/sounds/music.mp3")
+bg_sound.set_volume(0.04)
 
 def welcome_screen(screen):
+    mode = 0
     clicked = False
     mx, my = pygame.mouse.get_pos()
     theme = Themes.active_theme
@@ -21,7 +24,9 @@ def welcome_screen(screen):
     name_text = medium_font.render(f"Name: {DB.fetch_name()}", True, theme.font_c)
     name_rect = name_text.get_rect()
     name_rect.midleft = (10, WH - 50)
-
+    start_time = pygame.time.get_ticks()
+    click = 0
+    click_count = 0
     for i in range(NUM_OF_BALLS):
         x, y = random.randint(BORDERS, WW - BORDERS), -BORDERS
         # x, y = WW//2, WH//2
@@ -31,12 +36,14 @@ def welcome_screen(screen):
         balls.append(b)
 
     mouse_ball = DynamicBallWithColor((mx, my), 0, 0, 100, space)
+    # pygame.mixer.music.load("assets/sounds/music.mp3")
+    # pygame.mixer.music.play(-1)
 
     # zoom = '+'
 
     while True:
-        screen.fill(theme.background)
 
+        screen.fill(theme.background)
         # Ball
         mouse_ball.body.position = mx, my
         for ball in balls:
@@ -64,7 +71,7 @@ def welcome_screen(screen):
         #     zoom = '+'
         # elif title_rect.width >= 285 or title_rect.height >= 196:
         #     zoom = '-'
-        
+
         # if zoom == '+':
         #     title_text = pygame.transform.scale(title_text, (title_rect.width+5, title_rect.height+5))
         # elif zoom == '-':
@@ -74,7 +81,49 @@ def welcome_screen(screen):
         heading_text = pygame.image.load(os.path.join('assets', 'imgs', 'ClickBall.png'))
         heading_rect = heading_text.get_rect()
         heading_rect.center = (WW / 2, 75)
-        
+        # screen.blit(music_button, (20, 40))
+        music_button = theme.button_c["music"]
+        music_button = pygame.transform.smoothscale(music_button, (60, 60))
+        rect = music_button.get_rect(center=(40, 40))
+        music_sign = pygame.image.load("assets/imgs/music.png")
+        music_sign = pygame.transform.smoothscale(music_sign, (50, 50))
+
+        if mouse_rect.colliderect(rect):
+            music_button = pygame.transform.smoothscale(theme.button_c["music"], (70, 64))
+            music_sign = pygame.transform.smoothscale(music_sign, (60, 54))
+            rect = music_button.get_rect(center=(40, 40))
+        else:
+            music_button = pygame.transform.smoothscale(theme.button_c["music"], (60, 60))
+            music_sign = pygame.transform.smoothscale(music_sign, (50, 50))
+            rect = music_button.get_rect(center=(40, 40))
+        music_sign_rect = (rect.topleft[0] + 5, rect.topleft[1] + 5)
+        screen.blit(music_button, rect.topleft)
+        screen.blit(music_sign, music_sign_rect)
+        print(music_sign_rect[0])
+        if clicked and mouse_rect.colliderect(rect):
+            click_count += 1
+            print(click_count)
+        if click_count % 2 == 0:
+            bg_sound.play()
+            # pygame.mixer.music.play(-1)
+        if click_count % 2 != 0:
+            pygame.draw.line(screen, RED, (music_sign_rect[0] + 5, music_sign_rect[1] + 10), (rect.bottomright[0] - 10, rect.bottomright[1] - 15), 7)
+            bg_sound.stop()
+            # pygame.mixer.music.stop()
+        # if clicked and mouse_rect.colliderect(rect) and click_count == 0:
+        #     click = 1
+        #     click_count = 1
+        # if clicked and mouse_rect.colliderect(rect) and click_count == 2:
+        #     pygame.mixer.music.play(-1)
+        #     current_time = pygame.time.get_ticks()
+        #     if start_time - current_time < 1000:
+        #         if clicked and mouse_rect.colliderect(rect):
+        #             click_count = 1
+        #             click = 1
+        # if click_count == 1 and click == 1:
+        #     pygame.mixer.music.stop()
+        #     click_count = 2
+
         screen.blit(heading_text, heading_rect.topleft)
         screen.blit(name_text, name_rect.topleft)
 
@@ -89,6 +138,7 @@ def welcome_screen(screen):
             rect = play_button.get_rect(center=(WW // 2, 215))
         if clicked and mouse_rect.colliderect(rect):
             return ['game']
+
         screen.blit(play_button, rect.topleft)
         hover(heading_rect, screen)
         # Settings Button
@@ -158,6 +208,7 @@ def game_select_screen(screen):
     theme = Themes.active_theme
     survival_button = theme.button_c["survival"]
     while True:
+
         screen.fill(theme.background)
 
         rect = survival_button.get_rect(center=(WW / 4, WH / 2))
@@ -170,7 +221,18 @@ def game_select_screen(screen):
         if clicked and mouse_rect.colliderect(rect):
             return ['survival']
         screen.blit(survival_button, rect.topleft)
-
+        music_button = theme.button_c["music"]
+        music_button = pygame.transform.smoothscale(music_button, (60, 60))
+        rect = music_button.get_rect(center=(40, 40))
+        if mouse_rect.colliderect(rect):
+            music_button = pygame.transform.smoothscale(theme.button_c["music"], (70, 64))
+            rect = music_button.get_rect(center=(40, 40))
+        else:
+            music_button = pygame.transform.smoothscale(theme.button_c["music"], (60, 60))
+            rect = music_button.get_rect(center=(40, 40))
+        screen.blit(music_button, rect.topleft)
+        if clicked and mouse_rect.colliderect(rect):
+            pass
         heading_text = big_font.render('Campaign', True, theme.font_c)
         heading_rect = heading_text.get_rect()
         heading_rect.center = (WW * 3 / 4, WH / 2)
@@ -219,7 +281,18 @@ def theme_screen(screen):
     while True:
         theme = Themes.active_theme
         screen.fill(theme.background)
-
+        music_button = theme.button_c["music"]
+        music_button = pygame.transform.smoothscale(music_button, (60, 60))
+        rect = music_button.get_rect(center=(40, 40))
+        if mouse_rect.colliderect(rect):
+            music_button = pygame.transform.smoothscale(theme.button_c["music"], (70, 64))
+            rect = music_button.get_rect(center=(40, 40))
+        else:
+            music_button = pygame.transform.smoothscale(theme.button_c["music"], (60, 60))
+            rect = music_button.get_rect(center=(40, 40))
+        screen.blit(music_button, rect.topleft)
+        if clicked and mouse_rect.colliderect(rect):
+            pass
         heading_text = big_font.render('THEMES !', True, theme.font_c)
         heading_rect = heading_text.get_rect()
         heading_rect.center = (WW // 2, 50)
@@ -280,6 +353,18 @@ def score_screen(screen, score, data='None', coins=0):
 
     while True:
         screen.fill(theme.background)
+        music_button = theme.button_c["music"]
+        music_button = pygame.transform.smoothscale(music_button, (60, 60))
+        rect = music_button.get_rect(center=(40, 40))
+        if mouse_rect.colliderect(rect):
+            music_button = pygame.transform.smoothscale(theme.button_c["music"], (70, 64))
+            rect = music_button.get_rect(center=(40, 40))
+        else:
+            music_button = pygame.transform.smoothscale(theme.button_c["music"], (60, 60))
+            rect = music_button.get_rect(center=(40, 40))
+        screen.blit(music_button, rect.topleft)
+        if clicked and mouse_rect.colliderect(rect):
+            pass
         heading_text = big_font.render('You passed the Level!', True, theme.font_c)
         heading_rect = heading_text.get_rect()
         heading_rect.center = (WW // 2, 50)
@@ -353,6 +438,7 @@ def score_screen(screen, score, data='None', coins=0):
 # pycharm msg above -_-
 
 def leaderboard_screen(screen):
+
     theme = Themes.active_theme
     mx, my = pygame.mouse.get_pos()
 
@@ -364,13 +450,25 @@ def leaderboard_screen(screen):
     t.start()
     clicked = False
     while True:
+
         initial_coordinates = [WW // 2 - 200, 100]
         screen.fill(theme.background)
         heading_text = big_font.render('Click Ball Leaderboard!', True, theme.font_c)
         heading_rect = heading_text.get_rect()
         heading_rect.center = (WW // 2, 50)
         screen.blit(heading_text, heading_rect.topleft)
-
+        music_button = theme.button_c["music"]
+        music_button = pygame.transform.smoothscale(music_button, (60, 60))
+        rect = music_button.get_rect(center=(40, 40))
+        if mouse_rect.colliderect(rect):
+            music_button = pygame.transform.smoothscale(theme.button_c["music"], (70, 64))
+            rect = music_button.get_rect(center=(40, 40))
+        else:
+            music_button = pygame.transform.smoothscale(theme.button_c["music"], (60, 60))
+            rect = music_button.get_rect(center=(40, 40))
+        screen.blit(music_button, rect.topleft)
+        if clicked and mouse_rect.colliderect(rect):
+            pass
         if len(lboard_data) != 0:
             heading_text = medium_font.render('Name', True, theme.font_c)
             heading_rect = heading_text.get_rect()
@@ -433,7 +531,18 @@ def level_select_screen(screen, number_buttons):
         heading_rect = heading_text.get_rect()
         heading_rect.center = (WW // 2, 50)
         screen.blit(heading_text, heading_rect.topleft)
-
+        music_button = theme.button_c["music"]
+        music_button = pygame.transform.smoothscale(music_button, (60, 60))
+        rect = music_button.get_rect(center=(40, 40))
+        if mouse_rect.colliderect(rect):
+            music_button = pygame.transform.smoothscale(theme.button_c["music"], (70, 64))
+            rect = music_button.get_rect(center=(40, 40))
+        else:
+            music_button = pygame.transform.smoothscale(theme.button_c["music"], (60, 60))
+            rect = music_button.get_rect(center=(40, 40))
+        screen.blit(music_button, rect.topleft)
+        if clicked and mouse_rect.colliderect(rect):
+            pass
         back_button = theme.button_c["back"]
         rect = back_button.get_rect(center=(10, WH - 50))
         if rect.left < mx < rect.right and rect.top < my < rect.bottom:
@@ -551,7 +660,18 @@ def settings_screen(screen):
 
         if clicked and mouse_rect.colliderect(rect):
             return ['themes']
-
+        music_button = theme.button_c["music"]
+        music_button = pygame.transform.smoothscale(music_button, (60, 60))
+        rect = music_button.get_rect(center=(40, 40))
+        if mouse_rect.colliderect(rect):
+            music_button = pygame.transform.smoothscale(theme.button_c["music"], (70, 64))
+            rect = music_button.get_rect(center=(40, 40))
+        else:
+            music_button = pygame.transform.smoothscale(theme.button_c["music"], (60, 60))
+            rect = music_button.get_rect(center=(40, 40))
+        screen.blit(music_button, rect.topleft)
+        if clicked and mouse_rect.colliderect(rect):
+            pass
         heading_text = medium_font.render('Change Ball', True, theme.font_c)
         rect = heading_text.get_rect()
         rect.center = (WW // 2, 325)
@@ -613,7 +733,18 @@ def skin_select_screen(screen):
         heading_rect = heading_text.get_rect()
         heading_rect.center = (WW // 2, 50)
         screen.blit(heading_text, heading_rect.topleft)
-
+        music_button = theme.button_c["music"]
+        music_button = pygame.transform.smoothscale(music_button, (60, 60))
+        rect = music_button.get_rect(center=(40, 40))
+        if mouse_rect.colliderect(rect):
+            music_button = pygame.transform.smoothscale(theme.button_c["music"], (70, 64))
+            rect = music_button.get_rect(center=(40, 40))
+        else:
+            music_button = pygame.transform.smoothscale(theme.button_c["music"], (60, 60))
+            rect = music_button.get_rect(center=(40, 40))
+        screen.blit(music_button, rect.topleft)
+        if clicked and mouse_rect.colliderect(rect):
+            pass
         back_button = theme.button_c["back"]
         rect = back_button.get_rect(center=(10, WH - 50))
         if mouse_rect.colliderect(rect):
@@ -719,6 +850,18 @@ def death_screen(screen, status, score):
                 return ['quit']
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 clicked = True
+        music_button = theme.button_c["music"]
+        music_button = pygame.transform.smoothscale(music_button, (60, 60))
+        rect = music_button.get_rect(center=(40, 40))
+        if mouse_rect.colliderect(rect):
+            music_button = pygame.transform.smoothscale(theme.button_c["music"], (70, 64))
+            rect = music_button.get_rect(center=(40, 40))
+        else:
+            music_button = pygame.transform.smoothscale(theme.button_c["music"], (60, 60))
+            rect = music_button.get_rect(center=(40, 40))
+        screen.blit(music_button, rect.topleft)
+        if clicked and mouse_rect.colliderect(rect):
+            pass
         rect = back_button.get_rect(center=(WW//2 + 400, WH//2 - 20))
         if mx > rect.left and rect.top < my < rect.bottom:
             back_button = pygame.transform.smoothscale(theme.button_c["back"], (100, 64))
@@ -761,7 +904,18 @@ def name_screen(screen):
     while running:
         screen.fill(theme.background)
         screen.blit(name_text, name_rect)
-
+        music_button = theme.button_c["music"]
+        music_button = pygame.transform.smoothscale(music_button, (60, 60))
+        rect = music_button.get_rect(center=(40, 40))
+        if mouse_rect.colliderect(rect):
+            music_button = pygame.transform.smoothscale(theme.button_c["music"], (70, 64))
+            rect = music_button.get_rect(center=(40, 40))
+        else:
+            music_button = pygame.transform.smoothscale(theme.button_c["music"], (60, 60))
+            rect = music_button.get_rect(center=(40, 40))
+        screen.blit(music_button, rect.topleft)
+        if clicked and mouse_rect.colliderect(rect):
+            pass
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return 'quit'
@@ -827,7 +981,18 @@ def campaign_continue_screen(screen):
     while running:
         mx, my = pygame.mouse.get_pos()
         screen.fill(theme.background)
-
+        music_button = theme.button_c["music"]
+        music_button = pygame.transform.smoothscale(music_button, (60, 60))
+        rect = music_button.get_rect(center=(40, 40))
+        if mouse_rect.colliderect(rect):
+            music_button = pygame.transform.smoothscale(theme.button_c["music"], (70, 64))
+            rect = music_button.get_rect(center=(40, 40))
+        else:
+            music_button = pygame.transform.smoothscale(theme.button_c["music"], (60, 60))
+            rect = music_button.get_rect(center=(40, 40))
+        screen.blit(music_button, rect.topleft)
+        if clicked and mouse_rect.colliderect(rect):
+            pass
         screen.blit(heading_text, heading_rect.topleft)
         rect = continue_button.get_rect(center=(WW // 4, WH // 2))
         if rect.left < mx < rect.right and rect.top < my < rect.bottom:
@@ -884,7 +1049,18 @@ def campaign_death_screen(screen):
     while running:
         mx, my = pygame.mouse.get_pos()
         screen.fill(theme.background)
-
+        music_button = theme.button_c["music"]
+        music_button = pygame.transform.smoothscale(music_button, (60, 60))
+        rect = music_button.get_rect(center=(40, 40))
+        if mouse_rect.colliderect(rect):
+            music_button = pygame.transform.smoothscale(theme.button_c["music"], (70, 64))
+            rect = music_button.get_rect(center=(40, 40))
+        else:
+            music_button = pygame.transform.smoothscale(theme.button_c["music"], (60, 60))
+            rect = music_button.get_rect(center=(40, 40))
+        screen.blit(music_button, rect.topleft)
+        if clicked and mouse_rect.colliderect(rect):
+            pass
         screen.blit(heading_text, heading_rect.topleft)
 
         rect = restart_rect

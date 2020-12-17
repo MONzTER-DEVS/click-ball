@@ -239,7 +239,7 @@ def survival_mode(screen, current_level):
             if coin.collect(player.rect) == 10:
                 coins.remove(coin)
                 coins_collected_in_current_level += 10
-                coin_collect_sound.play()
+                # coin_collect_sound.play()
             else:
                 coin.draw(screen)
 
