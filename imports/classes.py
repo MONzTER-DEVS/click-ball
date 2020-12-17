@@ -45,6 +45,8 @@ class DynamicBall:
         rotated_image = pygame.transform.rotate(self.image, -math.degrees(self.body.angle))
         new_rect = rotated_image.get_rect(center=self.image.get_rect(topleft=self.rect.topleft).center)
 
+        shading = 5
+        pygame.draw.circle(surf, GRAY, (self.rect.centerx+shading, self.rect.centery+shading), 16)
         surf.blit(rotated_image, new_rect.topleft)
 
 
@@ -96,6 +98,10 @@ class StaticLine:
         StaticLine.all_lines.append(self)
 
     def draw(self, surf, color):
+        shading = 5
+        sx1, sy1 =  self.shape.a[0] + shading, self.shape.a[1] + shading
+        sx2, sy2 =  self.shape.b[0] + shading, self.shape.b[1] + shading
+        pygame.draw.line(surf, GRAY, (sx1, sy1), (sx2, sy2), int(self.shape.radius) * 2)
         pygame.draw.line(surf, color, self.shape.a, self.shape.b, int(self.shape.radius) * 2)
 
 
