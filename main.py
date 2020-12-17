@@ -50,7 +50,7 @@ def reset_player_pos(player, WW, WH, current_level):
         player.body.position = current_level.dict["player"][0]  ## Player
         player.body.velocity = (0, 0)
 
-def draw_dashed_line(surf, color, start_pos, end_pos, width=1, dash_length=10):
+def draw_dashed_line(surf, color, start_pos, end_pos, width=1, dash_length=20):
     x1, y1 = start_pos
     x2, y2 = end_pos
     dl = dash_length
@@ -78,8 +78,14 @@ def draw_dashed_line(surf, color, start_pos, end_pos, width=1, dash_length=10):
     next_coords = list(zip(xcoords[1::2], ycoords[1::2]))
     last_coords = list(zip(xcoords[0::2], ycoords[0::2]))
     for (x1, y1), (x2, y2) in zip(next_coords, last_coords):
-        start = (round(x1), round(y1))
-        end = (round(x2), round(y2))
+        rx1, ry1 = round(x1), round(y1)
+        rx2, ry2 = round(x2), round(y2)
+        start = (rx1, ry1)
+        end = (rx2, ry2)
+        shading = 5
+        start2 = (rx1 + shading, ry1 + shading)
+        end2 = (rx2 + shading, ry2 + shading)
+        pygame.draw.line(surf, GRAY, start2, end2, width)
         pygame.draw.line(surf, color, start, end, width)
 
 ## ========================= Survival Mode =========================
@@ -223,7 +229,7 @@ def survival_mode(screen, current_level):
         distx = mx - player.body.position.x
         disty = my - player.body.position.y
         # pygame.draw.line(screen, Themes.active_theme.mouse_line, player.body.position, (mx+100, my+100), 10)
-        draw_dashed_line(screen, Themes.active_theme.mouse_line, player.body.position, (mx, my), 10, 10)
+        draw_dashed_line(screen, Themes.active_theme.mouse_line, player.body.position, (mx, my), 10)
         pygame.draw.circle(screen, Themes.active_theme.mouse_line, (mx, my), 5)
 
         # Adding a velocity to the ball if it clicked
@@ -447,7 +453,7 @@ def campaign(screen, current_level):
         distx = mx - player.body.position.x
         disty = my - player.body.position.y
         # pygame.draw.aaline(screen, Themes.active_theme.mouse_line, player.body.position, (mx, my), 10)
-        draw_dashed_line(screen, Themes.active_theme.mouse_line, player.body.position, (mx, my), 10, 10)
+        draw_dashed_line(screen, Themes.active_theme.mouse_line, player.body.position, (mx, my), 10)
 
         # Adding a velocity to the ball if it clicked
         if clicked:
