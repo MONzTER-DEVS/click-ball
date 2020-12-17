@@ -1,4 +1,5 @@
 from imports import *
+import numpy
 
 ## -------- PyMunk Initialization --------
 space = pymunk.Space()  # Create a Space which contain the simulation
@@ -49,6 +50,37 @@ def reset_player_pos(player, WW, WH, current_level):
         player.body.position = current_level.dict["player"][0]  ## Player
         player.body.velocity = (0, 0)
 
+def draw_dashed_line(surf, color, start_pos, end_pos, width=1, dash_length=10):
+    x1, y1 = start_pos
+    x2, y2 = end_pos
+    dl = dash_length
+    x1 = int(x1)
+    y1 = int(y1)
+    x2 = int(x2)
+    y2 = int(y2)
+
+    if (x1 == x2):
+        ycoords = [int(y) for y in range(y1, y2, dl if y1 < y2 else -dl)]
+        xcoords = [x1] * len(ycoords)
+    elif (y1 == y2):
+        xcoords = [int(x) for x in range(x1, x2, dl if x1 < x2 else -dl)]
+        ycoords = [y1] * len(xcoords)
+    else:
+        a = abs(x2 - x1)
+        b = abs(y2 - y1)
+        c = round(math.sqrt(a**2 + b**2))
+        dx = dl * a / c
+        dy = dl * b / c
+
+        xcoords = [x for x in numpy.arange(x1, x2, dx if x1 < x2 else -dx)]
+        ycoords = [y for y in numpy.arange(y1, y2, dy if y1 < y2 else -dy)]
+
+    next_coords = list(zip(xcoords[1::2], ycoords[1::2]))
+    last_coords = list(zip(xcoords[0::2], ycoords[0::2]))
+    for (x1, y1), (x2, y2) in zip(next_coords, last_coords):
+        start = (round(x1), round(y1))
+        end = (round(x2), round(y2))
+        pygame.draw.line(surf, color, start, end, width)
 
 ## ========================= Survival Mode =========================
 def survival_mode(screen, current_level):
@@ -100,7 +132,7 @@ def survival_mode(screen, current_level):
     coins = []
     coins_collected_in_current_level = 0
     try:
-        print(current_level)
+        # print(current_level)
         for p in current_level.dict["coin_pos"]:
             c = Coins(p)
             coins.append(c)
@@ -190,7 +222,9 @@ def survival_mode(screen, current_level):
         mx, my = pygame.mouse.get_pos()
         distx = mx - player.body.position.x
         disty = my - player.body.position.y
-        pygame.draw.aaline(screen, Themes.active_theme.mouse_line, player.body.position, (mx, my), 10)
+        # pygame.draw.line(screen, Themes.active_theme.mouse_line, player.body.position, (mx+100, my+100), 10)
+        draw_dashed_line(screen, Themes.active_theme.mouse_line, player.body.position, (mx, my), 10, 10)
+        pygame.draw.circle(screen, Themes.active_theme.mouse_line, (mx, my), 5)
 
         # Adding a velocity to the ball if it clicked
         if clicked:
