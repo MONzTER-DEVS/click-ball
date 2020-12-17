@@ -108,7 +108,7 @@ class StaticLine:
 # Victory Flag
 class VictoryFlag:
     def __init__(self, pos):  # U have to put bottom point of the flag while making an instance
-        self.image = pygame.image.load(os.path.join('assets', 'imgs', 'victory_flag.png'))
+        self.image = pygame.image.load(os.path.join('assets', 'imgs', 'victory_flag.png')).convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.bottomleft = tuple(pos)
 
@@ -146,8 +146,8 @@ class Portal:
         self.start_pos = start_pos
         self.end_pos = end_pos
         self.radius = radius
-        self.start_img = pygame.image.load('assets/imgs/PortalStart.png')
-        self.end_img = pygame.image.load('assets/imgs/PortalEnd.png')
+        self.start_img = pygame.image.load('assets/imgs/PortalStart.png').convert_alpha()
+        self.end_img = pygame.image.load('assets/imgs/PortalEnd.png').convert_alpha()
         self.start_rect = self.start_img.get_rect()
         self.end_rect = self.end_img.get_rect()
         self.start_rect.center = self.start_pos
@@ -169,7 +169,7 @@ class Coins:
     def __init__(self, pos):
         self.x = pos[0]
         self.y = pos[1]
-        self.image = pygame.image.load(os.path.join("assets", "imgs", "dollar.png"))
+        self.image = pygame.image.load(os.path.join("assets", "imgs", "dollar.png")).convert_alpha()
         self.image = pygame.transform.smoothscale(self.image, (35, 35))
         self.rect = self.image.get_rect()
         self.rect.center = (self.x, self.y)
@@ -178,9 +178,8 @@ class Coins:
     def draw(self, screen):
         if not self.collected:
             self.rect.center = (self.x, self.y)
-            screen.blit(self.image, self.rect.topleft)
-        else:
-            # self.rect.center = (-100, -100)     ## Making sure that the coins don't trigger collisions as well as ME xD
+            shading = 5
+            pygame.draw.circle(screen, GRAY, (self.rect.centerx + shading, self.rect.centery + shading), self.rect.w//2)
             screen.blit(self.image, self.rect.topleft)
     
     def collect(self, player_rect):

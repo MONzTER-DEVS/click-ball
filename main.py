@@ -158,7 +158,6 @@ def survival_mode(screen, current_level):
             flag.rect.bottomleft = current_level.dict["victory"][0]  ## Flag
             moves = current_level.dict["moves"]  ## Moves
             ## Lines
-
             lines = []
             line_number = 0
             for s, e in zip(current_level.dict["start"],

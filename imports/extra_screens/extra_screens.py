@@ -78,14 +78,14 @@ def welcome_screen(screen):
         #     title_text = pygame.transform.scale(title_text, (title_rect.width-5, title_rect.height-5))
 
         # title_text = pygame.transform.scale(title_text, (title_rect.width+5, title_rect.height+5))
-        heading_text = pygame.image.load(os.path.join('assets', 'imgs', 'ClickBall.png'))
+        heading_text = pygame.image.load(os.path.join('assets', 'imgs', 'ClickBall.png')).convert_alpha()
         heading_rect = heading_text.get_rect()
         heading_rect.center = (WW / 2, 75)
         # screen.blit(music_button, (20, 40))
         music_button = theme.button_c["music"]
         music_button = pygame.transform.smoothscale(music_button, (60, 60))
         rect = music_button.get_rect(center=(40, 40))
-        music_sign = pygame.image.load("assets/imgs/music.png")
+        music_sign = pygame.image.load("assets/imgs/music.png").convert_alpha()
         music_sign = pygame.transform.smoothscale(music_sign, (50, 50))
 
         if mouse_rect.colliderect(rect):
