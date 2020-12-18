@@ -88,6 +88,123 @@ def draw_dashed_line(surf, color, start_pos, end_pos, width=1, dash_length=20):
         pygame.draw.line(surf, GRAY, start2, end2, width)
         pygame.draw.line(surf, color, start, end, width)
 
+def load_objects(level, mode='survival'):
+    ## -------------------- Initializing Level --------------------
+    player.image = p_img  ## Player
+    player.body.position = level.dict["player"][0]  ## Player
+    player.body.velocity = (0, 0)  ## Player
+    flag.rect.bottomleft = level.dict["victory"][0]  ## Flag
+    moves = level.dict["moves"]  ## Moves
+    ## Lines
+    lines = []
+    line_number = 0
+    for s, e in zip(level.dict["start"],
+                    level.dict["end"]):  # can't use nested cuz it makes wierd things happen xD
+        l = StaticLine(s, e, level.dict["thickness"][line_number], space)
+        lines.append(l)
+        line_number += 1
+    line_number = 0
+    ## Dummy Balls
+    balls = []
+    try:  ## Incase there are no balls ;)
+        for p, r in zip(level.dict["ball_center"],
+                        level.dict["ball_radius"]):  # can't use nested cuz it makes wierd things happen xD
+            b = DynamicBallWithColor(p, 0, 0, r, space)
+            balls.append(b)
+    except KeyError:
+        pass
+    ## Portals
+    portals = []
+    try:
+        for s, e in zip(level.dict["portal_start"],
+                        level.dict["portal_end"]):  # can't use nested cuz it makes wierd things happen xD
+            p = Portal(s, e, 32)
+            portals.append(p)
+    except KeyError:
+        pass
+    ## Coins
+    coins = []
+    if mode != 'survival':
+        try:
+            # print(level)
+            for p in level.dict["coin_pos"]:
+                c = Coins(p)
+                coins.append(c)
+        except KeyError:
+            pass
+    level_data = {
+        "moves" : moves, 
+        "lines" : lines, 
+        "balls" : balls,
+        "portals" : portals,
+        "coins" : coins
+    }
+    return level_data
+
+def draw_objects(moves, clicked, coins_collected_in_current_level, level, lines, balls, portals, coins, death_time):
+    ## -------------------- Player --------------------
+    # Drawing the direction in which a force will b applied
+    mx, my = pygame.mouse.get_pos()
+    distx = mx - player.body.position.x
+    disty = my - player.body.position.y
+    # pygame.draw.line(screen, Themes.active_theme.mouse_line, player.body.position, (mx+100, my+100), 10)
+    draw_dashed_line(screen, Themes.active_theme.mouse_line, player.body.position, (mx, my), 10)
+    pygame.draw.circle(screen, Themes.active_theme.mouse_line, (mx, my), 5)
+
+    # Adding a velocity to the ball if it clicked
+    if clicked:
+        if moves > 0:
+            moves -= 1
+            player.body.velocity = (distx * player_speed_factor, disty * player_speed_factor)
+
+        if moves == 0 and death_time == 0:  # Start Death timer if not already running
+            death_time = int(time.time())
+        clicked = False
+
+    # Limiting the player's velocity (so that it doesn't flies across like hell xD)
+    if distx > max_speed:
+        distx = max_speed
+    if disty > max_speed:
+        disty = max_speed
+
+    # reseting player's
+    reset_player_pos(player, WW, WH, level)
+
+    ## -------------------- Lines, balls and Portals --------------------
+    for line in lines:
+        line.draw(screen, Themes.active_theme.platform_c)
+    for ball in balls:
+        ball.draw(screen, Themes.active_theme.bouncing_ball_c)
+    for portal in portals:
+        portal.draw(screen, space)
+        portal.teleport(player)
+        for ball in balls:
+            portal.teleport(ball)
+
+    ## -------------------- Flag --------------------
+    flag.draw(screen)
+    player.draw(screen)
+
+    ## -------------------- Events --------------------
+    if moves == 0:
+        heading_text = medium_font.render("PRESS 'R' TO quit", True, Themes.active_theme.font_c)
+        heading_text.set_alpha(200)
+        heading_rect = heading_text.get_rect()
+        heading_rect.center = (WW // 2, WH // 2)
+        screen.blit(heading_text, heading_rect.topleft)
+
+    ## -------------------- Coins --------------------
+    for coin in coins:
+        if coin.collect(player.rect) == 10:
+            coins.remove(coin)
+            coins_collected_in_current_level += 10
+            # coin_collect_sound.play()
+        else:
+            coin.draw(screen)
+
+    return [moves, clicked, coins_collected_in_current_level]
+
+
 ## ========================= Survival Mode =========================
 def survival_mode(screen, current_level):
     score = 0
@@ -101,49 +218,13 @@ def survival_mode(screen, current_level):
     clicked = False
     coin_collect_sound = pygame.mixer.Sound(os.path.join('assets', 'sounds', 'coin_appear.wav'))
 
-    ## -------------------- Initializing Level --------------------
-    player.image = p_img  ## Player
-    player.body.position = current_level.dict["player"][0]  ## Player
-    player.body.velocity = (0, 0)  ## Player
-    flag.rect.bottomleft = current_level.dict["victory"][0]  ## Flag
-    moves = current_level.dict["moves"]  ## Moves
-    ## Lines
-    lines = []
-    line_number = 0
-    for s, e in zip(current_level.dict["start"],
-                    current_level.dict["end"]):  # can't use nested cuz it makes wierd things happen xD
-        l = StaticLine(s, e, current_level.dict["thickness"][line_number], space)
-        lines.append(l)
-        line_number += 1
-    line_number = 0
-    ## Dummy Balls
-    balls = []
-    try:  ## Incase there are no balls ;)
-        for p, r in zip(current_level.dict["ball_center"],
-                        current_level.dict["ball_radius"]):  # can't use nested cuz it makes wierd things happen xD
-            b = DynamicBallWithColor(p, 0, 0, r, space)
-            balls.append(b)
-    except KeyError:
-        pass
-    ## Portals
-    portals = []
-    try:
-        for s, e in zip(current_level.dict["portal_start"],
-                        current_level.dict["portal_end"]):  # can't use nested cuz it makes wierd things happen xD
-            p = Portal(s, e, 32)
-            portals.append(p)
-    except KeyError:
-        pass
-    ## Coins
-    coins = []
+    level_data = load_objects(current_level, 'survival')
+    moves = level_data["moves"]
+    lines = level_data["lines"]
+    balls = level_data["balls"]
+    portals = level_data["portals"]
+    coins = level_data["coins"]
     coins_collected_in_current_level = 0
-    try:
-        # print(current_level)
-        for p in current_level.dict["coin_pos"]:
-            c = Coins(p)
-            coins.append(c)
-    except KeyError:
-        pass
 
     ## ---------------------------------------- MAIN LOOP ----------------------------------------
     while True:
@@ -153,47 +234,13 @@ def survival_mode(screen, current_level):
 
             # load level
             lines = balls = remove_lines_and_balls_of_level_by_number(current_level.number, lines, balls)
-            player.body.position = current_level.dict["player"][0]  ## Player
-            player.body.velocity = (0, 0)  ## Player
-            flag.rect.bottomleft = current_level.dict["victory"][0]  ## Flag
-            moves = current_level.dict["moves"]  ## Moves
-            ## Lines
-            lines = []
-            line_number = 0
-            for s, e in zip(current_level.dict["start"],
-                            current_level.dict["end"]):  # can't use nested cuz it makes wierd things happen xD
-                l = StaticLine(s, e, current_level.dict["thickness"][line_number], space)
-                lines.append(l)
-                line_number += 1
-            line_number = 0
-            ## Dummy Balls
-            balls = []
-            try:  ## Incase there are no balls ;)
-                for p, r in zip(current_level.dict["ball_center"],
-                                current_level.dict[
-                                    "ball_radius"]):  # can't use nested cuz it makes wierd things happen xD
-                    b = DynamicBallWithColor(p, 0, 0, r, space)
-                    balls.append(b)
-            except KeyError:
-                pass
-            ## coins
-            coins = []
-            try:
-                for p in current_level.dict["coin_pos"]:
-                    c = Coins(p)
-                    coins.append(c)
-            except KeyError:
-                pass
-            ## Portals
-            portals = []
-            try:
-                for s, e in zip(current_level.dict["portal_start"],
-                                current_level.dict[
-                                    "portal_end"]):  # can't use nested cuz it makes wierd things happen xD
-                    p = Portal(s, e, 32)
-                    portals.append(p)
-            except KeyError:
-                pass
+            level_data = load_objects(current_level, 'survival')
+            moves = level_data["moves"]
+            lines = level_data["lines"]
+            balls = level_data["balls"]
+            portals = level_data["portals"]
+            coins = level_data["coins"]
+            coins_collected_in_current_level = 0
             coins_collected_in_current_level = 0
 
             st_time = time.time()
@@ -221,67 +268,11 @@ def survival_mode(screen, current_level):
                     player.body.angular_velocity = 0
                     return ['death', 'dead', score]
 
-        ## -------------------- Player --------------------
-
-        # Drawing the direction in which a force will b applied
-        mx, my = pygame.mouse.get_pos()
-        distx = mx - player.body.position.x
-        disty = my - player.body.position.y
-        # pygame.draw.line(screen, Themes.active_theme.mouse_line, player.body.position, (mx+100, my+100), 10)
-        draw_dashed_line(screen, Themes.active_theme.mouse_line, player.body.position, (mx, my), 10)
-        pygame.draw.circle(screen, Themes.active_theme.mouse_line, (mx, my), 5)
-
-        # Adding a velocity to the ball if it clicked
-        if clicked:
-            if moves > 0:
-                moves -= 1
-                player.body.velocity = (distx * player_speed_factor, disty * player_speed_factor)
-
-            if moves == 0 and death_time == 0:  # Start Death timer if not already running
-                death_time = int(time.time())
-            clicked = False
-
-        # Limiting the player's velocity (so that it doesn't flies across like hell xD)
-        if distx > max_speed:
-            distx = max_speed
-        if disty > max_speed:
-            disty = max_speed
-
-        # reseting player's
-        reset_player_pos(player, WW, WH, current_level)
-
-        ## -------------------- Lines, balls and Portals --------------------
-        for line in lines:
-            line.draw(screen, Themes.active_theme.platform_c)
-        for ball in balls:
-            ball.draw(screen, Themes.active_theme.bouncing_ball_c)
-        for portal in portals:
-            portal.draw(screen, space)
-            portal.teleport(player)
-            for ball in balls:
-                portal.teleport(ball)
-
-        ## -------------------- Flag --------------------
-        flag.draw(screen)
-        player.draw(screen)
-
-        ## -------------------- Events --------------------
-        if moves == 0:
-            heading_text = medium_font.render("PRESS 'R' TO quit", True, Themes.active_theme.font_c)
-            heading_text.set_alpha(200)
-            heading_rect = heading_text.get_rect()
-            heading_rect.center = (WW // 2, WH // 2)
-            screen.blit(heading_text, heading_rect.topleft)
-
-        ## -------------------- Coins --------------------
-        for coin in coins:
-            if coin.collect(player.rect) == 10:
-                coins.remove(coin)
-                coins_collected_in_current_level += 10
-                # coin_collect_sound.play()
-            else:
-                coin.draw(screen)
-
+        ## Drawing
+        draw_data = draw_objects(moves, clicked, coins_collected_in_current_level, current_level, lines, balls, portals, coins, death_time)
+        moves = draw_data[0]
+        clicked = draw_data[1]
+        coins_collected_in_current_level = draw_data[2]
 
         # Checking collision b/w player and the victory flag
         if player.rect.colliderect(flag.rect):
@@ -323,49 +314,14 @@ def campaign(screen, current_level):
     st_time = 0  # Time
     death_time = 0  # Death time
     clicked = False
-
-    ## -------------------- Initializing Level --------------------
-    player.image = p_img  ## Player
-    player.body.position = current_level.dict["player"][0]  ## Player
-    player.body.velocity = (0, 0)  ## Player
-    flag.rect.bottomleft = current_level.dict["victory"][0]  ## Flag
-    moves = current_level.dict["moves"]  ## Moves
-    ## Lines
-    lines = []
-    line_number = 0
-    for s, e in zip(current_level.dict["start"],
-                    current_level.dict["end"]):  # can't use nested cuz it makes wierd things happen xD
-        l = StaticLine(s, e, current_level.dict["thickness"][line_number], space)
-        lines.append(l)
-        line_number += 1
-    line_number = 0
-    ## Dummy Balls
-    balls = []
-    try:  ## Incase there are no balls ;)
-        for p, r in zip(current_level.dict["ball_center"],
-                        current_level.dict["ball_radius"]):  # can't use nested cuz it makes wierd things happen xD
-            b = DynamicBallWithColor(p, 0, 0, r, space)
-            balls.append(b)
-    except KeyError:
-        pass
-    ## Portals
-    portals = []
-    try:
-        for s, e in zip(current_level.dict["portal_start"],
-                        current_level.dict["portal_end"]):  # can't use nested cuz it makes wierd things happen xD
-            p = Portal(s, e, 32)
-            portals.append(p)
-    except KeyError:
-        pass
-    # ## Coins
-    # coins = []
-    # coins_collected_in_current_level = 0
-    # try:
-    #     for p in current_level.dict["coin_pos"]:
-    #         c = Coins(p)
-    #         coins.append(c)
-    # except KeyError:
-    #     pass
+    
+    level_data = load_objects(current_level, 'campaign')
+    moves = level_data["moves"]
+    lines = level_data["lines"]
+    balls = level_data["balls"]
+    portals = level_data["portals"]
+    coins = level_data["coins"]
+    coins_collected_in_current_level = 0
 
     ## ---------------------------------------- MAIN LOOP ----------------------------------------
     while True:
@@ -375,39 +331,13 @@ def campaign(screen, current_level):
             coins_collected_in_current_level = 0
             # load level
             lines = balls = remove_lines_and_balls_of_level_by_number(current_level.number, lines, balls)
-            player.body.position = current_level.dict["player"][0]  ## Player
-            player.body.velocity = (0, 0)  ## Player
-            flag.rect.bottomleft = current_level.dict["victory"][0]  ## Flag
-            moves = current_level.dict["moves"]  ## Moves
-            ## Lines
-            lines = []
-            line_number = 0
-            for s, e in zip(current_level.dict["start"],
-                            current_level.dict["end"]):  # can't use nested cuz it makes wierd things happen xD
-                l = StaticLine(s, e, current_level.dict["thickness"][line_number], space)
-                lines.append(l)
-                line_number += 1
-            line_number = 0
-            ## Dummy Balls
-            balls = []
-            try:  ## Incase there are no balls ;)
-                for p, r in zip(current_level.dict["ball_center"],
-                                current_level.dict[
-                                    "ball_radius"]):  # can't use nested cuz it makes wierd things happen xD
-                    b = DynamicBallWithColor(p, 0, 0, r, space)
-                    balls.append(b)
-            except KeyError:
-                pass
-            ## Portals
-            portals = []
-            try:
-                for s, e in zip(current_level.dict["portal_start"],
-                                current_level.dict[
-                                    "portal_end"]):  # can't use nested cuz it makes wierd things happen xD
-                    p = Portal(s, e, 32)
-                    portals.append(p)
-            except KeyError:
-                pass
+            level_data = load_objects(current_level, 'campaign')
+            moves = level_data["moves"]
+            lines = level_data["lines"]
+            balls = level_data["balls"]
+            portals = level_data["portals"]
+            coins = level_data["coins"]
+            coins_collected_in_current_level = 0
 
             st_time = time.time()
         if death_time != 0:
@@ -445,47 +375,12 @@ def campaign(screen, current_level):
                     if temp_death_data[0] == 'restart':
                         return ['campaign', 'continue', current_level.number]
 
-        ## -------------------- Player --------------------
-        player.draw(screen)
-        # Drawing the direction in which a force will b applied
-        mx, my = pygame.mouse.get_pos()
-        distx = mx - player.body.position.x
-        disty = my - player.body.position.y
-        # pygame.draw.aaline(screen, Themes.active_theme.mouse_line, player.body.position, (mx, my), 10)
-        draw_dashed_line(screen, Themes.active_theme.mouse_line, player.body.position, (mx, my), 10)
+        ## Drawing
+        draw_data = draw_objects(moves, clicked, coins_collected_in_current_level, current_level, lines, balls, portals, coins, death_time)
+        moves = draw_data[0]
+        clicked = draw_data[1]
+        coins_collected_in_current_level = draw_data[2]
 
-        # Adding a velocity to the ball if it clicked
-        if clicked:
-            if moves > 0:
-                moves -= 1
-                player.body.velocity = (distx * player_speed_factor, disty * player_speed_factor)
-
-            if moves == 0 and death_time == 0:  # Start Death timer if not already running
-                death_time = int(time.time())
-            clicked = False
-
-        # Limiting the player's velocity (so that it doesn't flies across like hell xD)
-        if distx > max_speed:
-            distx = max_speed
-        if disty > max_speed:
-            disty = max_speed
-
-        # reseting player's position
-        reset_player_pos(player, WW, WH, current_level)
-
-        ## -------------------- Lines, balls and Portals --------------------
-        for line in lines:
-            line.draw(screen, Themes.active_theme.platform_c)
-        for ball in balls:
-            ball.draw(screen, Themes.active_theme.bouncing_ball_c)
-        for portal in portals:
-            portal.draw(screen, space)
-            portal.teleport(player)
-            for ball in balls:
-                portal.teleport(ball)
-
-        ## -------------------- Flag --------------------
-        flag.draw(screen)
         # Checking collision b/w player and the victory flag
         if player.rect.colliderect(flag.rect):
             # Adding to Score and reset score Variables
