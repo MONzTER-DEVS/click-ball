@@ -10,7 +10,7 @@ from .encryption import *
 
 GLOBAL_FRICTION = 0.5
 shading = 5
-shade = False
+shade = True
 
 # Dynamic means it will move
 class DynamicBall:
@@ -67,6 +67,7 @@ class DynamicBallWithColor:
         space.add(self.body, self.shape)
         self.shape.collision_type = 1  ## idk wht this does, but if i comment it, the ball doesn't move
         ## This will b used for collsions for pygame
+        self.radius = radius
         self.rect = pygame.Rect(
             self.body.position.x,
             self.body.position.y,
@@ -118,7 +119,7 @@ class VictoryFlag:
 
     def draw(self, screen):
         if shade:
-            pygame.draw.circle(surf, GRAY, (self.rect.centerx+shading, self.rect.centery+shading), self.rect.w//2)
+            pygame.draw.circle(screen, GRAY, (self.rect.centerx+shading, self.rect.centery+shading), self.rect.w//2)
         screen.blit(self.image, self.rect.topleft)
 
 
