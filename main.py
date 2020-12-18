@@ -147,7 +147,6 @@ def draw_objects(moves, clicked, coins_collected_in_current_level, level, lines,
     mx, my = pygame.mouse.get_pos()
     distx = mx - player.body.position.x
     disty = my - player.body.position.y
-    # pygame.draw.line(screen, Themes.active_theme.mouse_line, player.body.position, (mx+100, my+100), 10)
     draw_dashed_line(screen, Themes.active_theme.mouse_line, player.body.position, (mx, my), 10)
     pygame.draw.circle(screen, Themes.active_theme.mouse_line, (mx, my), 5)
 
@@ -201,6 +200,16 @@ def draw_objects(moves, clicked, coins_collected_in_current_level, level, lines,
             # coin_collect_sound.play()
         else:
             coin.draw(screen)
+
+    ## -------------------- In-game UI --------------------
+    # Displaying the number of moves left
+    moves_text = small_font.render('Moves Left: ' + str(moves), True, Themes.active_theme.font_c)
+    moves_rect = moves_text.get_rect()
+    moves_rect.center = (WW // 2, 50)
+    screen.blit(moves_text, moves_rect.topleft)
+    # Displaying the level
+    level_text = small_font.render(f"level: {current_level.number}", True, Themes.active_theme.font_c)
+    screen.blit(level_text, (20, 31))
 
     return [moves, clicked, coins_collected_in_current_level]
 
@@ -290,16 +299,6 @@ def survival_mode(screen, current_level):
             if score_data[0] == 'quit': return ['quit']
             if score_data[0] == 'welcome': return ['welcome']
             if current_level == "finish": return ['death', 'completed', score]
-
-        ## -------------------- In-game UI --------------------
-        # Displaying the number of moves left
-        moves_text = small_font.render('Moves Left: ' + str(moves), True, Themes.active_theme.font_c)
-        moves_rect = moves_text.get_rect()
-        moves_rect.center = (WW // 2, 50)
-        screen.blit(moves_text, moves_rect.topleft)
-        # Displaying the level
-        level_text = small_font.render(f"level: {current_level.number}", True, Themes.active_theme.font_c)
-        screen.blit(level_text, (20, 31))
 
         ## -------------------- Updating--------------------
         space.step(1.5 / FPS)
@@ -401,20 +400,6 @@ def campaign(screen, current_level):
                 return ['campaign', 'select']
             if next_data[0] == 'continue':
                 return ['campaign', 'continue', current_level.number]
-        ## -------------------- Coins --------------------
-        # for coin in coins:
-        #     coins_collected_in_current_level += coin.collect(player.rect
-        #     coin.draw(screen)
-
-        ## -------------------- In-game UI --------------------
-        # Displaying the number of moves left
-        moves_text = small_font.render('Moves Left: ' + str(moves), True, Themes.active_theme.font_c)
-        moves_rect = moves_text.get_rect()
-        moves_rect.center = (WW // 2, 50)
-        screen.blit(moves_text, moves_rect.topleft)
-        # Displaying the level
-        level_text = small_font.render(f"level: {current_level.number}", True, Themes.active_theme.font_c)
-        screen.blit(level_text, (20, 31))
 
         ## -------------------- Updating--------------------
         space.step(1.5 / FPS)
