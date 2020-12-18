@@ -208,7 +208,7 @@ def draw_objects(moves, clicked, coins_collected_in_current_level, level, lines,
     moves_rect.center = (WW // 2, 50)
     screen.blit(moves_text, moves_rect.topleft)
     # Displaying the level
-    level_text = small_font.render(f"level: {current_level.number}", True, Themes.active_theme.font_c)
+    level_text = small_font.render(f"level: {level.number}", True, Themes.active_theme.font_c)
     screen.blit(level_text, (20, 31))
 
     return [moves, clicked, coins_collected_in_current_level]
