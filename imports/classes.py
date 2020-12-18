@@ -9,7 +9,8 @@ from .encryption import *
 # from settings import WW, WH
 
 GLOBAL_FRICTION = 0.5
-
+shading = 5
+shade = False
 
 # Dynamic means it will move
 class DynamicBall:
@@ -45,8 +46,9 @@ class DynamicBall:
         rotated_image = pygame.transform.rotate(self.image, -math.degrees(self.body.angle))
         new_rect = rotated_image.get_rect(center=self.image.get_rect(topleft=self.rect.topleft).center)
 
-        shading = 5
-        pygame.draw.circle(surf, GRAY, (self.rect.centerx+shading, self.rect.centery+shading), 16)
+        if shade:
+            pygame.draw.circle(surf, GRAY, (self.rect.centerx+shading, self.rect.centery+shading), 16)
+            
         surf.blit(rotated_image, new_rect.topleft)
 
 
@@ -76,6 +78,8 @@ class DynamicBallWithColor:
         ## Pygame comes into action ;)
         x, y = self.body.position
         self.rect.center = self.shape.body.position
+        if shade:
+            pygame.draw.circle(surf, GRAY, (self.rect.centerx+shading, self.rect.centery+shading), self.radius//2)
         pygame.draw.ellipse(surf, color, self.rect)
 
 
@@ -98,10 +102,10 @@ class StaticLine:
         StaticLine.all_lines.append(self)
 
     def draw(self, surf, color):
-        shading = 5
-        sx1, sy1 =  self.shape.a[0] + shading, self.shape.a[1] + shading
-        sx2, sy2 =  self.shape.b[0] + shading, self.shape.b[1] + shading
-        pygame.draw.line(surf, GRAY, (sx1, sy1), (sx2, sy2), int(self.shape.radius) * 2)
+        if shade:
+            sx1, sy1 =  self.shape.a[0] + shading, self.shape.a[1] + shading
+            sx2, sy2 =  self.shape.b[0] + shading, self.shape.b[1] + shading
+            pygame.draw.line(surf, GRAY, (sx1, sy1), (sx2, sy2), int(self.shape.radius) * 2)
         pygame.draw.line(surf, color, self.shape.a, self.shape.b, int(self.shape.radius) * 2)
 
 
@@ -113,6 +117,8 @@ class VictoryFlag:
         self.rect.bottomleft = tuple(pos)
 
     def draw(self, screen):
+        if shade:
+            pygame.draw.circle(surf, GRAY, (self.rect.centerx+shading, self.rect.centery+shading), self.rect.w//2)
         screen.blit(self.image, self.rect.topleft)
 
 
@@ -156,6 +162,9 @@ class Portal:
     def draw(self, surf, space):
         self.start_rect.center = self.start_pos
         self.end_rect.center = self.end_pos
+        if shade:
+            pygame.draw.circle(surf, GRAY, (self.start_rect.centerx+shading, self.start_rect.centery+shading), self.rect.w//2)
+            pygame.draw.circle(surf, GRAY, (self.end_rect.centerx+shading, self.end_rect.centery+shading), self.rect.w//2)
         surf.blit(self.start_img, self.start_rect.topleft)
         surf.blit(self.end_img, self.end_rect.topleft)
         pygame.draw.line(surf, (100, 100, 100), self.start_pos, self.end_pos)
@@ -178,8 +187,8 @@ class Coins:
     def draw(self, screen):
         if not self.collected:
             self.rect.center = (self.x, self.y)
-            shading = 5
-            pygame.draw.circle(screen, GRAY, (self.rect.centerx + shading, self.rect.centery + shading), self.rect.w//2)
+            if shade:
+                pygame.draw.circle(screen, GRAY, (self.rect.centerx + shading, self.rect.centery + shading), self.rect.w//2)
             screen.blit(self.image, self.rect.topleft)
     
     def collect(self, player_rect):
