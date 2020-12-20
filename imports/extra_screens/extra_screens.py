@@ -9,8 +9,8 @@ lboard_data = []
 
 ## Size is 204 x 81
 ## Ratio is 51/20
-bg_sound = pygame.mixer.Sound("assets/sounds/music.mp3")
-bg_sound.set_volume(0.04)
+bg_sound = pygame.mixer.Sound("assets/sounds/music2.ogg")
+# bg_sound.set_volume(0.04)
 
 def welcome_screen(screen):
     mode = 0

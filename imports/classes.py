@@ -108,11 +108,11 @@ class StaticLine:
             sx1, sy1 =  self.shape.a[0] + shading, self.shape.a[1] + shading
             sx2, sy2 =  self.shape.b[0] + shading, self.shape.b[1] + shading
             pygame.draw.line(surf, GRAY, (sx1, sy1), (sx2, sy2), int(self.shape.radius) * 2)
-        # spos = self.shape.a
-        # epos = self.shape.b
-        # thicc = int(self.shape.radius) * 2
-        # x1, y1 = spos
-        # x2, y2 = epos
+        spos = self.shape.a
+        epos = self.shape.b
+        thicc = int(self.shape.radius) * 2
+        x1, y1 = spos
+        x2, y2 = epos
         # pygame.draw.lines()
         pygame.draw.line(surf, color, spos, epos, thicc)
 
