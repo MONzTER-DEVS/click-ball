@@ -447,6 +447,9 @@ while True:
     elif to_do[0] == 'leaderboard':
         to_do = leaderboard_screen(screen)
 
+    elif to_do[0] == 'guide':
+        to_do = guide_screen(screen)
+
     elif to_do[0] == 'death':
         to_do = death_screen(screen, to_do[1], to_do[2])
 

@@ -103,12 +103,12 @@ def welcome_screen(screen):
         if clicked and mouse_rect.colliderect(rect):
             click_count += 1
         if click_count % 2 == 0:
-            # bg_sound.play()
+            bg_sound.play()
             pass
             # pygame.mixer.music.play(-1)
         if click_count % 2 != 0:
             pygame.draw.line(screen, RED, (music_sign_rect[0] + 5, music_sign_rect[1] + 10), (rect.bottomright[0] - 10, rect.bottomright[1] - 15), 7)
-            # bg_sound.stop()
+            bg_sound.stop()
             pass
 
         # if clicked and mouse_rect.colliderect(rect) and click_count == 0:
@@ -144,17 +144,24 @@ def welcome_screen(screen):
         hover(heading_rect, screen)
         # Settings Button
         settings_button = theme.button_c["settings"]
-        rect = settings_button.get_rect(center=(WW // 2, WH - 150))
+        rect = settings_button.get_rect(center=(WW // 2, WH - 225))
         if mouse_rect.colliderect(rect):
             settings_button = pygame.transform.smoothscale(theme.button_c["settings"], (160, 58))
-            rect = settings_button.get_rect(center=(WW // 2, WH - 150))
+            rect = settings_button.get_rect(center=(WW // 2, WH - 225))
         else:
             settings_button = pygame.transform.smoothscale(theme.button_c["settings"], (145, 54))
-            rect = settings_button.get_rect(center=(WW // 2, WH - 150))
+            rect = settings_button.get_rect(center=(WW // 2, WH - 225))
         if clicked and mouse_rect.colliderect(rect):
             return ['settings']
         screen.blit(settings_button, rect.topleft)
         hover(heading_rect, screen)
+        how_to_plat_text = small_font.render("How To Play", True, theme.font_c)
+        rect = how_to_plat_text.get_rect(center=(WW // 2, WH - 150))
+        if clicked and mouse_rect.colliderect(rect):
+            return ['guide']
+        start_time_guide = pygame.time.get_ticks()
+        screen.blit(how_to_plat_text, rect.topleft)
+
         # Leaderboard Button
         leaderboard_button = theme.button_c["leaderboard"]
         rect = leaderboard_button.get_rect(center=(WW // 2, WH - 75))
@@ -517,6 +524,67 @@ def leaderboard_screen(screen):
                 mx, my = pygame.mouse.get_pos()
             if event.type == pygame.MOUSEBUTTONUP:
                 clicked = False
+
+        pygame.display.update()
+
+
+def guide_screen(screen):
+    start_time_guide = pygame.time.get_ticks()
+    print(start_time_guide)
+    theme = Themes.active_theme
+    mx, my = pygame.mouse.get_pos()
+    clicked = False
+    while True:
+
+        mx, my = pygame.mouse.get_pos()
+        screen.fill(theme.background)
+        heading_text = big_font.render('How To Play The Game!', True, theme.font_c)
+        heading_rect = heading_text.get_rect()
+        heading_rect.center = (WW // 2, 50)
+        screen.blit(heading_text, heading_rect.topleft)
+        instruction_text = medium_font.render("Instructions!", True, theme.font_c)
+        instruction_rect = instruction_text.get_rect()
+        instruction_rect.center = (WW//6 - 75, WH//6)
+        screen.blit(instruction_text, instruction_rect.topleft)
+        clicked = False
+        explanation= """aim of the game is the player(ball) has to reach the flag in limited moves after dodging the obstacles likes ball, etc """
+        exp_list = explanation.split(" ")
+        current_time = pygame.time.get_ticks()
+        text = tiny_font.render("The", True, theme.font_c)
+        rect = text.get_rect()
+        rect.top = instruction_rect.bottom
+        screen.blit(text, rect.topleft)
+        top_right = rect.topright
+
+        for l in range(0, len(exp_list)):
+            if current_time - start_time_guide > exp_list.index(exp_list[l]) * 100:
+                current_text = tiny_font.render(exp_list[l], True, theme.font_c)
+                current_rect = current_text.get_rect()
+                current_rect.topleft = (top_right[0] + 10, top_right[1])
+                current_rect.top = instruction_rect.bottom
+                top_right = current_rect.topright
+                screen.blit(current_text, current_rect.topleft)
+                # if current_rect.right > WW - 200:
+                    # print(current_rect.bottomleft[1])
+                    # current_rect.topleft = (10, 10)
+
+        back_button = theme.button_c["back"]
+        rect = back_button.get_rect(center=(10, WH - 50))
+        if mouse_rect.colliderect(rect):
+            back_button = pygame.transform.smoothscale(theme.button_c["back"], (110, 64))
+            rect = back_button.get_rect(center=(60, WH - 50))
+        else:
+            back_button = pygame.transform.smoothscale(theme.button_c["back"], (100, 60))
+            rect = back_button.get_rect(center=(60, WH - 50))
+        hover(heading_rect, screen)
+        if clicked and rect.left < mx < rect.right and rect.top < my < rect.bottom:
+            return ['welcome']
+        screen.blit(back_button, rect.topleft)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return ['quit']
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                clicked = True
 
         pygame.display.update()
 
