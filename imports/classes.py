@@ -10,7 +10,8 @@ from .encryption import *
 
 GLOBAL_FRICTION = 0.5
 shading = 5
-shade = True
+shade = False
+border = 5
 
 # Dynamic means it will move
 class DynamicBall:
@@ -107,7 +108,13 @@ class StaticLine:
             sx1, sy1 =  self.shape.a[0] + shading, self.shape.a[1] + shading
             sx2, sy2 =  self.shape.b[0] + shading, self.shape.b[1] + shading
             pygame.draw.line(surf, GRAY, (sx1, sy1), (sx2, sy2), int(self.shape.radius) * 2)
-        pygame.draw.line(surf, color, self.shape.a, self.shape.b, int(self.shape.radius) * 2)
+        # spos = self.shape.a
+        # epos = self.shape.b
+        # thicc = int(self.shape.radius) * 2
+        # x1, y1 = spos
+        # x2, y2 = epos
+        # pygame.draw.lines()
+        pygame.draw.line(surf, color, spos, epos, thicc)
 
 
 # Victory Flag
@@ -164,8 +171,8 @@ class Portal:
         self.start_rect.center = self.start_pos
         self.end_rect.center = self.end_pos
         if shade:
-            pygame.draw.circle(surf, GRAY, (self.start_rect.centerx+shading, self.start_rect.centery+shading), self.rect.w//2)
-            pygame.draw.circle(surf, GRAY, (self.end_rect.centerx+shading, self.end_rect.centery+shading), self.rect.w//2)
+            pygame.draw.circle(surf, GRAY, (self.start_rect.centerx+shading, self.start_rect.centery+shading), self.start_rect.w//2)
+            pygame.draw.circle(surf, GRAY, (self.end_rect.centerx+shading, self.end_rect.centery+shading), self.start_rect.w//2)
         surf.blit(self.start_img, self.start_rect.topleft)
         surf.blit(self.end_img, self.end_rect.topleft)
         pygame.draw.line(surf, (100, 100, 100), self.start_pos, self.end_pos)

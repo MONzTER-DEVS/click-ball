@@ -103,12 +103,14 @@ def welcome_screen(screen):
         if clicked and mouse_rect.colliderect(rect):
             click_count += 1
         if click_count % 2 == 0:
-            bg_sound.play()
+            # bg_sound.play()
+            pass
             # pygame.mixer.music.play(-1)
         if click_count % 2 != 0:
             pygame.draw.line(screen, RED, (music_sign_rect[0] + 5, music_sign_rect[1] + 10), (rect.bottomright[0] - 10, rect.bottomright[1] - 15), 7)
-            bg_sound.stop()
-            # pygame.mixer.music.stop()
+            # bg_sound.stop()
+            pass
+
         # if clicked and mouse_rect.colliderect(rect) and click_count == 0:
         #     click = 1
         #     click_count = 1
