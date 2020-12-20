@@ -7,6 +7,7 @@ pygame.init()
 
 from .settings import *
 from .classes import *
+
 screen_flags = pygame.SCALED | pygame.RESIZABLE
 screen = pygame.display.set_mode((WW, WH), screen_flags)
 
@@ -105,8 +106,10 @@ light_theme = Themes('Bright White', WHITE, L_BLUE, GREEN, PINK, WHITE, GREEN, y
 violet_theme = Themes("Limited Voilet", PURPLE, WHITE, WHITE, WHITE, WHITE, WHITE, blue_button)
 dark_light_theme = Themes("Darkest Light", BLACK, WHITE, WHITE, L_BLUE, WHITE, EMRALD, green_button)
 dracula_theme = Themes("Dracula", BLACK, PINK, PINK, PINK, WHITE, EMRALD, pink_button)
-green_theme = Themes("Grass", (81,204,64), (121,234,125), (201,242,199), (36,49,25), WHITE, (121,234,125), purple_button)
-hot_chilli_theme = Themes("Hot Chilli", (157,2,8), (232,93,4), WHITE, (255,186,8), WHITE, (220,47,2), red_button)
+green_theme = Themes("Grass", (81, 204, 64), (121, 234, 125), (201, 242, 199), (36, 49, 25), WHITE, (121, 234, 125),
+                     purple_button)
+hot_chilli_theme = Themes("Hot Chilli", (157, 2, 8), (232, 93, 4), WHITE, (255, 186, 8), WHITE, (220, 47, 2),
+                          red_button)
 light_theme.set_to_active_theme()
 
 from .extra_screens import *
@@ -118,12 +121,16 @@ can_start_game = False
 
 errors = []
 
-number_buttons = [pygame.image.load(os.path.join('assets', 'buttons', 'level number buttons', 'lock.png')).convert_alpha()]
+number_buttons = [
+    pygame.image.load(os.path.join('assets', 'buttons', 'level number buttons', 'lock.png')).convert_alpha()]
+
+loading_percent = 0
 
 
 def load_data_while_loading_screen():
     global can_start_game
     global number_buttons
+    global loading_percent
     if not os.path.exists(DB.db_path):
         DB.make_db()
 
@@ -131,20 +138,26 @@ def load_data_while_loading_screen():
         errors.append("no name")
     else:
         User_data.name = DB.fetch_name()
+    loading_percent = 1
+    loading_percent = 2
     st_time = time.time()
     data = DB.Cache.load()
-    Themes.set_active_by_name(data[0])
+    loading_percent = 5
 
     number_buttons_path = os.path.join('assets', 'buttons', 'level number buttons')
-
+    loading_percent = 6
     for counter in range(1, 101):
         path = os.path.join(number_buttons_path, f'{int(4 - len(str(counter))) * "0"}{counter}.png')
         number_buttons.append(pygame.image.load(path).convert_alpha())
+
+    loading_percent = 9
 
     data = DB.load_user_progress()[0]
     User_data.current_level = int(data[0])
     User_data.save = ast.literal_eval(data[1])
     User_data.coins = ast.literal_eval(data[2])
+
+    loading_percent = 15
 
     try:
         for x in range(1, len(os.listdir(os.path.join('assets', 'levels'))) + 1):
@@ -153,12 +166,19 @@ def load_data_while_loading_screen():
             f.close()
     except:
         pass
-    try:
-        time.sleep(3 - float(time.time() - st_time))
-    except:
-        pass
+
+    sleep = (5 - float(time.time() - st_time)) / 85
+
+    if sleep < 0:
+        loading_percent = 99
+    else:
+        while loading_percent != 100:
+            loading_percent += 1
+            time.sleep(sleep)
 
     # change this at the absolute end else conflicts would take place
+    Themes.set_active_by_name(data[0])
+    loading_percent = 100
     can_start_game = True
 
 
@@ -173,12 +193,22 @@ clock = pygame.time.Clock()
 loading_screen_running = True
 
 to_do = ['welcome']
+template = pygame.image.load('assets/imgs/loading bar/template.png')
+template_rect = template.get_rect()
+template_rect.center = (WW // 2, WH - 200)
+fill_img = pygame.image.load('assets/imgs/loading bar/Fill.png')
+fill_rect = fill_img.get_rect()
+fill_rect.center = (WW // 2, WH - 200)
+
 while loading_screen_running:
     screen.fill(Themes.active_theme.background)
     text = big_font.render("Loading Screen", True, Themes.active_theme.font_c)
     text_rect = text.get_rect()
     text_rect.center = (WW / 2, WH / 2)
     screen.blit(text, text_rect)
+    screen.blit(template, template_rect)
+
+    screen.blit(fill_img, fill_rect, (0, 0, fill_rect.width * loading_percent / 100, fill_rect.height))
 
     if can_start_game:
         loading_screen_running = False
