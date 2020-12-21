@@ -131,54 +131,61 @@ def load_data_while_loading_screen():
     global can_start_game
     global number_buttons
     global loading_percent
+    st_time = time.time()
+
+    loading_percent = 1
     if not os.path.exists(DB.db_path):
         DB.make_db()
-
+    else:
+        DB.check_tables()
+    loading_percent = 2
     if DB.check_name() == "no name":
         errors.append("no name")
     else:
         User_data.name = DB.fetch_name()
-    loading_percent = 1
-    loading_percent = 2
-    st_time = time.time()
-    data = DB.Cache.load()
+    loading_percent = 4
     loading_percent = 5
+    data = DB.Cache.load()
+    loading_percent = 6
 
     number_buttons_path = os.path.join('assets', 'buttons', 'level number buttons')
-    loading_percent = 6
+    loading_percent = 7
     for counter in range(1, 101):
         path = os.path.join(number_buttons_path, f'{int(4 - len(str(counter))) * "0"}{counter}.png')
         number_buttons.append(pygame.image.load(path).convert_alpha())
+        loading_percent+= 0.1
 
-    loading_percent = 9
+    loading_percent = 17.5
 
     data = DB.load_user_progress()[0]
+    loading_percent += 0.5
     User_data.current_level = int(data[0])
+    loading_percent += 0.5
     User_data.save = ast.literal_eval(data[1])
+    loading_percent += 0.5
     User_data.coins = ast.literal_eval(data[2])
-
-    loading_percent = 15
+    loading_percent += 0.5
 
     try:
         for x in range(1, len(os.listdir(os.path.join('assets', 'levels'))) + 1):
             f = open(os.path.join('assets', 'levels', f'level{x}.json'))
             Levels(name='placeholder', data=json.load(f))
             f.close()
+            loading_percent += 0.2
     except:
         pass
 
-    sleep = (5 - float(time.time() - st_time)) / 85
+    sleep = (5 - float(time.time() - st_time)) / (int(100 - loading_percent) * 10)
 
     if sleep < 0:
         loading_percent = 99
     else:
-        while loading_percent != 100:
-            loading_percent += 1
+        while loading_percent < 100:
+            loading_percent += 0.1
             time.sleep(sleep)
 
     # change this at the absolute end else conflicts would take place
     Themes.set_active_by_name(data[0])
-    loading_percent = 100
     can_start_game = True
 
 

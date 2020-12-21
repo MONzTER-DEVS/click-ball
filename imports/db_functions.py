@@ -24,7 +24,9 @@ class DB:
             "CREATE TABLE user_data(level text, save text, coins text)",
             "CREATE TABLE cache(theme text)",
             "CREATE TABLE user_name(name text)",
+            "CREATE TABLE music(state text)",
             "INSERT INTO cache values('Bright White')",
+            "INSERT INTO music values('True')",
             f"INSERT INTO user_data values('{Crypt.en('1')}','{Crypt.en('None')}', '{Crypt.en('0')}')"
         ]
         DB.execute(commands)
@@ -112,3 +114,26 @@ class DB:
         conn.commit()
         conn.close()
         return to_return
+
+    @staticmethod
+    def check_tables():
+        conn = sqlite3.connect(DB.db_path)
+        c = conn.cursor()
+        c.execute("""SELECT name FROM sqlite_master WHERE type='table'""")
+        tables = c.fetchall()
+        checks = {
+            'music': ["CREATE TABLE music(state text)",
+                      "INSERT INTO music values('True')"],
+        }
+
+        copy = checks.copy()
+        for table in tables:
+            for check in checks:
+                if table[0] == check:
+                    del copy[table[0]]
+
+        checks = copy
+        for fail in checks:
+            DB.execute(checks[fail])
+        conn.commit()
+        conn.close()
