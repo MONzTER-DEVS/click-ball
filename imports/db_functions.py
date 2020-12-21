@@ -154,7 +154,6 @@ class DB:
             val = c.fetchall()[0][0]
             if val == "full":
                 screen_flags = pygame.SCALED | pygame.FULLSCREEN | pygame.RESIZABLE
-                print("here")
         except Exception as e:
             val = "standard"
 

@@ -553,9 +553,12 @@ def guide_screen(screen):
             if current_time - start_time_guide > exp_list.index(exp_list[l]) * 100:
                 current_text = tiny_font.render(exp_list[l], True, theme.font_c)
                 current_rect = current_text.get_rect()
+                if top_right[0] > WW - 200:
+                    top_right[0] = -8
+                    top_right[1] += 25
+
                 current_rect.topleft = (top_right[0] + 10, top_right[1])
-                current_rect.top = instruction_rect.bottom
-                top_right = current_rect.topright
+                top_right = list(current_rect.topright)
                 screen.blit(current_text, current_rect.topleft)
                 # if current_rect.right > WW - 200:
                     # print(current_rect.bottomleft[1])
