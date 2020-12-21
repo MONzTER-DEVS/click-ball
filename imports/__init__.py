@@ -126,6 +126,7 @@ number_buttons = [
 
 loading_percent = 0
 
+pygame.init()
 
 def load_data_while_loading_screen():
     global can_start_game
@@ -145,7 +146,6 @@ def load_data_while_loading_screen():
         User_data.name = DB.fetch_name()
     loading_percent = 4
     loading_percent = 5
-    data = DB.Cache.load()
     loading_percent = 6
 
     number_buttons_path = os.path.join('assets', 'buttons', 'level number buttons')
@@ -185,8 +185,14 @@ def load_data_while_loading_screen():
             time.sleep(sleep)
 
     # change this at the absolute end else conflicts would take place
-    Themes.set_active_by_name(data[0])
+    data = DB.Cache.load()
+    Themes.set_active_by_name(data[0][0][0])
+    User_data.music = ast.literal_eval(data[1][0][0])
     can_start_game = True
+    pygame.mixer.music.load("assets/sounds/music.mp3")
+    if User_data.music:
+        pygame.mixer.music.play(-1)
+
 
 
 t_load_data_while_loading_screen = threading.Thread(target=load_data_while_loading_screen)

@@ -35,13 +35,17 @@ class DB:
 
         @staticmethod
         def load():
+            values = []
             conn = sqlite3.connect(DB.db_path)
             c = conn.cursor()
             c.execute("SELECT * FROM cache")
-            values = c.fetchall()
+            values.append(c.fetchall())
+            c.execute("SELECT * FROM music")
+            values.append(c.fetchall())
             conn.commit()
+
             conn.close()
-            return values[0]
+            return values
 
         @staticmethod
         def change_value(field, value, old=None):
@@ -137,3 +141,21 @@ class DB:
             DB.execute(checks[fail])
         conn.commit()
         conn.close()
+
+
+def toggle_music():
+    conn = sqlite3.connect(DB.db_path)
+    c = conn.cursor()
+    if User_data.music:
+        to_update = False
+        User_data.music = False
+        pygame.mixer.music.fadeout(1500)
+    else:
+        to_update = True
+        User_data.music = True
+        pygame.mixer.music.play(-1)
+
+
+    c.execute(f"UPDATE music SET state = '{to_update}'")
+    conn.commit()
+    conn.close()

@@ -26,7 +26,6 @@ def welcome_screen(screen):
     name_rect.midleft = (10, WH - 50)
     start_time = pygame.time.get_ticks()
     click = 0
-    click_count = 0
     for i in range(NUM_OF_BALLS):
         x, y = random.randint(BORDERS, WW - BORDERS), -BORDERS
         # x, y = WW//2, WH//2
@@ -36,8 +35,6 @@ def welcome_screen(screen):
         balls.append(b)
 
     mouse_ball = DynamicBallWithColor((mx, my), 0, 0, 100, space)
-    # pygame.mixer.music.load("assets/sounds/music.mp3")
-    # pygame.mixer.music.play(-1)
 
     # zoom = '+'
 
@@ -99,17 +96,15 @@ def welcome_screen(screen):
         music_sign_rect = (rect.topleft[0] + 5, rect.topleft[1] + 5)
         screen.blit(music_button, rect.topleft)
         screen.blit(music_sign, music_sign_rect)
-        print(music_sign_rect[0])
+
         if clicked and mouse_rect.colliderect(rect):
-            click_count += 1
-        if click_count % 2 == 0:
-            bg_sound.play()
-            pass
-            # pygame.mixer.music.play(-1)
-        if click_count % 2 != 0:
+            if User_data.music:
+                toggle_music()
+            else:
+                toggle_music()
+
+        if not User_data.music:
             pygame.draw.line(screen, RED, (music_sign_rect[0] + 5, music_sign_rect[1] + 10), (rect.bottomright[0] - 10, rect.bottomright[1] - 15), 7)
-            bg_sound.stop()
-            pass
 
         # if clicked and mouse_rect.colliderect(rect) and click_count == 0:
         #     click = 1
@@ -535,7 +530,6 @@ def guide_screen(screen):
     mx, my = pygame.mouse.get_pos()
     clicked = False
     while True:
-
         mx, my = pygame.mouse.get_pos()
         screen.fill(theme.background)
         heading_text = big_font.render('How To Play The Game!', True, theme.font_c)
@@ -546,7 +540,6 @@ def guide_screen(screen):
         instruction_rect = instruction_text.get_rect()
         instruction_rect.center = (WW//6 - 75, WH//6)
         screen.blit(instruction_text, instruction_rect.topleft)
-        clicked = False
         explanation= """aim of the game is the player(ball) has to reach the flag in limited moves after dodging the obstacles likes ball, etc """
         exp_list = explanation.split(" ")
         current_time = pygame.time.get_ticks()
@@ -580,6 +573,8 @@ def guide_screen(screen):
         if clicked and rect.left < mx < rect.right and rect.top < my < rect.bottom:
             return ['welcome']
         screen.blit(back_button, rect.topleft)
+
+        clicked = False
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return ['quit']
