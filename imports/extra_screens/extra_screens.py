@@ -740,6 +740,7 @@ def settings_screen(screen):
         rect = heading_text.get_rect()
         rect.center = (WW // 2, 325)
         # 647, 297, 243, 57
+
         if mouse_rect.colliderect(rect):
             ball_button = pygame.transform.scale(theme.button_c["ball"], (165, 61))
             rect = ball_button.get_rect(center=(WW // 2, 325))
@@ -747,13 +748,34 @@ def settings_screen(screen):
             ball_button = pygame.transform.scale(theme.button_c["ball"], (150, 57))
             rect = ball_button.get_rect(center=(WW // 2, 325))
 
+        if clicked and mouse_rect.colliderect(rect):
+            return ['ball']
+
         screen.blit(ball_button, rect.topleft)
+
+        heading_text = medium_font.render('Toggle Fullscreen', True, theme.font_c)
+        rect = heading_text.get_rect()
+        rect.center = (WW // 2, 400)
+
+        screen.blit(heading_text, rect)
+        if mouse_rect.colliderect(rect) and clicked:
+            conn = sqlite3.connect(DB.db_path)
+            c = conn.cursor()
+            c.execute(f"SELECT * FROM display")
+            size = c.fetchall()[0][0]
+            if size == "full":
+                c.execute("UPDATE display SET size = 'standard'")
+            else:
+                c.execute("UPDATE display SET size = 'full'")
+
+            conn.commit()
+            conn.close()
+            pygame.display.toggle_fullscreen()
 
         # screen.blit(heading_text, rect.topleft)
         # hover(rect, screen)
 
-        if clicked and mouse_rect.colliderect(rect):
-            return ['ball']
+
 
         back_button = theme.button_c["back"]
         rect = back_button.get_rect(center=(10, WH - 50))

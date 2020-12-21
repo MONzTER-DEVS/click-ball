@@ -1,15 +1,17 @@
 import pygame
 import time
 import json
-import ast
 
 pygame.init()
-
+from .extra_screens import *
 from .settings import *
 from .classes import *
+from .db_functions import *
 
+pygame.init()
 screen_flags = pygame.SCALED | pygame.RESIZABLE
-screen = pygame.display.set_mode((WW, WH), screen_flags)
+screen, val = DB.make_screen()
+# screen = pygame.display.set_mode((WW, WH), screen_flags)
 
 yellow_buttons = {
     "play": pygame.image.load("assets/buttons/Yellow button/Play.png").convert_alpha(),
@@ -112,8 +114,6 @@ hot_chilli_theme = Themes("Hot Chilli", (157, 2, 8), (232, 93, 4), WHITE, (255, 
                           red_button)
 light_theme.set_to_active_theme()
 
-from .extra_screens import *
-from .db_functions import *
 
 # Make DB if it doesnt Exist
 
@@ -127,6 +127,7 @@ number_buttons = [
 loading_percent = 0
 
 pygame.init()
+
 
 def load_data_while_loading_screen():
     global can_start_game
@@ -153,7 +154,7 @@ def load_data_while_loading_screen():
     for counter in range(1, 101):
         path = os.path.join(number_buttons_path, f'{int(4 - len(str(counter))) * "0"}{counter}.png')
         number_buttons.append(pygame.image.load(path).convert_alpha())
-        loading_percent+= 0.1
+        loading_percent += 0.1
 
     loading_percent = 17.5
 
@@ -175,13 +176,13 @@ def load_data_while_loading_screen():
     except:
         pass
 
-    sleep = (5 - float(time.time() - st_time)) / (int(100 - loading_percent) * 10)
+    sleep = (3 - float(time.time() - st_time)) / (int(100 - loading_percent) * 5)
 
     if sleep < 0:
         loading_percent = 99
     else:
         while loading_percent < 100:
-            loading_percent += 0.1
+            loading_percent += 0.2
             time.sleep(sleep)
 
     # change this at the absolute end else conflicts would take place
@@ -189,10 +190,10 @@ def load_data_while_loading_screen():
     Themes.set_active_by_name(data[0][0][0])
     User_data.music = ast.literal_eval(data[1][0][0])
     can_start_game = True
+    pygame.init()
     pygame.mixer.music.load("assets/sounds/music.mp3")
     if User_data.music:
         pygame.mixer.music.play(-1)
-
 
 
 t_load_data_while_loading_screen = threading.Thread(target=load_data_while_loading_screen)

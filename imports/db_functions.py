@@ -128,6 +128,8 @@ class DB:
         checks = {
             'music': ["CREATE TABLE music(state text)",
                       "INSERT INTO music values('True')"],
+            'display': ["CREATE TABLE display(size text)",
+                        "INSERT INTO display values('standard')"],
         }
 
         copy = checks.copy()
@@ -142,6 +144,25 @@ class DB:
         conn.commit()
         conn.close()
 
+    @staticmethod
+    def make_screen():
+        screen_flags = pygame.SCALED | pygame.RESIZABLE
+        conn = sqlite3.connect(DB.db_path)
+        c = conn.cursor()
+        try:
+            c.execute(f"SELECT * FROM display")
+            val = c.fetchall()[0][0]
+            if val == "full":
+                screen_flags = pygame.SCALED | pygame.FULLSCREEN | pygame.RESIZABLE
+                print("here")
+        except Exception as e:
+            val = "standard"
+
+        conn.commit()
+        conn.close()
+        screen = pygame.display.set_mode((WW, WH), screen_flags)
+        return screen, val
+
 
 def toggle_music():
     conn = sqlite3.connect(DB.db_path)
@@ -154,7 +175,6 @@ def toggle_music():
         to_update = True
         User_data.music = True
         pygame.mixer.music.play(-1)
-
 
     c.execute(f"UPDATE music SET state = '{to_update}'")
     conn.commit()
