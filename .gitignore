@@ -4,3 +4,5 @@
 *.pyc
 /assets/level_editor_saves
 /EXE
+/installer
+installer.bat
