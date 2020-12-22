@@ -10,6 +10,8 @@ lboard_data = []
 ## Size is 204 x 81
 ## Ratio is 51/20
 bg_sound = pygame.mixer.Sound("assets/sounds/music2.ogg")
+
+
 # bg_sound.set_volume(0.04)
 
 def welcome_screen(screen):
@@ -104,7 +106,8 @@ def welcome_screen(screen):
                 toggle_music()
 
         if not User_data.music:
-            pygame.draw.line(screen, RED, (music_sign_rect[0] + 5, music_sign_rect[1] + 10), (rect.bottomright[0] - 10, rect.bottomright[1] - 15), 7)
+            pygame.draw.line(screen, RED, (music_sign_rect[0] + 5, music_sign_rect[1] + 10),
+                             (rect.bottomright[0] - 10, rect.bottomright[1] - 15), 7)
 
         # if clicked and mouse_rect.colliderect(rect) and click_count == 0:
         #     click = 1
@@ -150,7 +153,7 @@ def welcome_screen(screen):
             return ['settings']
         screen.blit(settings_button, rect.topleft)
         hover(heading_rect, screen)
-        how_to_plat_text = small_font.render("How To Play", True, theme.font_c)
+        how_to_plat_text = small_font.render("Instructions", True, theme.font_c)
         rect = how_to_plat_text.get_rect(center=(WW // 2, WH - 150))
         if clicked and mouse_rect.colliderect(rect):
             return ['guide']
@@ -441,7 +444,6 @@ def score_screen(screen, score, data='None', coins=0):
 # pycharm msg above -_-
 
 def leaderboard_screen(screen):
-
     theme = Themes.active_theme
     mx, my = pygame.mouse.get_pos()
 
@@ -532,37 +534,40 @@ def guide_screen(screen):
     while True:
         mx, my = pygame.mouse.get_pos()
         screen.fill(theme.background)
-        heading_text = big_font.render('How To Play The Game!', True, theme.font_c)
+        heading_text = big_font.render('Instructions For The Game!', True, theme.font_c)
         heading_rect = heading_text.get_rect()
         heading_rect.center = (WW // 2, 50)
         screen.blit(heading_text, heading_rect.topleft)
-        instruction_text = medium_font.render("Instructions!", True, theme.font_c)
-        instruction_rect = instruction_text.get_rect()
-        instruction_rect.center = (WW//6 - 75, WH//6)
-        screen.blit(instruction_text, instruction_rect.topleft)
-        explanation= """aim of the game is the player(ball) has to reach the flag in limited moves after dodging the obstacles likes ball, etc """
-        exp_list = explanation.split(" ")
-        current_time = pygame.time.get_ticks()
-        text = tiny_font.render("The", True, theme.font_c)
-        rect = text.get_rect()
-        rect.top = instruction_rect.bottom
-        screen.blit(text, rect.topleft)
-        top_right = rect.topright
+        if not clicked:
+            instruction_text = medium_font.render("Instructions!", True, theme.font_c)
+            instruction_rect = instruction_text.get_rect()
+            instruction_rect.center = (WW // 6 - 55, WH // 6)
+            screen.blit(instruction_text, instruction_rect.topleft)
+            explanation = "aim of the game is the player(ball) has to reach the flag by clicking on the different spots. Each click counts one move.The level has to be completed in limited moves after dodging the obstacles in the way likes ball, etc." \
+                          "There are two modes in the game - 'Campaign' and 'Survival'." \
+                          "In the Campaign Mode, there are 25 levels.Clearing each level would hop on to the next level." \
+                          "In the Survival Mode, you have to clear each level simultaneously. Losing a level would result in playing the game from the first level....After you lose then you can send your data to the Leaderboard and check you position there afterwards..." \
+                          "There are many themes and ball skins available in the Settings which can be unlocked and used on the basis of the coins collected...So what's the delay for ? Play and Enjoy the Game...."
+            exp_list = explanation.split(" ")
+            current_time = pygame.time.get_ticks()
+            text = tiny_font.render("The", True, theme.font_c)
+            rect = text.get_rect()
+            rect.topleft = (22, rect.top)
+            rect.top = instruction_rect.bottom
+            screen.blit(text, rect.topleft)
+            top_right = rect.topright
 
-        for l in range(0, len(exp_list)):
-            if current_time - start_time_guide > exp_list.index(exp_list[l]) * 100:
-                current_text = tiny_font.render(exp_list[l], True, theme.font_c)
-                current_rect = current_text.get_rect()
-                if top_right[0] > WW - 200:
-                    top_right[0] = -8
-                    top_right[1] += 25
+            for l in range(0, len(exp_list)):
+                if current_time - start_time_guide > exp_list.index(exp_list[l]) * 100:
+                    current_text = tiny_font.render(exp_list[l], True, theme.font_c)
+                    current_rect = current_text.get_rect()
+                    if top_right[0] > WW - 200:
+                        top_right[0] = 15
+                        top_right[1] += 40
 
-                current_rect.topleft = (top_right[0] + 10, top_right[1])
-                top_right = list(current_rect.topright)
-                screen.blit(current_text, current_rect.topleft)
-                # if current_rect.right > WW - 200:
-                    # print(current_rect.bottomleft[1])
-                    # current_rect.topleft = (10, 10)
+                    current_rect.topleft = (top_right[0] + 10, top_right[1])
+                    top_right = list(current_rect.topright)
+                    screen.blit(current_text, current_rect.topleft)
 
         back_button = theme.button_c["back"]
         rect = back_button.get_rect(center=(10, WH - 50))
@@ -778,8 +783,6 @@ def settings_screen(screen):
         # screen.blit(heading_text, rect.topleft)
         # hover(rect, screen)
 
-
-
         back_button = theme.button_c["back"]
         rect = back_button.get_rect(center=(10, WH - 50))
         if mouse_rect.colliderect(rect):
@@ -924,7 +927,7 @@ def death_screen(screen, status, score):
 
     send_data_text = small_font.render('Send Data to Leaderboard', True, theme.font_c)
     send_data_rect = send_data_text.get_rect()
-    send_data_rect.center = (WW// 4, 350)
+    send_data_rect.center = (WW // 4, 350)
 
     back_button = theme.button_c["back"]
     # if clicked and mouse_rect.colliderect(rect):
@@ -951,13 +954,13 @@ def death_screen(screen, status, score):
         # screen.blit(music_button, rect.topleft)
         # if clicked and mouse_rect.colliderect(rect):
         #     pass
-        rect = back_button.get_rect(center=(WW//2 + 400, WH//2 - 20))
+        rect = back_button.get_rect(center=(WW // 2 + 400, WH // 2 - 20))
         if mx > rect.left and rect.top < my < rect.bottom:
             back_button = pygame.transform.smoothscale(theme.button_c["back"], (100, 64))
-            rect = back_button.get_rect(center=(WW//2 + 400, WH//2 - 20))
+            rect = back_button.get_rect(center=(WW // 2 + 400, WH // 2 - 20))
         else:
             back_button = pygame.transform.smoothscale(theme.button_c["back"], (90, 60))
-            rect = back_button.get_rect(center=(WW//2 + 400, WH//2 - 20 ))
+            rect = back_button.get_rect(center=(WW // 2 + 400, WH // 2 - 20))
         if clicked and mx > rect.left and rect.top < my < rect.bottom:
             return ['welcome']
         screen.blit(back_button, rect.topleft)
@@ -971,8 +974,6 @@ def death_screen(screen, status, score):
 
                 threading.Thread(target=sending_thread, args=(User_data.name, score)).start()  # sends Score
                 return ['welcome']
-
-
 
         clicked = False
         pygame.display.update()
@@ -1015,12 +1016,12 @@ def name_screen(screen):
                     if len(name) > 32:
                         error = medium_font.render("Name Too long", True, theme.font_c)
                         error_rect = error.get_rect()
-                        error_rect.center = (WW//2, 500)
+                        error_rect.center = (WW // 2, 500)
 
                     elif name == "":
                         error = medium_font.render("Empty Name", True, theme.font_c)
                         error_rect = error.get_rect()
-                        error_rect.center = (WW//2, 500)
+                        error_rect.center = (WW // 2, 500)
 
                     else:
                         while name[-1] == " ":
@@ -1043,7 +1044,7 @@ def name_screen(screen):
 
         pygame.draw.rect(screen, (255, 0, 0), (input_name_rect.x - rect_border_gap, input_name_rect.y - rect_border_gap,
                                                input_name_rect.width + (rect_border_gap * 2),
-                                               input_name_rect.height + (rect_border_gap * 2)),width=2)
+                                               input_name_rect.height + (rect_border_gap * 2)), width=2)
 
         pygame.display.update()
 
