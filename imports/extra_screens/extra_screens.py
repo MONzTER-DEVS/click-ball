@@ -29,7 +29,7 @@ def welcome_screen(screen):
     start_time = pygame.time.get_ticks()
     click = 0
     for i in range(NUM_OF_BALLS):
-        x, y = random.randint(BORDERS, WW - BORDERS), -BORDERS
+        x, y = random.randint(BORDERS, WW - BORDERS), random.randint(BORDERS, WH - BORDERS)
         # x, y = WW//2, WH//2
         vx, vy = random.randint(0, 100), random.randint(0, 100)
         r = random.randint(10, 30)
@@ -37,8 +37,6 @@ def welcome_screen(screen):
         balls.append(b)
 
     mouse_ball = DynamicBallWithColor((mx, my), 0, 0, 100, space)
-
-    # zoom = '+'
 
     while True:
 
@@ -61,22 +59,6 @@ def welcome_screen(screen):
                 x, y = ball.body.position[0], WH + BORDERS
                 ball.body.position = (x, y)
 
-        ###### Whole Lotta mess in here and idk wut to remove and wut to keep :P
-        # display
-        # heading_text = big_font.render('Clicker Ball!', True, theme.font_c)
-
-        # ## Zoom in and out
-        # if title_rect.width <= 228 or title_rect.height <= 157:
-        #     zoom = '+'
-        # elif title_rect.width >= 285 or title_rect.height >= 196:
-        #     zoom = '-'
-
-        # if zoom == '+':
-        #     title_text = pygame.transform.scale(title_text, (title_rect.width+5, title_rect.height+5))
-        # elif zoom == '-':
-        #     title_text = pygame.transform.scale(title_text, (title_rect.width-5, title_rect.height-5))
-
-        # title_text = pygame.transform.scale(title_text, (title_rect.width+5, title_rect.height+5))
         heading_text = pygame.image.load(os.path.join('assets', 'imgs', 'ClickBall.png')).convert_alpha()
         heading_rect = heading_text.get_rect()
         heading_rect.center = (WW / 2, 75)
@@ -127,69 +109,51 @@ def welcome_screen(screen):
         screen.blit(name_text, name_rect.topleft)
 
         # Play button
-        play_button = theme.button_c["play"]
-        rect = play_button.get_rect(center=(WW // 2, 215))
-        if mouse_rect.colliderect(rect):
-            play_button = pygame.transform.smoothscale(theme.button_c["play"], (177, 69))
-            rect = play_button.get_rect(center=(WW // 2, 215))
-        else:
-            play_button = pygame.transform.smoothscale(theme.button_c["play"], (150, 65))
-            rect = play_button.get_rect(center=(WW // 2, 215))
-        if clicked and mouse_rect.colliderect(rect):
+        try:
+            play_button.draw(screen, mx, my)
+        except Exception as e:
+            play_button = Buttons(theme.button_c["play"], WW//2, 215, 150, 65)
+        if play_button.is_clicked(clicked, mx, my):
             return ['game']
+        hover(heading_rect, screen)
 
-        screen.blit(play_button, rect.topleft)
-        hover(heading_rect, screen)
         # Settings Button
-        settings_button = theme.button_c["settings"]
-        rect = settings_button.get_rect(center=(WW // 2, WH - 225))
-        if mouse_rect.colliderect(rect):
-            settings_button = pygame.transform.smoothscale(theme.button_c["settings"], (160, 58))
-            rect = settings_button.get_rect(center=(WW // 2, WH - 225))
-        else:
-            settings_button = pygame.transform.smoothscale(theme.button_c["settings"], (145, 54))
-            rect = settings_button.get_rect(center=(WW // 2, WH - 225))
-        if clicked and mouse_rect.colliderect(rect):
+        try:
+            settings_button.draw(screen, mx, my)
+        except Exception as e:
+            settings_button = Buttons(theme.button_c["settings"], WW // 2, WH - 225, 145, 54)
+        if settings_button.is_clicked(clicked, mx, my):
             return ['settings']
-        screen.blit(settings_button, rect.topleft)
         hover(heading_rect, screen)
-        how_to_plat_text = small_font.render("Instructions", True, theme.font_c)
-        rect = how_to_plat_text.get_rect(center=(WW // 2, WH - 150))
-        if clicked and mouse_rect.colliderect(rect):
+
+        # How to play button
+        instructions_text = small_font.render("Instructions", True, theme.font_c)
+        try:
+            instructions_button.draw(screen, mx, my)
+        except Exception as e:
+            instructions_button = Buttons(instructions_text, WW // 2, WH - 150, 200, 54)
+        if instructions_button.is_clicked(clicked, mx, my):
             return ['guide']
-        start_time_guide = pygame.time.get_ticks()
-        screen.blit(how_to_plat_text, rect.topleft)
 
         # Leaderboard Button
-        leaderboard_button = theme.button_c["leaderboard"]
-        rect = leaderboard_button.get_rect(center=(WW // 2, WH - 75))
-        if mouse_rect.colliderect(rect):
-            leaderboard_button = pygame.transform.smoothscale(theme.button_c["leaderboard"], (200, 60))
-            rect = leaderboard_button.get_rect(center=(WW // 2, WH - 75))
-        else:
-            leaderboard_button = pygame.transform.smoothscale(theme.button_c["leaderboard"], (185, 56))
-            rect = leaderboard_button.get_rect(center=(WW // 2, WH - 75))
-        if clicked and mouse_rect.colliderect(rect):
+        try:
+            leaderboard_button.draw(screen, mx, my)
+        except Exception as e:
+            leaderboard_button = Buttons(theme.button_c["leaderboard"], WW // 2, WH - 75, 185, 56)
+        if leaderboard_button.is_clicked(clicked, mx, my):
             return ['leaderboard']
-        screen.blit(leaderboard_button, rect.topleft)
         hover(heading_rect, screen)
-        # Exit
-        exit_button = theme.button_c["exit"]
-        rect = exit_button.get_rect(center=(WW - 100, WH - 75))
-        if mouse_rect.colliderect(rect):
-            exit_button = pygame.transform.smoothscale(theme.button_c["exit"], (100, 64))
-            rect = exit_button.get_rect(center=(WW - 100, WH - 75))
-        else:
-            exit_button = pygame.transform.smoothscale(theme.button_c["exit"], (90, 60))
-            rect = exit_button.get_rect(center=(WW - 100, WH - 75))
-        if clicked and mouse_rect.colliderect(rect):
-            return ['quit']
-        screen.blit(exit_button, rect.topleft)
 
-        heading_text = small_font.render('Exit', True, theme.font_c)
-        heading_rect = heading_text.get_rect()
-        heading_rect.center = (WW - 50, WH - 50)
+        # Exit
+        try:
+            exit_button.draw(screen, mx, my)
+        except Exception as e:
+            exit_button = Buttons(theme.button_c["exit"], WW - 100, WH - 75, 100, 50)
+        if exit_button.is_clicked(clicked, mx, my):
+            return ['quit']
+
         hover(heading_rect, screen)
+
         coin_display(screen, coins=User_data.coins)
 
         # Events
@@ -212,21 +176,19 @@ def game_select_screen(screen):
     clicked = False
     mx, my = pygame.mouse.get_pos()
     theme = Themes.active_theme
-    survival_button = theme.button_c["survival"]
     while True:
 
         screen.fill(theme.background)
+        mx, my = pygame.mouse.get_pos()
 
-        rect = survival_button.get_rect(center=(WW / 4, WH / 2))
-        if mouse_rect.colliderect(rect):
-            survival_button = pygame.transform.smoothscale(theme.button_c["survival"], (232, 79))
-            rect = survival_button.get_rect(center=(WW / 4, WH / 2))
-        else:
-            survival_button = pygame.transform.smoothscale(theme.button_c["survival"], (216, 75))
-            rect = survival_button.get_rect(center=(WW / 4, WH / 2))
-        if clicked and mouse_rect.colliderect(rect):
+        # survival button
+        try:
+            survival_button.draw(screen, mx, my)
+        except Exception as e:
+            survival_button = Buttons(theme.button_c["survival"], WW/4,  WH/2, 216, 75)
+        if survival_button.is_clicked(clicked, mx, my):
             return ['survival']
-        screen.blit(survival_button, rect.topleft)
+
         # music_button = theme.button_c["music"]
         # music_button = pygame.transform.smoothscale(music_button, (60, 60))
         # rect = music_button.get_rect(center=(40, 40))
@@ -239,34 +201,23 @@ def game_select_screen(screen):
         # screen.blit(music_button, rect.topleft)
         # if clicked and mouse_rect.colliderect(rect):
         #     pass
-        heading_text = big_font.render('Campaign', True, theme.font_c)
-        heading_rect = heading_text.get_rect()
-        heading_rect.center = (WW * 3 / 4, WH / 2)
-        campaign_button = theme.button_c["campaign"]
-        rect = campaign_button.get_rect(center=(WW * 3 / 4, WH / 2))
-        if mouse_rect.colliderect(rect):
-            survival_button = pygame.transform.smoothscale(theme.button_c["campaign"], (260, 79))
-            rect = survival_button.get_rect(center=(WW * 3 / 4, WH / 2))
-        else:
-            survival_button = pygame.transform.smoothscale(theme.button_c["campaign"], (250, 75))
-            rect = survival_button.get_rect(center=(WW * 3 / 4, WH / 2))
-        hover(heading_rect, screen)
-        if clicked and mouse_rect.colliderect(rect):
+
+        # Campaign button
+        try:
+            campaign_button.draw(screen, mx, my)
+        except Exception as e:
+            campaign_button = Buttons(theme.button_c["campaign"], WW * 3 / 4, WH / 2, 250, 75)
+        if campaign_button.is_clicked(clicked, mx, my):
             return ['campaign', 'map']
 
-        screen.blit(survival_button, rect.topleft)
-        back_button = theme.button_c["back"]
-        rect = back_button.get_rect(center=(10, WH - 50))
-        if mouse_rect.colliderect(rect):
-            back_button = pygame.transform.smoothscale(theme.button_c["back"], (110, 64))
-            rect = back_button.get_rect(center=(60, WH - 50))
-        else:
-            back_button = pygame.transform.smoothscale(theme.button_c["back"], (100, 60))
-            rect = back_button.get_rect(center=(60, WH - 50))
-        hover(heading_rect, screen)
-        if clicked and mouse_rect.colliderect(rect):
+        # Back Button
+        try:
+            back_button.draw(screen, mx, my)
+        except Exception as e:
+            back_button = Buttons(theme.button_c["back"], 60, WH - 50, 100, 60)
+        if back_button.is_clicked(clicked, mx, my):
             return ['welcome']
-        screen.blit(back_button, rect.topleft)
+
         # Events
         clicked = False
         for event in pygame.event.get():
@@ -282,11 +233,11 @@ def game_select_screen(screen):
 
 
 def theme_screen(screen):
-    mx, my = pygame.mouse.get_pos()
     clicked = False
     while True:
         theme = Themes.active_theme
         screen.fill(theme.background)
+        mx, my = pygame.mouse.get_pos()
         # music_button = theme.button_c["music"]
         # music_button = pygame.transform.smoothscale(music_button, (60, 60))
         # rect = music_button.get_rect(center=(40, 40))
@@ -303,34 +254,24 @@ def theme_screen(screen):
         heading_rect = heading_text.get_rect()
         heading_rect.center = (WW // 2, 50)
         screen.blit(heading_text, heading_rect.topleft)
-        back_button = theme.button_c["back"]
-        rect = back_button.get_rect(center=(10, WH - 50))
-        if mouse_rect.colliderect(rect):
-            back_button = pygame.transform.smoothscale(theme.button_c["back"], (110, 64))
-            rect = back_button.get_rect(center=(60, WH - 50))
-        else:
-            back_button = pygame.transform.smoothscale(theme.button_c["back"], (100, 60))
-            rect = back_button.get_rect(center=(60, WH - 50))
-        hover(heading_rect, screen)
-        screen.blit(back_button, rect.topleft)
 
-        if clicked and mouse_rect.colliderect(rect):
+        # Back button
+        try:
+            back_button.draw(screen, mx, my)
+        except Exception as e:
+            back_button = Buttons(theme.button_c["back"], 60, WH - 50, 100, 60)
+        if back_button.is_clicked(clicked, mx, my):
             return ['settings']
 
         for them, y in zip(Themes.themes, range(200, WH - 100, 60)):
-            heading_text = medium_font.render(them.name, True, theme.font_c)
-            heading_rect = heading_text.get_rect()
-            heading_rect.center = (WW // 2, y)
-            screen.blit(heading_text, heading_rect.topleft)
-            hover(heading_rect, screen)
-
-            # CLick detection
-            if clicked:
-                mx, my = pygame.mouse.get_pos()
-                if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
-                    old = Themes.active_theme
-                    them.set_to_active_theme()
-                    DB.Cache.change_value('theme', Themes.active_theme.name, old.name)
+            theme_text = medium_font.render(them.name, True, theme.font_c)
+            theme_rect = theme_text.get_rect()
+            theme_button = Buttons(theme_text, WW // 2, y, theme_rect.w, theme_rect.h)
+            theme_button.draw(screen, mx, my)
+            if theme_button.is_clicked(clicked, mx, my):
+                old = Themes.active_theme
+                them.set_to_active_theme()
+                DB.Cache.change_value('theme', Themes.active_theme.name, old.name)
 
         clicked = False
         for event in pygame.event.get():
@@ -382,19 +323,27 @@ def score_screen(screen, score, data='None', coins=0):
         screen.blit(heading_text, heading_rect.topleft)
 
         hover(heading_rect, screen)
-        next_level_button = theme.button_c["next level"]
-        rect = next_level_button.get_rect(center=(WW * 3 // 4, WH // 2 + 100))
-        if mouse_rect.colliderect(rect):
-            next_level_button = pygame.transform.smoothscale(theme.button_c["next level"], (260, 79))
-            rect = next_level_button.get_rect(center=(WW * 3 // 4, WH // 2 + 100))
-        else:
-            next_level_button = pygame.transform.smoothscale(theme.button_c["next level"], (250, 75))
-            rect = next_level_button.get_rect(center=(WW * 3 // 4, WH // 2 + 100))
-        hover(heading_rect, screen)
-        if clicked and mouse_rect.colliderect(rect):
-            # coin_sound.stop()
+        # next level button
+        try:
+            next_button.draw(screen, mx, my)
+        except Exception as e:
+            next_button = Buttons(theme.button_c["next level"], WW * 3 // 4, WH // 2 + 100, 250, 75)
+        if next_button.is_clicked(clicked, mx, my):
             return ['survival']
-        screen.blit(next_level_button, rect.topleft)
+
+        # next_level_button = theme.button_c["next level"]
+        # rect = next_level_button.get_rect(center=(WW * 3 // 4, WH // 2 + 100))
+        # if mouse_rect.colliderect(rect):
+        #     next_level_button = pygame.transform.smoothscale(theme.button_c["next level"], (260, 79))
+        #     rect = next_level_button.get_rect(center=(WW * 3 // 4, WH // 2 + 100))
+        # else:
+        #     next_level_button = pygame.transform.smoothscale(theme.button_c["next level"], (250, 75))
+        #     rect = next_level_button.get_rect(center=(WW * 3 // 4, WH // 2 + 100))
+        # hover(heading_rect, screen)
+        # if clicked and mouse_rect.colliderect(rect):
+        #     # coin_sound.stop()
+        #     return ['survival']
+        # screen.blit(next_level_button, rect.topleft)
         exit_button = theme.button_c["exit"]
         rect = exit_button.get_rect(center=(WW // 4, WH // 2 + 100))
         if mouse_rect.colliderect(rect):

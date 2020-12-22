@@ -52,3 +52,29 @@ def coin_display(screen, coins=User_data.coins):
     screen.blit(coin, (WW - 200, 10))
     text = small_font.render(f": {coins}", True, Themes.active_theme.font_c)
     screen.blit(text, (WW - 155, 10))
+
+class Buttons:
+    shift = 1.1
+    def __init__(self, img, x, y, width, height):
+        self.small_img = pygame.transform.smoothscale(img, (width, height))
+        self.big_img = pygame.transform.smoothscale(img, (int(width*Buttons.shift), int(height*Buttons.shift)))
+        self.x = x
+        self.y = y
+        self.w = width
+        self.h = height
+        self.small_rect = self.small_img.get_rect(center=(self.x, self.y))
+        self.big_rect = self.big_img.get_rect(center=(self.x, self.y))
+    
+    def draw(self, screen, mx, my):
+        mouse_rect = pygame.Rect(mx-5, my-5, 10, 10)
+        if not (mouse_rect.colliderect(self.small_rect) or mouse_rect.colliderect(self.big_rect)):
+            screen.blit(self.small_img, self.small_rect.topleft)
+        else:
+            screen.blit(self.big_img, self.big_rect.topleft)
+    
+    def is_clicked(self, clicked, mx, my):
+        mouse_rect = pygame.Rect(mx-5, my-5, 10, 10)
+        if (mouse_rect.colliderect(self.small_rect) or mouse_rect.colliderect(self.big_rect)):
+            if clicked:
+                return True
+        return False
