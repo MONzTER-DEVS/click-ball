@@ -769,7 +769,6 @@ def death_screen(screen, status, score):
     send_data_rect = send_data_text.get_rect()
     send_data_rect.center = (WW // 4, 350)
 
-    back_button = theme.button_c["back"]
     # if clicked and mouse_rect.colliderect(rect):
     #     return ['quit']
     # screen.blit(exit_button, rect.topleft)
@@ -794,26 +793,38 @@ def death_screen(screen, status, score):
         # screen.blit(music_button, rect.topleft)
         # if clicked and mouse_rect.colliderect(rect):
         #     pass
-        rect = back_button.get_rect(center=(WW // 2 + 400, WH // 2 - 20))
-        if mx > rect.left and rect.top < my < rect.bottom:
-            back_button = pygame.transform.smoothscale(theme.button_c["back"], (100, 64))
-            rect = back_button.get_rect(center=(WW // 2 + 400, WH // 2 - 20))
-        else:
-            back_button = pygame.transform.smoothscale(theme.button_c["back"], (90, 60))
-            rect = back_button.get_rect(center=(WW // 2 + 400, WH // 2 - 20))
-        if clicked and mx > rect.left and rect.top < my < rect.bottom:
-            return ['welcome']
-        screen.blit(back_button, rect.topleft)
-        screen.blit(header_text, header_rect)
-        screen.blit(send_data_text, send_data_rect)
-        if send_data_rect.left < mx < send_data_rect.right and send_data_rect.top < my < send_data_rect.bottom:
-            # todo Replace with Button
-            if clicked:
-                def sending_thread(name, score):
-                    send_data_to_leaderboard(name, score)
 
-                threading.Thread(target=sending_thread, args=(User_data.name, score)).start()  # sends Score
-                return ['welcome']
+        # Back button
+        try:
+            back_button.draw(screen, mx, my)
+        except Exception as e:
+            back_button = Buttons(theme.button_c["back"], WW // 2 + 400, WH // 2 - 20, 90, 60)
+        if back_button.is_clicked(clicked, mx, my):
+            return ['welcome']
+        
+        # Send button
+        try:
+            send_button.draw(screen, mx, my)
+        except Exception as e:
+            send_button = Buttons(send_data_text, WW // 4, 350, send_data_rect.w, send_data_rect.h)
+        if send_button.is_clicked(clicked, mx, my):
+            def sending_thread(name, score):
+                send_data_to_leaderboard(name, score)
+
+            threading.Thread(target=sending_thread, args=(User_data.name, score)).start()  # sends Score
+            return ['welcome']
+        
+
+        screen.blit(header_text, header_rect)
+        # screen.blit(send_data_text, send_data_rect)
+        # if send_data_rect.left < mx < send_data_rect.right and send_data_rect.top < my < send_data_rect.bottom:
+        #     # todo Replace with Button
+        #     if clicked:
+        #         def sending_thread(name, score):
+        #             send_data_to_leaderboard(name, score)
+
+        #         threading.Thread(target=sending_thread, args=(User_data.name, score)).start()  # sends Score
+        #         return ['welcome']
 
         clicked = False
         pygame.display.update()
@@ -822,7 +833,7 @@ def death_screen(screen, status, score):
 def name_screen(screen):
     name = ""
     theme = Themes.active_theme
-    name_text = big_font.render("Enter your Name", True, theme.font_c)
+    name_text = big_font.render("Enter your Name:", True, theme.font_c)
     name_rect = name_text.get_rect()
     name_rect.center = WW // 2, 50
 
@@ -898,15 +909,9 @@ def campaign_continue_screen(screen, coins):
     heading_rect = heading_text.get_rect()
     heading_rect.center = (WW // 2, 50)
 
-    continue_button = theme.button_c["continue"]
-
     # continue_text = small_font.render('Continue', True, theme.font_c)
     # continue_rect = continue_text.get_rect()
     # continue_rect.center = (WW // 4, WH // 2)
-
-    map_text = small_font.render('Level Map', True, theme.font_c)
-    map_rect = map_text.get_rect()
-    map_rect.center = (int(WW * 3) // 4, WH // 2)
 
     User_data.increment_coins(coins)
     while running:
@@ -924,37 +929,30 @@ def campaign_continue_screen(screen, coins):
         # screen.blit(music_button, rect.topleft)
         # if clicked and mouse_rect.colliderect(rect):
         #     pass
+        
+        screen.blit(heading_text, heading_rect.topleft)     ## Heading
 
         coin_text = small_font.render(f'Coins Earned: {coins}', True, theme.font_c)
         coin_rect = coin_text.get_rect()
         coin_rect.center = (WW // 2, 300)
         screen.blit(coin_text, coin_rect)
-
-        screen.blit(heading_text, heading_rect.topleft)
-        rect = continue_button.get_rect(center=(WW // 4, WH // 2))
-
-        if rect.left < mx < rect.right and rect.top < my < rect.bottom:
-            continue_button = pygame.transform.smoothscale(theme.button_c["continue"], (160, 64))
-            rect = continue_button.get_rect(center=(WW // 4, WH // 2))
-        else:
-            continue_button = pygame.transform.smoothscale(theme.button_c["continue"], (150, 60))
-            rect = continue_button.get_rect(center=(WW // 4, WH // 2))
-        screen.blit(continue_button, rect.topleft)
-        if clicked and rect.left < mx < rect.right and rect.top < my < rect.bottom:
+        
+        # Continue button
+        try:
+            continue_button.draw(screen, mx, my)
+        except Exception as e:
+            continue_button = Buttons(theme.button_c["continue"], WW // 4, WH // 2, 150, 60)
+        if continue_button.is_clicked(clicked, mx, my):
             return ['continue']
-        if rect.left < mx < rect.right and rect.top < my < rect.bottom:
-            # todo make Hover Effect
-            if clicked:
-                return ['continue']
 
-        rect = map_rect
-
-        if rect.left < mx < rect.right and rect.top < my < rect.bottom:
-            # todo make Hover Effect
-            if clicked:
-                return ['level_map']
-
-        screen.blit(map_text, map_rect.topleft)
+        # map button
+        map_text = small_font.render('Level Map', True, theme.font_c)
+        try:
+            map_button.draw(screen, mx, my)
+        except Exception as e:
+            map_button = Buttons(map_text, int(WW * 3) // 4, WH // 2, 150, 60)
+        if map_button.is_clicked(clicked, mx, my):
+            return ['level_map']
 
         clicked = False
         for event in pygame.event.get():
@@ -976,14 +974,6 @@ def campaign_death_screen(screen):
     heading_rect = heading_text.get_rect()
     heading_rect.center = (WW // 2, 50)
 
-    restart_text = small_font.render('Restart', True, theme.font_c)
-    restart_rect = restart_text.get_rect()
-    restart_rect.center = (WW // 4, WH // 2)
-
-    map_text = small_font.render('Level Map', True, theme.font_c)
-    map_rect = map_text.get_rect()
-    map_rect.center = (int(WW * 3) // 4, WH // 2)
-
     while running:
         mx, my = pygame.mouse.get_pos()
         screen.fill(theme.background)
@@ -1001,21 +991,21 @@ def campaign_death_screen(screen):
         #     pass
         screen.blit(heading_text, heading_rect.topleft)
 
-        rect = restart_rect
-        screen.blit(restart_text, rect.topleft)
-        if rect.left < mx < rect.right and rect.top < my < rect.bottom:
-            # todo make Hover Effect
-            if clicked:
-                return ['restart']
+        map_text = small_font.render('Level Map', True, theme.font_c)
+        try:
+            map_button.draw(screen, mx, my)
+        except Exception as e:
+            map_button = Buttons(map_text, int(WW * 3) // 4, WH // 2, 150, 60)
+        if map_button.is_clicked(clicked, mx, my):
+            return ['level_map']
 
-        rect = map_rect
-
-        if rect.left < mx < rect.right and rect.top < my < rect.bottom:
-            # todo make Hover Effect
-            if clicked:
-                return ['level_map']
-
-        screen.blit(map_text, map_rect.topleft)
+        restart_text = small_font.render('Restart', True, theme.font_c)
+        try:
+            restart_button.draw(screen, mx, my)
+        except Exception as e:
+            restart_button = Buttons(restart_text, WW // 4, WH // 2, 150, 60)
+        if restart_button.is_clicked(clicked, mx, my):
+            return ['restart']
 
         clicked = False
         for event in pygame.event.get():
