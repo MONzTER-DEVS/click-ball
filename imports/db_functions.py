@@ -1,8 +1,7 @@
-from .classes import *
 from .encryption import *
 from .settings import *
-import ast
-
+from .classes import User_data
+import sqlite3
 
 class DB:
     db_path = db_path

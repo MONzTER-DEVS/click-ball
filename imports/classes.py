@@ -6,12 +6,14 @@ import os
 import sqlite3
 from .settings import *
 from .encryption import *
+
 # from settings import WW, WH
 
 GLOBAL_FRICTION = 0.5
 shading = 5
 shade = False
 border = 5
+
 
 # Dynamic means it will move
 class DynamicBall:
@@ -48,8 +50,8 @@ class DynamicBall:
         new_rect = rotated_image.get_rect(center=self.image.get_rect(topleft=self.rect.topleft).center)
 
         if shade:
-            pygame.draw.circle(surf, GRAY, (self.rect.centerx+shading, self.rect.centery+shading), 16)
-            
+            pygame.draw.circle(surf, GRAY, (self.rect.centerx + shading, self.rect.centery + shading), 16)
+
         surf.blit(rotated_image, new_rect.topleft)
 
 
@@ -81,7 +83,7 @@ class DynamicBallWithColor:
         x, y = self.body.position
         self.rect.center = self.shape.body.position
         if shade:
-            pygame.draw.circle(surf, GRAY, (self.rect.centerx+shading, self.rect.centery+shading), self.radius//2)
+            pygame.draw.circle(surf, GRAY, (self.rect.centerx + shading, self.rect.centery + shading), self.radius // 2)
         pygame.draw.ellipse(surf, color, self.rect)
 
 
@@ -105,8 +107,8 @@ class StaticLine:
 
     def draw(self, surf, color):
         if shade:
-            sx1, sy1 =  self.shape.a[0] + shading, self.shape.a[1] + shading
-            sx2, sy2 =  self.shape.b[0] + shading, self.shape.b[1] + shading
+            sx1, sy1 = self.shape.a[0] + shading, self.shape.a[1] + shading
+            sx2, sy2 = self.shape.b[0] + shading, self.shape.b[1] + shading
             pygame.draw.line(surf, GRAY, (sx1, sy1), (sx2, sy2), int(self.shape.radius) * 2)
         spos = self.shape.a
         epos = self.shape.b
@@ -126,7 +128,8 @@ class VictoryFlag:
 
     def draw(self, screen):
         if shade:
-            pygame.draw.circle(screen, GRAY, (self.rect.centerx+shading, self.rect.centery+shading), self.rect.w//2)
+            pygame.draw.circle(screen, GRAY, (self.rect.centerx + shading, self.rect.centery + shading),
+                               self.rect.w // 2)
         screen.blit(self.image, self.rect.topleft)
 
 
@@ -171,8 +174,10 @@ class Portal:
         self.start_rect.center = self.start_pos
         self.end_rect.center = self.end_pos
         if shade:
-            pygame.draw.circle(surf, GRAY, (self.start_rect.centerx+shading, self.start_rect.centery+shading), self.start_rect.w//2)
-            pygame.draw.circle(surf, GRAY, (self.end_rect.centerx+shading, self.end_rect.centery+shading), self.start_rect.w//2)
+            pygame.draw.circle(surf, GRAY, (self.start_rect.centerx + shading, self.start_rect.centery + shading),
+                               self.start_rect.w // 2)
+            pygame.draw.circle(surf, GRAY, (self.end_rect.centerx + shading, self.end_rect.centery + shading),
+                               self.start_rect.w // 2)
         surf.blit(self.start_img, self.start_rect.topleft)
         surf.blit(self.end_img, self.end_rect.topleft)
         pygame.draw.line(surf, (100, 100, 100), self.start_pos, self.end_pos)
@@ -186,19 +191,27 @@ class Coins:
     def __init__(self, pos):
         self.x = pos[0]
         self.y = pos[1]
-        self.image = pygame.image.load(os.path.join("assets", "imgs", "dollar.png")).convert_alpha()
-        self.image = pygame.transform.smoothscale(self.image, (35, 35))
-        self.rect = self.image.get_rect()
+        self.images = [pygame.transform.smoothscale(pygame.image.load(f"assets/imgs/coins/{x}.png").convert_alpha(), (35, 35)) for x in range(1, 11)]
+        self.step = 0
+        self.step_step = 0
+        self.rect = self.images[0].get_rect()
         self.rect.center = (self.x, self.y)
         self.collected = False
-    
+
     def draw(self, screen):
         if not self.collected:
             self.rect.center = (self.x, self.y)
+            self.step_step+=1
+            if self.step_step > 4:
+                self.step_step=0
+                self.step += 1
+            if self.step > 9:
+                self.step = 0
             if shade:
-                pygame.draw.circle(screen, GRAY, (self.rect.centerx + shading, self.rect.centery + shading), self.rect.w//2)
-            screen.blit(self.image, self.rect.topleft)
-    
+                pygame.draw.circle(screen, GRAY, (self.rect.centerx + shading, self.rect.centery + shading),
+                                   self.rect.w // 2)
+            screen.blit(self.images[self.step], self.rect.topleft)
+
     def collect(self, player_rect):
         if self.rect.colliderect(player_rect) and not self.collected:
             self.collected = True
@@ -222,6 +235,7 @@ class User_data:
     coins = None
     name = None
     music = True
+
     @staticmethod
     def get_save():
         """
@@ -249,7 +263,7 @@ class User_data:
 
         conn = sqlite3.connect(db_path)
         c = conn.cursor()
-        query = f"UPDATE user_data SET coins = '{Crypt.en(str(User_data.coins+number_of_coins_to_increment))}'"
+        query = f"UPDATE user_data SET coins = '{Crypt.en(str(User_data.coins + number_of_coins_to_increment))}'"
         c.execute(query)
         User_data.coins += number_of_coins_to_increment
         conn.commit()

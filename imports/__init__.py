@@ -1,17 +1,19 @@
 import pygame
 import time
 import json
-
+import ast
 pygame.init()
+
+
+
+from .db_functions import *
 from .extra_screens import *
 from .settings import *
 from .classes import *
-from .db_functions import *
 
-pygame.init()
+# screen = pygame.display.set_mode((WW, WH), screen_flags)
 screen_flags = pygame.SCALED | pygame.RESIZABLE
 screen, val = DB.make_screen()
-# screen = pygame.display.set_mode((WW, WH), screen_flags)
 
 yellow_buttons = {
     "play": pygame.image.load("assets/buttons/Yellow button/Play.png").convert_alpha(),
@@ -113,7 +115,6 @@ green_theme = Themes("Grass", (81, 204, 64), (121, 234, 125), (201, 242, 199), (
 hot_chilli_theme = Themes("Hot Chilli", (157, 2, 8), (232, 93, 4), WHITE, (255, 186, 8), WHITE, (220, 47, 2),
                           red_button)
 light_theme.set_to_active_theme()
-
 
 # Make DB if it doesnt Exist
 
