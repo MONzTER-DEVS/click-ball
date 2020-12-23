@@ -286,33 +286,15 @@ def theme_screen(screen):
         pygame.display.update()
 
 
-def score_screen(screen, score, data='None', coins=0):
+def score_screen(screen, score, data='None'):
     theme = Themes.active_theme
     clicked = False
     mx, my = pygame.mouse.get_pos()
 
-    coin_state = "ongoing"
-    step = 0
-    coins_shown = 0  # show Number of coins
-
-    # coin_sound = pygame.mixer.Sound(os.path.join('assets', 'sounds', 'coin_appear.wav'))
-    # coin_sound.set_volume(0.004)
-
     while True:
         screen.fill(theme.background)
         mx, my = pygame.mouse.get_pos()
-        # music_button = theme.button_c["music"]
-        # music_button = pygame.transform.smoothscale(music_button, (60, 60))
-        # rect = music_button.get_rect(center=(40, 40))
-        # if mouse_rect.colliderect(rect):
-        #     music_button = pygame.transform.smoothscale(theme.button_c["music"], (70, 64))
-        #     rect = music_button.get_rect(center=(40, 40))
-        # else:
-        #     music_button = pygame.transform.smoothscale(theme.button_c["music"], (60, 60))
-        #     rect = music_button.get_rect(center=(40, 40))
-        # screen.blit(music_button, rect.topleft)
-        # if clicked and mouse_rect.colliderect(rect):
-        #     pass
+
         heading_text = big_font.render('You passed the Level!', True, theme.font_c)
         heading_rect = heading_text.get_rect()
         heading_rect.center = (WW // 2, 50)
@@ -340,31 +322,15 @@ def score_screen(screen, score, data='None', coins=0):
         if exit_button.is_clicked(clicked, mx, my):
             return ['welcome']
 
-        if coin_state == "ongoing":
-            if coins_shown == coins:
-                coin_state = "finished"
-                User_data.increment_coins(coins)
-            else:
-                coins_shown += 1
-
-        heading_text = medium_font.render(f'Coins Earned: {coins_shown}', True, theme.font_c)
-        heading_rect = heading_text.get_rect()
-        heading_rect.center = (WW // 2, WH * 3 // 4)
-        screen.blit(heading_text, heading_rect.topleft)
-
-        if coin_state == "ongoing":
-            coin_display(screen, coins=coins_shown + User_data.coins)
-        else:
-            coin_display(screen, coins=User_data.coins)
+        coin_display(screen, User_data.coins)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 # coin_sound.stop()
                 return ['quit']
-            if coin_state != "ongoing":
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    clicked = True
-                    mx, my = pygame.mouse.get_pos()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                clicked = True
+                mx, my = pygame.mouse.get_pos()
 
         pygame.display.update()
 
@@ -381,8 +347,7 @@ def leaderboard_screen(screen):
         global lboard_data
         lboard_data = get_data()
 
-    t = threading.Thread(target=global_some_data)
-    t.start()
+    threading.Thread(target=global_some_data).start()
     clicked = False
     while True:
         mx, my = pygame.mouse.get_pos()
@@ -924,7 +889,7 @@ def name_screen(screen):
         pygame.display.update()
 
 
-def campaign_continue_screen(screen):
+def campaign_continue_screen(screen, coins):
     theme = Themes.active_theme
     clicked = False
     running = True
@@ -943,6 +908,7 @@ def campaign_continue_screen(screen):
     map_rect = map_text.get_rect()
     map_rect.center = (int(WW * 3) // 4, WH // 2)
 
+    User_data.increment_coins(coins)
     while running:
         mx, my = pygame.mouse.get_pos()
         screen.fill(theme.background)
@@ -958,8 +924,15 @@ def campaign_continue_screen(screen):
         # screen.blit(music_button, rect.topleft)
         # if clicked and mouse_rect.colliderect(rect):
         #     pass
+
+        coin_text = small_font.render(f'Coins Earned: {coins}', True, theme.font_c)
+        coin_rect = coin_text.get_rect()
+        coin_rect.center = (WW // 2, 300)
+        screen.blit(coin_text, coin_rect)
+
         screen.blit(heading_text, heading_rect.topleft)
         rect = continue_button.get_rect(center=(WW // 4, WH // 2))
+
         if rect.left < mx < rect.right and rect.top < my < rect.bottom:
             continue_button = pygame.transform.smoothscale(theme.button_c["continue"], (160, 64))
             rect = continue_button.get_rect(center=(WW // 4, WH // 2))

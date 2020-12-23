@@ -293,8 +293,7 @@ def survival_mode(screen, current_level):
             lines = balls = remove_lines_and_balls_of_level_by_number(current_level.number, lines, balls)
             player.body.angular_velocity = 0
 
-            score_data = score_screen(screen, score, data={"score": score, "level": current_level.number},
-                                      coins=coins_collected_in_current_level)
+            score_data = score_screen(screen, score, data={"score": score, "level": current_level.number})
 
             if score_data[0] == 'quit': return ['quit']
             if score_data[0] == 'welcome': return ['welcome']
@@ -393,7 +392,7 @@ def campaign(screen, current_level):
             lines = balls = remove_lines_and_balls_of_level_by_number(current_level, lines, balls)
             player.body.angular_velocity = 0
 
-            next_data = campaign_continue_screen(screen)
+            next_data = campaign_continue_screen(screen, coins_collected_in_current_level)
             if next_data[0] == 'quit':
                 return ['quit']
             if next_data[0] == 'level_map':
