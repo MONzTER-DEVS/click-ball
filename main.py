@@ -290,7 +290,11 @@ def survival_mode(screen, current_level):
             st_time = 0
             death_time = 0
             current_level = load_level_by_num('noname', current_level.number + 1, is_survival=True)
-            lines = balls = remove_lines_and_balls_of_level_by_number(current_level.number, lines, balls)
+
+            if current_level == "finish":
+                lines = balls = remove_lines_and_balls_of_level_by_number(current_level, lines, balls)
+                return ['death', 'completed', score]
+
             player.body.angular_velocity = 0
 
             score_data = score_screen(screen, score, data={"score": score, "level": current_level.number})
