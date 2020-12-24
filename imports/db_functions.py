@@ -3,6 +3,7 @@ from .settings import *
 from .classes import User_data
 import sqlite3
 
+
 class DB:
     db_path = db_path
 
@@ -86,7 +87,6 @@ class DB:
     @staticmethod
     def check_name():
         to_return = None
-        print(DB.db_path)
         conn = sqlite3.connect(DB.db_path)
         c = conn.cursor()
 
@@ -127,9 +127,20 @@ class DB:
         checks = {
             'music': ["CREATE TABLE music(state text)",
                       "INSERT INTO music values('True')"],
+
             'display': ["CREATE TABLE display(size text)",
                         "INSERT INTO display values('standard')"],
+
+            'user_data': ["CREATE TABLE user_data(level text, save text, coins text)",
+                          f"INSERT INTO user_data values('{Crypt.en('1')}','{Crypt.en('None')}', '{Crypt.en('0')}')"],
+
+            'cache': ["CREATE TABLE cache(theme text)",
+                      "INSERT INTO cache values('Bright White')"],
+
+            'user_name': ["CREATE TABLE user_name(name text)"]
+
         }
+        # "CREATE TABLE user_name(name text)",
 
         copy = checks.copy()
         for table in tables:

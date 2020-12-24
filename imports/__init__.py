@@ -2,9 +2,8 @@ import pygame
 import time
 import json
 import ast
+
 pygame.init()
-
-
 
 from .db_functions import *
 from .extra_screens import *
