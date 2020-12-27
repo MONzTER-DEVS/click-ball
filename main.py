@@ -244,7 +244,6 @@ def survival_mode(screen, current_level):
     ## ---------------------------------------- MAIN LOOP ----------------------------------------
     while True:
         screen.fill(Themes.active_theme.background)
-        draw_cursor(screen)
         ## -------------------- Time and stuff --------------------
         if st_time == 0:
             # load level
@@ -314,6 +313,7 @@ def survival_mode(screen, current_level):
             if current_level == "finish":
                 lines = balls = remove_lines_and_balls_of_level_by_number(current_level.number, lines, balls)
                 return ['death', 'completed', score]
+        draw_cursor(screen)
 
         ## -------------------- Updating--------------------
         space.step(1.5 / FPS)
@@ -340,7 +340,6 @@ def campaign(screen, current_level):
     ## ---------------------------------------- MAIN LOOP ----------------------------------------
     while True:
         screen.fill(Themes.active_theme.background)
-        draw_cursor(screen)
         ## -------------------- Time and stuff --------------------
         if st_time == 0:
             coins_collected_in_current_level = 0
@@ -417,6 +416,7 @@ def campaign(screen, current_level):
                 return ['campaign', 'select']
             if next_data[0] == 'continue':
                 return ['campaign', 'continue', current_level.number]
+        draw_cursor(screen)
 
         ## -------------------- Updating--------------------
         space.step(1.5 / FPS)

@@ -35,6 +35,7 @@ def welcome_screen(screen):
         vx, vy = random.randint(0, 100), random.randint(0, 100)
         r = random.randint(10, 30)
         b = DynamicBallWithColor((x, y), vx, vy, r, space)
+        b.body.mass = r * 10
         balls.append(b)
 
     mouse_ball = DynamicBallWithColor((mx, my), 0, 0, 100, space)
@@ -42,7 +43,6 @@ def welcome_screen(screen):
     while True:
 
         screen.fill(theme.background)
-        draw_cursor(screen)
         # Ball
         mouse_ball.body.position = mx, my
         for ball in balls:
@@ -157,6 +157,7 @@ def welcome_screen(screen):
         hover(heading_rect, screen)
 
         coin_display(screen, coins=User_data.coins)
+        draw_cursor(screen)
 
         # Events
         mx, my = pygame.mouse.get_pos()
@@ -180,7 +181,6 @@ def game_select_screen(screen):
     theme = Themes.active_theme
     while True:
         screen.fill(theme.background)
-        draw_cursor(screen)
         mx, my = pygame.mouse.get_pos()
 
         # survival button
@@ -220,6 +220,8 @@ def game_select_screen(screen):
         if back_button.is_clicked(clicked, mx, my):
             return ['welcome']
 
+        draw_cursor(screen)
+
         # Events
         clicked = False
         for event in pygame.event.get():
@@ -239,7 +241,6 @@ def theme_screen(screen):
     while True:
         theme = Themes.active_theme
         screen.fill(theme.background)
-        draw_cursor(screen)
         mx, my = pygame.mouse.get_pos()
         # music_button = theme.button_c["music"]
         # music_button = pygame.transform.smoothscale(music_button, (60, 60))
@@ -275,6 +276,8 @@ def theme_screen(screen):
                 old = Themes.active_theme
                 them.set_to_active_theme()
                 DB.Cache.change_value('theme', Themes.active_theme.name, old.name)
+
+        draw_cursor(screen)
 
         clicked = False
         for event in pygame.event.get():
@@ -326,6 +329,7 @@ def score_screen(screen, score, data='None'):
             return ['welcome']
 
         coin_display(screen, User_data.coins)
+        draw_cursor(screen)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -356,7 +360,6 @@ def leaderboard_screen(screen):
         mx, my = pygame.mouse.get_pos()
         initial_coordinates = [WW // 2 - 200, 100]
         screen.fill(theme.background)
-        draw_cursor(screen)
         heading_text = big_font.render('Click Ball Leaderboard!', True, theme.font_c)
         heading_rect = heading_text.get_rect()
         heading_rect.center = (WW // 2, 50)
@@ -404,6 +407,8 @@ def leaderboard_screen(screen):
         if back_button.is_clicked(clicked, mx, my):
             return ['welcome']
 
+        draw_cursor(screen)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return ['quit']
@@ -424,7 +429,6 @@ def guide_screen(screen):
     while True:
         mx, my = pygame.mouse.get_pos()
         screen.fill(theme.background)
-        draw_cursor(screen)
         heading_text = big_font.render('Instructions For The Game!', True, theme.font_c)
         heading_rect = heading_text.get_rect()
         heading_rect.center = (WW // 2, 50)
@@ -467,6 +471,8 @@ def guide_screen(screen):
             back_button = Buttons(theme.button_c["back"], 60, WH - 50, 100, 60)
         if back_button.is_clicked(clicked, mx, my):
             return ['welcome']
+            
+        draw_cursor(screen)
 
         clicked = False
         for event in pygame.event.get():
@@ -485,7 +491,6 @@ def level_select_screen(screen, number_buttons):
     mx, my = pygame.mouse.get_pos()
     while True:
         mx, my = pygame.mouse.get_pos()
-        draw_cursor(screen)
         screen.fill(theme.background)
         heading_text = big_font.render('Level Map!', True, theme.font_c)
         heading_rect = heading_text.get_rect()
@@ -571,6 +576,8 @@ def level_select_screen(screen, number_buttons):
         #         if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
         #             level = num
 
+        draw_cursor(screen)
+
         clicked = False
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -587,7 +594,6 @@ def settings_screen(screen):
     mx, my = pygame.mouse.get_pos()
     while True:
         screen.fill(theme.background)
-        draw_cursor(screen)
         mx, my = pygame.mouse.get_pos()
 
         heading_text = big_font.render('Settings', True, theme.font_c)
@@ -662,6 +668,9 @@ def settings_screen(screen):
         if back_button.is_clicked(clicked, mx, my):
             return ['welcome']
         clicked = False
+
+        draw_cursor(screen)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT: return ['quit']
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -681,7 +690,6 @@ def line_select_screen(screen):
     mouse_.center = (mx, my)
     while True:
         screen.fill(theme.background)
-        draw_cursor(screen)
         heading_text = big_font.render('Line Select!', True, theme.font_c)
         heading_rect = heading_text.get_rect()
         heading_rect.center = (WW // 2, 50)
@@ -719,6 +727,9 @@ def line_select_screen(screen):
 
         if back_button.is_clicked(clicked, mx, my):
             return ['welcome']
+        
+        draw_cursor(screen)
+
         clicked = False
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -748,7 +759,6 @@ def skin_select_screen(screen):
     while True:
         mx, my = pygame.mouse.get_pos()
         screen.fill(theme.background)
-        draw_cursor(screen)
         heading_text = big_font.render('Skin Select!', True, theme.font_c)
         heading_rect = heading_text.get_rect()
         heading_rect.center = (WW // 2, 50)
@@ -818,6 +828,8 @@ def skin_select_screen(screen):
                 s_img.fill(select_rect_color)
                 screen.blit(s_img, ball_button.big_rect.topleft)
 
+        draw_cursor(screen)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return ['quit']
@@ -852,7 +864,6 @@ def death_screen(screen, status, score):
 
     while True:
         screen.fill(theme.background)
-        draw_cursor(screen)
         mx, my = pygame.mouse.get_pos()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -904,6 +915,7 @@ def death_screen(screen, status, score):
         #         return ['welcome']
 
         clicked = False
+        draw_cursor(screen)
         pygame.display.update()
 
 
@@ -974,6 +986,7 @@ def name_screen(screen):
                                                input_name_rect.width + (rect_border_gap * 2),
                                                input_name_rect.height + (rect_border_gap * 2)), width=2)
 
+        draw_cursor(screen)
         pygame.display.update()
 
 
@@ -1038,6 +1051,7 @@ def campaign_continue_screen(screen, coins):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 clicked = True
 
+        draw_cursor(screen)
         pygame.display.update()
 
 
@@ -1091,6 +1105,7 @@ def campaign_death_screen(screen):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 clicked = True
 
+        draw_cursor(screen)
         pygame.display.update()
 
 # WIll come in handy when we will have Multiple Users :)
