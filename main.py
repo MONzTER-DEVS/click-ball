@@ -50,6 +50,7 @@ def reset_player_pos(player, WW, WH, current_level):
         player.body.position = current_level.dict["player"][0]  ## Player
         player.body.velocity = (0, 0)
 
+
 def draw_dashed_line(surf, color, start_pos, end_pos, width=1, dash_length=20):
     x1, y1 = start_pos
     x2, y2 = end_pos
@@ -68,7 +69,7 @@ def draw_dashed_line(surf, color, start_pos, end_pos, width=1, dash_length=20):
     else:
         a = abs(x2 - x1)
         b = abs(y2 - y1)
-        c = round(math.sqrt(a**2 + b**2))
+        c = round(math.sqrt(a ** 2 + b ** 2))
         dx = dl * a / c
         dy = dl * b / c
 
@@ -85,8 +86,12 @@ def draw_dashed_line(surf, color, start_pos, end_pos, width=1, dash_length=20):
         shading = 5
         start2 = (rx1 + shading, ry1 + shading)
         end2 = (rx2 + shading, ry2 + shading)
-        pygame.draw.line(surf, GRAY, start2, end2, width)
-        pygame.draw.line(surf, color, start, end, width)
+        if User_data.line == 'new':
+            pygame.draw.line(surf, GRAY, start2, end2, width)
+            pygame.draw.line(surf, color, start, end, width)
+        if User_data.line == 'old':
+            pygame.draw.line(surf, BLUE, start_pos, end_pos, 2)
+
 
 def load_objects(level, mode='survival'):
     ## -------------------- Initializing Level --------------------
@@ -133,13 +138,14 @@ def load_objects(level, mode='survival'):
         except KeyError:
             pass
     level_data = {
-        "moves" : moves, 
-        "lines" : lines, 
-        "balls" : balls,
-        "portals" : portals,
-        "coins" : coins
+        "moves": moves,
+        "lines": lines,
+        "balls": balls,
+        "portals": portals,
+        "coins": coins
     }
     return level_data
+
 
 def draw_objects(moves, clicked, coins_collected_in_current_level, level, lines, balls, portals, coins, death_time):
     ## -------------------- Player --------------------
@@ -240,7 +246,6 @@ def survival_mode(screen, current_level):
         screen.fill(Themes.active_theme.background)
         ## -------------------- Time and stuff --------------------
         if st_time == 0:
-
             # load level
             lines = balls = remove_lines_and_balls_of_level_by_number(current_level.number, lines, balls)
             level_data = load_objects(current_level, 'survival')
@@ -278,7 +283,8 @@ def survival_mode(screen, current_level):
                     return ['death', 'dead', score]
 
         ## Drawing
-        draw_data = draw_objects(moves, clicked, coins_collected_in_current_level, current_level, lines, balls, portals, coins, death_time)
+        draw_data = draw_objects(moves, clicked, coins_collected_in_current_level, current_level, lines, balls, portals,
+                                 coins, death_time)
         moves = draw_data[0]
         clicked = draw_data[1]
         coins_collected_in_current_level = draw_data[2]
@@ -321,7 +327,7 @@ def campaign(screen, current_level):
     st_time = 0  # Time
     death_time = 0  # Death time
     clicked = False
-    
+
     level_data = load_objects(current_level, 'campaign')
     moves = level_data["moves"]
     lines = level_data["lines"]
@@ -383,7 +389,8 @@ def campaign(screen, current_level):
                         return ['campaign', 'continue', current_level.number]
 
         ## Drawing
-        draw_data = draw_objects(moves, clicked, coins_collected_in_current_level, current_level, lines, balls, portals, coins, death_time)
+        draw_data = draw_objects(moves, clicked, coins_collected_in_current_level, current_level, lines, balls, portals,
+                                 coins, death_time)
         moves = draw_data[0]
         clicked = draw_data[1]
         coins_collected_in_current_level = draw_data[2]
@@ -460,7 +467,8 @@ while True:
 
     elif to_do[0] == 'death':
         to_do = death_screen(screen, to_do[1], to_do[2])
-
+    elif to_do[0] == 'line':
+        to_do = line_select_screen(screen)
     elif to_do[0] == 'ball':
         to_do = skin_select_screen(screen)
         p_img = to_do[1]

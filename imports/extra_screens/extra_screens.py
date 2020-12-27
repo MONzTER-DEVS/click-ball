@@ -10,6 +10,7 @@ lboard_data = []
 ## Size is 204 x 81
 ## Ratio is 51/20
 bg_sound = pygame.mixer.Sound("assets/sounds/music2.ogg")
+line_mode = 1
 
 
 # bg_sound.set_volume(0.04)
@@ -112,7 +113,7 @@ def welcome_screen(screen):
         try:
             play_button.draw(screen, mx, my)
         except Exception as e:
-            play_button = Buttons(theme.button_c["play"], WW//2, 215, 150, 65)
+            play_button = Buttons(theme.button_c["play"], WW // 2, 215, 150, 65)
         if play_button.is_clicked(clicked, mx, my):
             return ['game']
         hover(heading_rect, screen)
@@ -185,7 +186,7 @@ def game_select_screen(screen):
         try:
             survival_button.draw(screen, mx, my)
         except Exception as e:
-            survival_button = Buttons(theme.button_c["survival"], WW/4,  WH/2, 216, 75)
+            survival_button = Buttons(theme.button_c["survival"], WW / 4, WH / 2, 216, 75)
         if survival_button.is_clicked(clicked, mx, my):
             return ['survival']
 
@@ -618,12 +619,21 @@ def settings_screen(screen):
         if ball_button.is_clicked(clicked, mx, my):
             return ['ball']
 
+        # Change line button
+        line_text = medium_font.render('Change Line', True, theme.font_c)
+        try:
+            line_button.draw(screen, mx, my)
+        except Exception as e:
+            line_button = Buttons(line_text, WW // 2, 400, 200, 57)
+        if line_button.is_clicked(clicked, mx, my):
+            return ['line']
+
         # Fullscreen button
         full_text = medium_font.render('Toggle Fullscreen', True, theme.font_c)
         try:
             full_button.draw(screen, mx, my)
         except Exception as e:
-            full_button = Buttons(full_text, WW // 2, 400, 300, 57)
+            full_button = Buttons(full_text, WW // 2, 475, 300, 57)
         if full_button.is_clicked(clicked, mx, my):
             conn = sqlite3.connect(DB.db_path)
             c = conn.cursor()
@@ -653,6 +663,63 @@ def settings_screen(screen):
                 mx, my = pygame.mouse.get_pos()
             if event.type == pygame.MOUSEBUTTONUP:
                 clicked = False
+        pygame.display.update()
+
+
+def line_select_screen(screen):
+    print(1)
+    theme = Themes.active_theme
+    clicked = False
+    mx, my = pygame.mouse.get_pos()
+    mouse_ = pygame.Rect(0, 0, 10, 10)
+    mouse_.center = (mx, my)
+    while True:
+        screen.fill(theme.background)
+        heading_text = big_font.render('Line Select!', True, theme.font_c)
+        heading_rect = heading_text.get_rect()
+        heading_rect.center = (WW // 2, 50)
+        screen.blit(heading_text, heading_rect.topleft)
+        line_one = pygame.image.load("assets/lines/line_one.png")
+        line_one = pygame.transform.smoothscale(line_one, (680, 60))
+        line_one_rect = line_one.get_rect()
+        line_one_rect.center = (WW // 2, WH // 2 - 100)
+        if mouse_.colliderect(line_one_rect) and clicked:
+            pass
+        # if line_one_rect.right > mx > line_one_rect.left and line_one_rect.bottom > my > line_one_rect.top:
+        #     line_one = pygame.transform.smoothscale(line_one, (720, 64))
+        #     line_one_rect = line_one.get_rect()
+        #     line_one_rect.center = (WW // 2, WH // 2 - 100)
+        # else:
+        #     line_one = pygame.transform.smoothscale(line_one, (680, 60))
+        #     line_one_rect = line_one.get_rect()
+        #     line_one_rect.center = (WW // 2, WH // 2 - 100)
+        # if line_one_rect.right > mx > line_one_rect.left and line_one_rect.bottom > my > line_one_rect.top and clicked:
+        #     print(1)
+        screen.blit(line_one, line_one_rect.topleft)
+        line_two = pygame.image.load("assets/lines/line_two.png")
+        line_two_rect = line_two.get_rect()
+        line_two_rect.center = (WW // 2, WH // 2)
+        if mouse_.colliderect(line_two_rect) and clicked:
+            line_select()
+        screen.blit(line_two, line_two_rect.topleft)
+        # pygame.draw.line(screen, BLUE, (10, 10), (100, 10), 2)
+        try:
+            back_button.draw(screen, mx, my)
+        except Exception as e:
+            back_button = Buttons(theme.button_c["back"], 60, WH - 50, 100, 60)
+        if back_button.is_clicked(clicked, mx, my):
+            return ['welcome']
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return ['quit']
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                clicked = True
+                mx, my = pygame.mouse.get_pos()
+                mouse_ = pygame.Rect(0, 0, 10, 10)
+                mouse_.center = (mx, my)
+            if event.type == pygame.MOUSEBUTTONUP:
+                clicked = False
+
         pygame.display.update()
 
 
@@ -688,7 +755,7 @@ def skin_select_screen(screen):
         # screen.blit(music_button, rect.topleft)
         # if clicked and mouse_rect.colliderect(rect):
         #     pass
-        
+
         # Back button
         try:
             back_button.draw(screen, mx, my)
@@ -801,7 +868,7 @@ def death_screen(screen, status, score):
             back_button = Buttons(theme.button_c["back"], WW // 2 + 400, WH // 2 - 20, 90, 60)
         if back_button.is_clicked(clicked, mx, my):
             return ['welcome']
-        
+
         # Send button
         try:
             send_button.draw(screen, mx, my)
@@ -813,7 +880,6 @@ def death_screen(screen, status, score):
 
             threading.Thread(target=sending_thread, args=(User_data.name, score)).start()  # sends Score
             return ['welcome']
-        
 
         screen.blit(header_text, header_rect)
         # screen.blit(send_data_text, send_data_rect)
@@ -929,14 +995,14 @@ def campaign_continue_screen(screen, coins):
         # screen.blit(music_button, rect.topleft)
         # if clicked and mouse_rect.colliderect(rect):
         #     pass
-        
-        screen.blit(heading_text, heading_rect.topleft)     ## Heading
+
+        screen.blit(heading_text, heading_rect.topleft)  ## Heading
 
         coin_text = small_font.render(f'Coins Earned: {coins}', True, theme.font_c)
         coin_rect = coin_text.get_rect()
         coin_rect.center = (WW // 2, 300)
         screen.blit(coin_text, coin_rect)
-        
+
         # Continue button
         try:
             continue_button.draw(screen, mx, my)

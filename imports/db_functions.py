@@ -27,6 +27,7 @@ class DB:
             "CREATE TABLE music(state text)",
             "INSERT INTO cache values('Bright White')",
             "INSERT INTO music values('True')",
+
             f"INSERT INTO user_data values('{Crypt.en('1')}','{Crypt.en('None')}', '{Crypt.en('0')}')"
         ]
         DB.execute(commands)
@@ -188,3 +189,15 @@ def toggle_music():
     c.execute(f"UPDATE music SET state = '{to_update}'")
     conn.commit()
     conn.close()
+
+
+def line_select():
+    if User_data.line == "old":
+        User_data.line = "new"
+    else:
+        User_data.line = "False"
+    # conn = sqlite3.connect(DB.db_path)
+    # c = conn.cursor()
+    #
+    # conn.commit()
+    # conn.close()
