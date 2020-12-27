@@ -1,6 +1,6 @@
 import os
 import pygame
-
+import sqlite3
 # WW, WH = pygame.display.Info().current_w, pygame.display.Info().current_h
 WW, WH = 1200, 720
 
@@ -49,6 +49,14 @@ try:
     if not os.path.exists(os.path.join(db_folder_path)):
         os.mkdir(f"{app_data_path}/click_ball")
     db_path = os.path.join(db_folder_path, 'data.db')
+
+    # TESTING
+    conn = sqlite3.connect(db_path)
+    c = conn.cursor()
+
+    conn.commit()
+    conn.close()
+
 
 except Exception as e:
     db_path = os.path.join('assets', 'data.db')

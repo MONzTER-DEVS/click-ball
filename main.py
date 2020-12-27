@@ -299,9 +299,14 @@ def survival_mode(screen, current_level):
 
             score_data = score_screen(screen, score, data={"score": score, "level": current_level.number})
 
-            if score_data[0] == 'quit': return ['quit']
-            if score_data[0] == 'welcome': return ['welcome']
-            if current_level == "finish": return ['death', 'completed', score]
+            if score_data[0] == 'quit':
+                return ['quit']
+            if score_data[0] == 'welcome':
+                lines = balls = remove_lines_and_balls_of_level_by_number(current_level.number, lines, balls)
+                return ['welcome']
+            if current_level == "finish":
+                lines = balls = remove_lines_and_balls_of_level_by_number(current_level.number, lines, balls)
+                return ['death', 'completed', score]
 
         ## -------------------- Updating--------------------
         space.step(1.5 / FPS)
