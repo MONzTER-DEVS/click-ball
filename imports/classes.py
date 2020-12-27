@@ -137,7 +137,7 @@ class Themes:
     themes = []
     active_theme = None
 
-    def __init__(self, name, bg, platform_c, mouse_line, font_c, hover, bouncing_ball_c, button_c):
+    def __init__(self, name, bg, platform_c, mouse_line, font_c, hover, bouncing_ball_c, button_c, cursor_c):
         self.name = name
         self.background = bg
         self.platform_c = platform_c
@@ -146,6 +146,7 @@ class Themes:
         self.hover = hover
         self.bouncing_ball_c = bouncing_ball_c
         self.button_c = button_c
+        self.cursor_c = cursor_c
         Themes.themes.append(self)
 
     def set_to_active_theme(self):

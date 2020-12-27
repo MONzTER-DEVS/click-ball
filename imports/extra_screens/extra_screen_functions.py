@@ -79,5 +79,5 @@ class Buttons:
                 return True
         return False
 
-def draw_cursor(screen):
-    pygame.draw.circle(screen, RED, pygame.mouse.get_pos(), 10, 3)
+def draw_cursor(screen, color=(0, 0, 0)):
+    pygame.draw.circle(screen, color, pygame.mouse.get_pos(), 15, 10)

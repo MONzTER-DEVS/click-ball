@@ -104,15 +104,15 @@ red_button = {
     "music": pygame.image.load("assets/buttons/Red button/music.png").convert_alpha(),
 }
 
-#                      name,               bg,       platform_c, mouse_line, font_c,  hover, bouncing_ball_c
-light_theme = Themes('Bright White', WHITE, L_BLUE, GREEN, PINK, WHITE, GREEN, yellow_buttons)
-violet_theme = Themes("Limited Voilet", PURPLE, WHITE, WHITE, WHITE, WHITE, WHITE, blue_button)
-dark_light_theme = Themes("Darkest Light", BLACK, WHITE, WHITE, L_BLUE, WHITE, EMRALD, green_button)
-dracula_theme = Themes("Dracula", BLACK, PINK, PINK, PINK, WHITE, EMRALD, pink_button)
+#                      name,               bg,       platform_c, mouse_line, font_c,  hover, bouncing_ball_c, cursor
+light_theme = Themes('Bright White', WHITE, L_BLUE, GREEN, PINK, WHITE, GREEN, yellow_buttons, L_BLUE)
+violet_theme = Themes("Limited Voilet", PURPLE, WHITE, WHITE, WHITE, WHITE, WHITE, blue_button, WHITE)
+dark_light_theme = Themes("Darkest Light", BLACK, WHITE, WHITE, L_BLUE, WHITE, EMRALD, green_button, EMRALD)
+dracula_theme = Themes("Dracula", BLACK, PINK, PINK, PINK, WHITE, EMRALD, pink_button, WHITE)
 green_theme = Themes("Grass", (81, 204, 64), (121, 234, 125), (201, 242, 199), (36, 49, 25), WHITE, (121, 234, 125),
-                     purple_button)
+                     purple_button, WHITE)
 hot_chilli_theme = Themes("Hot Chilli", (157, 2, 8), (232, 93, 4), WHITE, (255, 186, 8), WHITE, (220, 47, 2),
-                          red_button)
+                          red_button, PINK)
 light_theme.set_to_active_theme()
 
 # Make DB if it doesnt Exist

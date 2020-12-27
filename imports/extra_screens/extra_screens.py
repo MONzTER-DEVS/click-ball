@@ -157,7 +157,7 @@ def welcome_screen(screen):
         hover(heading_rect, screen)
 
         coin_display(screen, coins=User_data.coins)
-        draw_cursor(screen)
+        draw_cursor(screen, theme.cursor_c)
 
         # Events
         mx, my = pygame.mouse.get_pos()
@@ -220,7 +220,7 @@ def game_select_screen(screen):
         if back_button.is_clicked(clicked, mx, my):
             return ['welcome']
 
-        draw_cursor(screen)
+        draw_cursor(screen, theme.cursor_c)
 
         # Events
         clicked = False
@@ -277,7 +277,7 @@ def theme_screen(screen):
                 them.set_to_active_theme()
                 DB.Cache.change_value('theme', Themes.active_theme.name, old.name)
 
-        draw_cursor(screen)
+        draw_cursor(screen, theme.cursor_c)
 
         clicked = False
         for event in pygame.event.get():
@@ -329,7 +329,7 @@ def score_screen(screen, score, data='None'):
             return ['welcome']
 
         coin_display(screen, User_data.coins)
-        draw_cursor(screen)
+        draw_cursor(screen, theme.cursor_c)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -407,7 +407,7 @@ def leaderboard_screen(screen):
         if back_button.is_clicked(clicked, mx, my):
             return ['welcome']
 
-        draw_cursor(screen)
+        draw_cursor(screen, theme.cursor_c)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -472,7 +472,7 @@ def guide_screen(screen):
         if back_button.is_clicked(clicked, mx, my):
             return ['welcome']
             
-        draw_cursor(screen)
+        draw_cursor(screen, theme.cursor_c)
 
         clicked = False
         for event in pygame.event.get():
@@ -576,7 +576,7 @@ def level_select_screen(screen, number_buttons):
         #         if heading_rect.left < mx < heading_rect.right and heading_rect.top < my < heading_rect.bottom:
         #             level = num
 
-        draw_cursor(screen)
+        draw_cursor(screen, theme.cursor_c)
 
         clicked = False
         for event in pygame.event.get():
@@ -669,7 +669,7 @@ def settings_screen(screen):
             return ['welcome']
         clicked = False
 
-        draw_cursor(screen)
+        draw_cursor(screen, theme.cursor_c)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT: return ['quit']
@@ -728,7 +728,7 @@ def line_select_screen(screen):
         if back_button.is_clicked(clicked, mx, my):
             return ['welcome']
         
-        draw_cursor(screen)
+        draw_cursor(screen, theme.cursor_c)
 
         clicked = False
         for event in pygame.event.get():
@@ -828,7 +828,7 @@ def skin_select_screen(screen):
                 s_img.fill(select_rect_color)
                 screen.blit(s_img, ball_button.big_rect.topleft)
 
-        draw_cursor(screen)
+        draw_cursor(screen, theme.cursor_c)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -915,7 +915,7 @@ def death_screen(screen, status, score):
         #         return ['welcome']
 
         clicked = False
-        draw_cursor(screen)
+        draw_cursor(screen, theme.cursor_c)
         pygame.display.update()
 
 
@@ -986,7 +986,7 @@ def name_screen(screen):
                                                input_name_rect.width + (rect_border_gap * 2),
                                                input_name_rect.height + (rect_border_gap * 2)), width=2)
 
-        draw_cursor(screen)
+        draw_cursor(screen, theme.cursor_c)
         pygame.display.update()
 
 
@@ -1051,7 +1051,7 @@ def campaign_continue_screen(screen, coins):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 clicked = True
 
-        draw_cursor(screen)
+        draw_cursor(screen, theme.cursor_c)
         pygame.display.update()
 
 
@@ -1105,7 +1105,7 @@ def campaign_death_screen(screen):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 clicked = True
 
-        draw_cursor(screen)
+        draw_cursor(screen, theme.cursor_c)
         pygame.display.update()
 
 # WIll come in handy when we will have Multiple Users :)
