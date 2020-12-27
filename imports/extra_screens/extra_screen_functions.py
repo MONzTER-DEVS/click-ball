@@ -78,3 +78,6 @@ class Buttons:
             if clicked:
                 return True
         return False
+
+def draw_cursor(screen):
+    pygame.draw.circle(screen, RED, pygame.mouse.get_pos(), 10, 3)

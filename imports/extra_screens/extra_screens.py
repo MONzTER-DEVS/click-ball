@@ -42,6 +42,7 @@ def welcome_screen(screen):
     while True:
 
         screen.fill(theme.background)
+        draw_cursor(screen)
         # Ball
         mouse_ball.body.position = mx, my
         for ball in balls:
@@ -178,8 +179,8 @@ def game_select_screen(screen):
     mx, my = pygame.mouse.get_pos()
     theme = Themes.active_theme
     while True:
-
         screen.fill(theme.background)
+        draw_cursor(screen)
         mx, my = pygame.mouse.get_pos()
 
         # survival button
@@ -238,6 +239,7 @@ def theme_screen(screen):
     while True:
         theme = Themes.active_theme
         screen.fill(theme.background)
+        draw_cursor(screen)
         mx, my = pygame.mouse.get_pos()
         # music_button = theme.button_c["music"]
         # music_button = pygame.transform.smoothscale(music_button, (60, 60))
@@ -354,6 +356,7 @@ def leaderboard_screen(screen):
         mx, my = pygame.mouse.get_pos()
         initial_coordinates = [WW // 2 - 200, 100]
         screen.fill(theme.background)
+        draw_cursor(screen)
         heading_text = big_font.render('Click Ball Leaderboard!', True, theme.font_c)
         heading_rect = heading_text.get_rect()
         heading_rect.center = (WW // 2, 50)
@@ -421,6 +424,7 @@ def guide_screen(screen):
     while True:
         mx, my = pygame.mouse.get_pos()
         screen.fill(theme.background)
+        draw_cursor(screen)
         heading_text = big_font.render('Instructions For The Game!', True, theme.font_c)
         heading_rect = heading_text.get_rect()
         heading_rect.center = (WW // 2, 50)
@@ -481,6 +485,7 @@ def level_select_screen(screen, number_buttons):
     mx, my = pygame.mouse.get_pos()
     while True:
         mx, my = pygame.mouse.get_pos()
+        draw_cursor(screen)
         screen.fill(theme.background)
         heading_text = big_font.render('Level Map!', True, theme.font_c)
         heading_rect = heading_text.get_rect()
@@ -582,6 +587,7 @@ def settings_screen(screen):
     mx, my = pygame.mouse.get_pos()
     while True:
         screen.fill(theme.background)
+        draw_cursor(screen)
         mx, my = pygame.mouse.get_pos()
 
         heading_text = big_font.render('Settings', True, theme.font_c)
@@ -675,6 +681,7 @@ def line_select_screen(screen):
     mouse_.center = (mx, my)
     while True:
         screen.fill(theme.background)
+        draw_cursor(screen)
         heading_text = big_font.render('Line Select!', True, theme.font_c)
         heading_rect = heading_text.get_rect()
         heading_rect.center = (WW // 2, 50)
@@ -741,6 +748,7 @@ def skin_select_screen(screen):
     while True:
         mx, my = pygame.mouse.get_pos()
         screen.fill(theme.background)
+        draw_cursor(screen)
         heading_text = big_font.render('Skin Select!', True, theme.font_c)
         heading_rect = heading_text.get_rect()
         heading_rect.center = (WW // 2, 50)
@@ -844,6 +852,7 @@ def death_screen(screen, status, score):
 
     while True:
         screen.fill(theme.background)
+        draw_cursor(screen)
         mx, my = pygame.mouse.get_pos()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

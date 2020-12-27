@@ -204,6 +204,7 @@ t_load_data_while_loading_screen.start()
 # starting screen
 pygame.display.set_icon(pygame.image.load(os.path.join('assets', 'imgs', 'ClickBall.png')).convert_alpha())
 pygame.display.set_caption('Click Ball!')
+# pygame.mouse.cursor()
 clock = pygame.time.Clock()
 loading_screen_running = True
 
@@ -217,7 +218,7 @@ fill_rect.center = (WW // 2, WH - 200)
 
 while loading_screen_running:
     screen.fill(Themes.active_theme.background)
-    text = big_font.render("Loading Screen", True, Themes.active_theme.font_c)
+    text = big_font.render("Loading...", True, Themes.active_theme.font_c)
     text_rect = text.get_rect()
     text_rect.center = (WW / 2, WH / 2)
     screen.blit(text, text_rect)

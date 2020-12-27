@@ -244,6 +244,7 @@ def survival_mode(screen, current_level):
     ## ---------------------------------------- MAIN LOOP ----------------------------------------
     while True:
         screen.fill(Themes.active_theme.background)
+        draw_cursor(screen)
         ## -------------------- Time and stuff --------------------
         if st_time == 0:
             # load level
@@ -339,6 +340,7 @@ def campaign(screen, current_level):
     ## ---------------------------------------- MAIN LOOP ----------------------------------------
     while True:
         screen.fill(Themes.active_theme.background)
+        draw_cursor(screen)
         ## -------------------- Time and stuff --------------------
         if st_time == 0:
             coins_collected_in_current_level = 0
@@ -430,6 +432,7 @@ for error in errors:
         else:
             User_data.name = DB.fetch_name()
 # Main Loop
+pygame.mouse.set_visible(False)
 while True:
     if to_do[0] == 'game':
         to_do = game_select_screen(screen)
