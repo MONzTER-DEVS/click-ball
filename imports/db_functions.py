@@ -12,8 +12,11 @@ class DB:
         conn = sqlite3.connect(DB.db_path)
         c = conn.cursor()
 
-        for command in commands:
-            c.execute(command)
+        if type(commands) == list:
+            for command in commands:
+                c.execute(command)
+        else:
+            c.execute(commands)
 
         conn.commit()
         conn.close()
@@ -42,6 +45,8 @@ class DB:
             c.execute("SELECT * FROM cache")
             values.append(c.fetchall())
             c.execute("SELECT * FROM music")
+            values.append(c.fetchall())
+            c.execute("SELECT * FROM line")
             values.append(c.fetchall())
             conn.commit()
 
@@ -138,6 +143,9 @@ class DB:
             'cache': ["CREATE TABLE cache(theme text)",
                       "INSERT INTO cache values('Bright White')"],
 
+            'line': ["CREATE TABLE line(type text)",
+                      "INSERT INTO line values('new')"],
+
             'user_name': ["CREATE TABLE user_name(name text)"]
 
         }
@@ -191,13 +199,6 @@ def toggle_music():
     conn.close()
 
 
-def line_select():
-    if User_data.line == "old":
-        User_data.line = "new"
-    else:
-        User_data.line = "False"
-    # conn = sqlite3.connect(DB.db_path)
-    # c = conn.cursor()
-    #
-    # conn.commit()
-    # conn.close()
+def line_select(state):
+    User_data.line = state
+    DB.execute([f"UPDATE line SET type = '{state}'"])

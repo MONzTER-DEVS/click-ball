@@ -415,7 +415,6 @@ def leaderboard_screen(screen):
 
 def guide_screen(screen):
     start_time_guide = pygame.time.get_ticks()
-    print(start_time_guide)
     theme = Themes.active_theme
     mx, my = pygame.mouse.get_pos()
     clicked = False
@@ -471,6 +470,7 @@ def guide_screen(screen):
                 return ['quit']
             if event.type == pygame.MOUSEBUTTONDOWN:
                 clicked = True
+                start_time_guide -= 1000000
 
         pygame.display.update()
 
@@ -684,7 +684,8 @@ def line_select_screen(screen):
         line_one_rect = line_one.get_rect()
         line_one_rect.center = (WW // 2, WH // 2 - 100)
         if mouse_.colliderect(line_one_rect) and clicked:
-            pass
+            line_select("old")
+            return ['welcome']
         # if line_one_rect.right > mx > line_one_rect.left and line_one_rect.bottom > my > line_one_rect.top:
         #     line_one = pygame.transform.smoothscale(line_one, (720, 64))
         #     line_one_rect = line_one.get_rect()
@@ -700,15 +701,18 @@ def line_select_screen(screen):
         line_two_rect = line_two.get_rect()
         line_two_rect.center = (WW // 2, WH // 2)
         if mouse_.colliderect(line_two_rect) and clicked:
-            line_select()
+            line_select("new")
+            return ['welcome']
         screen.blit(line_two, line_two_rect.topleft)
         # pygame.draw.line(screen, BLUE, (10, 10), (100, 10), 2)
         try:
             back_button.draw(screen, mx, my)
         except Exception as e:
             back_button = Buttons(theme.button_c["back"], 60, WH - 50, 100, 60)
+
         if back_button.is_clicked(clicked, mx, my):
             return ['welcome']
+        clicked = False
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return ['quit']
@@ -717,8 +721,6 @@ def line_select_screen(screen):
                 mx, my = pygame.mouse.get_pos()
                 mouse_ = pygame.Rect(0, 0, 10, 10)
                 mouse_.center = (mx, my)
-            if event.type == pygame.MOUSEBUTTONUP:
-                clicked = False
 
         pygame.display.update()
 

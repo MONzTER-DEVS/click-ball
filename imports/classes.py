@@ -235,7 +235,7 @@ class User_data:
     coins = None
     name = None
     music = True
-    line = 'new'
+    line = "new"
 
     @staticmethod
     def get_save():

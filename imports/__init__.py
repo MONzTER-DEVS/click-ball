@@ -189,6 +189,7 @@ def load_data_while_loading_screen():
     data = DB.Cache.load()
     Themes.set_active_by_name(data[0][0][0])
     User_data.music = ast.literal_eval(data[1][0][0])
+    User_data.line = data[2][0][0]
     can_start_game = True
     pygame.init()
     pygame.mixer.music.load("assets/sounds/music.mp3")
