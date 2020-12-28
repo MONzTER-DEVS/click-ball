@@ -690,37 +690,35 @@ def line_select_screen(screen):
     mouse_ = pygame.Rect(0, 0, 10, 10)
     mouse_.center = (mx, my)
     while True:
+        mx, my = pygame.mouse.get_pos()
         screen.fill(theme.background)
         heading_text = big_font.render('Line Select!', True, theme.font_c)
         heading_rect = heading_text.get_rect()
         heading_rect.center = (WW // 2, 50)
         screen.blit(heading_text, heading_rect.topleft)
+
+        # Line one
         line_one = pygame.image.load("assets/lines/line_one.png")
-        line_one = pygame.transform.smoothscale(line_one, (680, 60))
-        line_one_rect = line_one.get_rect()
-        line_one_rect.center = (WW // 2, WH // 2 - 100)
-        if mouse_.colliderect(line_one_rect) and clicked:
+        try:
+            line_one_button.draw(screen, mx, my)
+        except Exception as e:
+            line_one_button = Buttons(line_one, WW // 2, WH // 2 - 100, 680, 60)
+
+        if line_one_button.is_clicked(clicked, mx, my):
             line_select("old")
             return ['welcome']
-        # if line_one_rect.right > mx > line_one_rect.left and line_one_rect.bottom > my > line_one_rect.top:
-        #     line_one = pygame.transform.smoothscale(line_one, (720, 64))
-        #     line_one_rect = line_one.get_rect()
-        #     line_one_rect.center = (WW // 2, WH // 2 - 100)
-        # else:
-        #     line_one = pygame.transform.smoothscale(line_one, (680, 60))
-        #     line_one_rect = line_one.get_rect()
-        #     line_one_rect.center = (WW // 2, WH // 2 - 100)
-        # if line_one_rect.right > mx > line_one_rect.left and line_one_rect.bottom > my > line_one_rect.top and clicked:
-        #     print(1)
-        screen.blit(line_one, line_one_rect.topleft)
+
+        # Line two
         line_two = pygame.image.load("assets/lines/line_two.png")
-        line_two_rect = line_two.get_rect()
-        line_two_rect.center = (WW // 2, WH // 2)
-        if mouse_.colliderect(line_two_rect) and clicked:
+        try:
+            line_two_button.draw(screen, mx, my)
+        except Exception as e:
+            line_two_button = Buttons(line_two, WW // 2, WH // 2 + 100, 680, 60)
+
+        if line_two_button.is_clicked(clicked, mx, my):
             line_select("new")
             return ['welcome']
-        screen.blit(line_two, line_two_rect.topleft)
-        # pygame.draw.line(screen, BLUE, (10, 10), (100, 10), 2)
+
         try:
             back_button.draw(screen, mx, my)
         except Exception as e:
