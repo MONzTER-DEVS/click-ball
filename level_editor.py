@@ -38,6 +38,9 @@ from imports.settings import WW, WH, small_font, medium_font, big_font
 from imports.classes import Themes
 from imports.classes import Levels
 import pygame, math, json, os
+if not os.path.exists(os.path.join('assets', 'level_editor_saves')):
+    os.mkdir('assets/level_editor_saves')
+
 n = int(input("Which level do you want to edit(Press 0 to create a new level):"))
 
 pygame.init()

@@ -331,6 +331,7 @@ def score_screen(screen, score, data='None'):
         coin_display(screen, User_data.coins)
         draw_cursor(screen, theme.cursor_c)
 
+        clicked = False
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 # coin_sound.stop()

@@ -6,6 +6,4 @@
 /EXE
 /installer
 installer.bat
-/output/
-output.zip
-/release
+/release.zip
