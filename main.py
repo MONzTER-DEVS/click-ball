@@ -1,5 +1,4 @@
 from imports import *
-import numpy
 import math
 
 ## -------- PyMunk Initialization --------

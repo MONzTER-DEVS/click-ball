@@ -192,7 +192,7 @@ def load_data_while_loading_screen():
     User_data.line = data[2][0][0]
     can_start_game = True
     pygame.init()
-    pygame.mixer.music.load("assets/sounds/music.mp3")
+    pygame.mixer.music.load("assets/sounds/music.ogg")
     if User_data.music:
         pygame.mixer.music.play(-1)
 
