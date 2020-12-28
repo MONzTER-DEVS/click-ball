@@ -1,5 +1,6 @@
 from imports import *
 import numpy
+import math
 
 ## -------- PyMunk Initialization --------
 space = pymunk.Space()  # Create a Space which contain the simulation
@@ -52,6 +53,44 @@ def reset_player_pos(player, WW, WH, current_level):
 
 
 def draw_dashed_line(surf, color, start_pos, end_pos, width=1, dash_length=20):
+    def range_(start_, end_, diff):
+
+        to_return = []
+        # times = (start_ - end_) / diff
+        #
+        # if start_ > end_:
+        #     sum_ = start_
+        # else:
+        #     sum_ = end_
+        #
+        # for x in range(abs(math.ceil(times))):
+        #     if times > 0:
+        #         to_return.append(sum_)
+        #         sum_ += diff
+        #     else:
+        #         to_return.append(sum_)
+        #         sum_ += diff
+
+        if diff > 0:
+            positive = True
+        else:
+            positive = False
+
+        if not positive:
+            while start_ - end_ > 0:
+                # end_ -= diff
+                # to_return.append(end_)
+                start_ += diff
+                to_return.append(start_)
+        else:
+            while end_ - start_ > 0:
+                # end_ -= diff
+                # to_return.append(end_)
+                start_ += diff
+                to_return.append(start_)
+
+        return to_return
+
     x1, y1 = start_pos
     x2, y2 = end_pos
     dl = dash_length
@@ -73,12 +112,26 @@ def draw_dashed_line(surf, color, start_pos, end_pos, width=1, dash_length=20):
         dx = dl * a / c
         dy = dl * b / c
 
-        xcoords = [x for x in numpy.arange(x1, x2, dx if x1 < x2 else -dx)]
-        ycoords = [y for y in numpy.arange(y1, y2, dy if y1 < y2 else -dy)]
+        xcoords = [x for x in range_(x1, x2, dx if x1 < x2 else -dx)]
+        ycoords = [y for y in range_(y1, y2, dy if y1 < y2 else -dy)]
+        # xcoords = [x for x in numpy.arange(x1, x2, dx if x1 < x2 else -dx)]
+        # ycoords = [y for y in numpy.arange(y1, y2, dy if y1 < y2 else -dy)]
+        # print(xcoords)
+        # print(ycoords)
+        # print()
 
     next_coords = list(zip(xcoords[1::2], ycoords[1::2]))
     last_coords = list(zip(xcoords[0::2], ycoords[0::2]))
+    # print(next_coords)
+    # print(last_coords)
+    # print()
+    # print()
     for (x1, y1), (x2, y2) in zip(next_coords, last_coords):
+        # print(x1, y1)
+        # print(x2, y2)
+        # print()
+        # print()
+        # print()
         rx1, ry1 = round(x1), round(y1)
         rx2, ry2 = round(x2), round(y2)
         start = (rx1, ry1)
