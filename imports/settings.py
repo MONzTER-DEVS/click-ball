@@ -1,6 +1,8 @@
 import os
 import pygame
 import sqlite3
+import platform
+
 # WW, WH = pygame.display.Info().current_w, pygame.display.Info().current_h
 WW, WH = 1200, 720
 
@@ -45,20 +47,30 @@ for img_name in os.listdir(img_path):
 lvl_path_50 = os.path.join('assets', 'levels', '1-50')
 levels = []
 
-try:
-    app_data_path = os.path.join(os.getenv('APPDATA'), '..', 'LocalLow')
-    db_folder_path = os.path.join(app_data_path, 'click ball')
-    if not os.path.exists(os.path.join(db_folder_path)):
-        os.mkdir(f"{app_data_path}/click ball")
-    db_path = os.path.join(db_folder_path, 'data.db')
+if platform.system().lower() == "windows":
+    try:
+        app_data_path = os.path.join(os.getenv('APPDATA'), '..', 'LocalLow')
+        db_folder_path = os.path.join(app_data_path, 'click ball')
+        if not os.path.exists(os.path.join(db_folder_path)):
+            os.mkdir(f"{app_data_path}/click ball")
+        db_path = os.path.join(db_folder_path, 'data.db')
 
-    # TESTING
-    conn = sqlite3.connect(db_path)
-    c = conn.cursor()
+        # TESTING
+        conn = sqlite3.connect(db_path)
+        c = conn.cursor()
 
-    conn.commit()
-    conn.close()
+        conn.commit()
+        conn.close()
 
 
-except Exception as e:
+    except Exception as e:
+        try:
+            folder_path = os.path.join('C:/', 'click ball')
+            if not os.path.exists(folder_path):
+                os.mkdir(folder_path)
+            db_path = os.path.join('C:/', 'click ball', 'data.db')
+        except:
+            db_path = os.path.join('assets', 'data.db')
+
+else:
     db_path = os.path.join('assets', 'data.db')
