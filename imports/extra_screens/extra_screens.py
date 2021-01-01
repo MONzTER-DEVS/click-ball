@@ -292,7 +292,7 @@ def theme_screen(screen):
         pygame.display.update()
 
 
-def score_screen(screen, score, data='None'):
+def score_screen(screen, score, data=None):
     theme = Themes.active_theme
     clicked = False
     mx, my = pygame.mouse.get_pos()
@@ -326,6 +326,8 @@ def score_screen(screen, score, data='None'):
         except Exception as e:
             exit_button = Buttons(theme.button_c["exit"], WW // 4, WH // 2 + 100, 120, 75)
         if exit_button.is_clicked(clicked, mx, my):
+            if data is not None:
+                DB.save_survival(data)
             return ['welcome']
 
         coin_display(screen, User_data.coins)

@@ -136,10 +136,8 @@ def load_data_while_loading_screen():
     st_time = time.time()
 
     loading_percent = 1
-    if not os.path.exists(DB.db_path):
-        DB.make_db()
-    else:
-        DB.check_tables()
+
+    DB.check_tables()
     loading_percent = 2
     if DB.check_name() == "no name":
         errors.append("no name")
@@ -158,13 +156,11 @@ def load_data_while_loading_screen():
 
     loading_percent = 17.5
 
-    data = DB.load_user_progress()[0]
+    data_u_p = DB.load_user_progress()[0]
     loading_percent += 0.5
-    User_data.current_level = int(data[0])
+    User_data.current_level = int(data_u_p[0])
     loading_percent += 0.5
-    User_data.save = ast.literal_eval(data[1])
-    loading_percent += 0.5
-    User_data.coins = ast.literal_eval(data[2])
+    User_data.coins = ast.literal_eval(data_u_p[2])
     loading_percent += 0.5
 
     try:
@@ -193,6 +189,8 @@ def load_data_while_loading_screen():
     can_start_game = True
     pygame.init()
     pygame.mixer.music.load("assets/sounds/music.ogg")
+    User_data.save = ast.literal_eval(data_u_p[1])
+    loading_percent += 0.5
     if User_data.music:
         pygame.mixer.music.play(-1)
 

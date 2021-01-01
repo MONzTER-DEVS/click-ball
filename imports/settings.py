@@ -4,6 +4,8 @@ import sqlite3
 # WW, WH = pygame.display.Info().current_w, pygame.display.Info().current_h
 WW, WH = 1200, 720
 
+if __name__ == '__main__':
+    pygame.init()
 # Font
 tiny_font = pygame.font.Font('Roboto-Thin.ttf', 24)
 small_font = pygame.font.Font('Roboto-Thin.ttf', 32)
@@ -45,9 +47,9 @@ levels = []
 
 try:
     app_data_path = os.path.join(os.getenv('APPDATA'), '..', 'LocalLow')
-    db_folder_path = os.path.join(app_data_path, 'click_ball')
+    db_folder_path = os.path.join(app_data_path, 'click ball')
     if not os.path.exists(os.path.join(db_folder_path)):
-        os.mkdir(f"{app_data_path}/click_ball")
+        os.mkdir(f"{app_data_path}/click ball")
     db_path = os.path.join(db_folder_path, 'data.db')
 
     # TESTING

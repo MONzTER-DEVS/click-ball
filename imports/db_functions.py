@@ -30,7 +30,6 @@ class DB:
             "CREATE TABLE music(state text)",
             "INSERT INTO cache values('Bright White')",
             "INSERT INTO music values('True')",
-
             f"INSERT INTO user_data values('{Crypt.en('1')}','{Crypt.en('None')}', '{Crypt.en('0')}')"
         ]
         DB.execute(commands)
@@ -144,7 +143,7 @@ class DB:
                       "INSERT INTO cache values('Bright White')"],
 
             'line': ["CREATE TABLE line(type text)",
-                      "INSERT INTO line values('new')"],
+                     "INSERT INTO line values('new')"],
 
             'user_name': ["CREATE TABLE user_name(name text)"]
 
