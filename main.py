@@ -530,3 +530,5 @@ while True:
 
     elif to_do[0] == 'quit':
         break
+
+pygame.quit()
