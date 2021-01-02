@@ -1,4 +1,4 @@
-import pymunk as pymunk
+import pymunk
 
 from imports import *
 import math

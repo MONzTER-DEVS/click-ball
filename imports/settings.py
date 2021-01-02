@@ -9,16 +9,16 @@ WW, WH = 1200, 720
 if __name__ == '__main__':
     pygame.init()
 # Font
-tiny_font = pygame.font.Font('Roboto-Thin.ttf', 24)
-small_font = pygame.font.Font('Roboto-Thin.ttf', 32)
-medium_font = pygame.font.Font('Roboto-Thin.ttf', 48)
-big_font = pygame.font.Font('Roboto-Thin.ttf', 64)
+tiny_font = pygame.font.Font('assets/Roboto-Thin.ttf', 24)
+small_font = pygame.font.Font('assets/Roboto-Thin.ttf', 32)
+medium_font = pygame.font.Font('assets/Roboto-Thin.ttf', 48)
+big_font = pygame.font.Font('assets/Roboto-Thin.ttf', 64)
 GRAVITY = 350
 FPS = 60
 
 
 def game_font_generator(size):
-    return pygame.font.Font('Roboto-Thin.ttf', size)
+    return pygame.font.Font('assets/Roboto-Thin.ttf', size)
 
 
 #################   General Settings    #################

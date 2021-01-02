@@ -272,6 +272,7 @@ def theme_screen(screen):
 
         # Back button
         try:
+            back_button = Buttons(theme.button_c["back"], 60, WH - 50, 100, 60)
             back_button.draw(screen, mx, my)
         except Exception as e:
             back_button = Buttons(theme.button_c["back"], 60, WH - 50, 100, 60)
