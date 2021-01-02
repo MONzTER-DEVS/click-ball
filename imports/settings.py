@@ -1,7 +1,7 @@
 import os
 import pygame
 import sqlite3
-import platform
+# import platform
 
 # WW, WH = pygame.display.Info().current_w, pygame.display.Info().current_h
 WW, WH = 1200, 720
@@ -47,6 +47,7 @@ for img_name in os.listdir(img_path):
 lvl_path_50 = os.path.join('assets', 'levels', '1-50')
 levels = []
 
+"""
 if platform.system().lower() == "windows":
     try:
         app_data_path = os.path.join(os.getenv('APPDATA'), '..', 'LocalLow')
@@ -74,3 +75,5 @@ if platform.system().lower() == "windows":
 
 else:
     db_path = os.path.join('assets', 'data.db')
+"""
+db_path = os.path.join('assets', 'data.db')
