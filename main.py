@@ -1,6 +1,9 @@
+import pymunk as pymunk
+
 from imports import *
 import math
-
+import pymunk
+import pygame
 ## -------- PyMunk Initialization --------
 space = pymunk.Space()  # Create a Space which contain the simulation
 space.gravity = 0, GRAVITY  # Set its gravity

@@ -200,7 +200,7 @@ t_load_data_while_loading_screen.start()
 # Starting to load data
 
 # starting screen
-pygame.display.set_icon(pygame.image.load(os.path.join('assets', 'imgs', 'ClickBall.png')).convert_alpha())
+pygame.display.set_icon(pygame.image.load(os.path.join('assets', 'imgs', 'icon.png')).convert_alpha())
 pygame.display.set_caption('Click Ball!')
 # pygame.mouse.cursor()
 clock = pygame.time.Clock()

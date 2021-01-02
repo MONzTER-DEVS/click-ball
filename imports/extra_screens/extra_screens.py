@@ -1,5 +1,6 @@
 import random
 import threading
+import webbrowser
 
 from imports.db_functions import *
 from .extra_screen_functions import *
@@ -29,6 +30,8 @@ def welcome_screen(screen):
     name_rect.midleft = (10, WH - 50)
     start_time = pygame.time.get_ticks()
     click = 0
+
+    # https: // discord.gg / b3ScQB5bpJ
     for i in range(NUM_OF_BALLS):
         x, y = random.randint(BORDERS, WW - BORDERS), random.randint(BORDERS, WH - BORDERS)
         # x, y = WW//2, WH//2
@@ -39,6 +42,11 @@ def welcome_screen(screen):
         balls.append(b)
 
     mouse_ball = DynamicBallWithColor((mx, my), 0, 0, 100, space)
+
+    discord_button = pygame.image.load('assets/imgs/discord.png')
+    discord_rect = discord_button.get_rect()
+    discord_rect.center = (WW-50, WH-200)
+    # webbrowser.open_new('https://discord.gg/b3ScQB5bpJ')
 
     while True:
 
@@ -153,6 +161,9 @@ def welcome_screen(screen):
             exit_button = Buttons(theme.button_c["exit"], WW - 100, WH - 75, 100, 50)
         if exit_button.is_clicked(clicked, mx, my):
             return ['quit']
+
+        # todo make Discord image better
+        # screen.blit(discord_button, discord_rect)
 
         hover(heading_rect, screen)
 
@@ -523,6 +534,9 @@ def level_select_screen(screen, number_buttons):
         for i in range(1, 6):
             for j in range(1, 6):
                 counter += 1
+
+                if counter>=18:
+                    break
 
                 if counter <= User_data.current_level:
                     temp_img = number_buttons[counter]
