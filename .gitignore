@@ -1,6 +1,6 @@
-/assets/data.db
 /venv/
 /.idea/
+*.db
 *.pyc
 /assets/level_editor_saves
 /EXE

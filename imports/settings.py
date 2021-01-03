@@ -6,8 +6,6 @@ import sqlite3
 # WW, WH = pygame.display.Info().current_w, pygame.display.Info().current_h
 WW, WH = 1200, 720
 
-if __name__ == '__main__':
-    pygame.init()
 # Font
 tiny_font = pygame.font.Font('assets/Roboto-Thin.ttf', 24)
 small_font = pygame.font.Font('assets/Roboto-Thin.ttf', 32)
@@ -76,4 +74,4 @@ if platform.system().lower() == "windows":
 else:
     db_path = os.path.join('assets', 'data.db')
 """
-db_path = os.path.join('assets', 'data.db')
+db_path = 'data.db'
