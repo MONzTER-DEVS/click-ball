@@ -10,7 +10,7 @@ lboard_data = []
 
 # Size is 204 x 81
 ## Ratio is 51/20
-bg_sound = pygame.mixer.Sound("assets/sounds/music.ogg")
+# bg_sound = pygame.mixer.Sound("assets/sounds/music.ogg")
 line_mode = 1
 
 
@@ -615,6 +615,38 @@ def level_select_screen(screen, number_buttons):
         pygame.display.update()
 
 
+def music_screen(screen):
+    theme = Themes.active_theme
+    clicked = False
+    mx, my = pygame.mouse.get_pos()
+    while True:
+        screen.fill(theme.background)
+        mx, my = pygame.mouse.get_pos()
+
+        heading_text = big_font.render('Select Music', True, theme.font_c)
+        heading_rect = heading_text.get_rect()
+        heading_rect.center = (WW // 2, 50)
+        screen.blit(heading_text, heading_rect.topleft)
+        draw_cursor(screen, theme.cursor_c)
+        coin_display(screen, coins=User_data.coins)  ## coins
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return ['quit']
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                clicked = True
+                mx, my = pygame.mouse.get_pos()
+            if event.type == pygame.MOUSEBUTTONUP:
+                clicked = False
+        # ball_text = medium_font.render('Change Ball', True, theme.font_c)
+        # try:
+        #     ball_button.draw(screen, mx, my)
+        # except Exception as e:
+        #     ball_button = Buttons(ball_text, WW // 2, 325, 250, 57)
+        # if ball_button.is_clicked(clicked, mx, my):
+        #     return ['ball']
+        pygame.display.update()
+
+
 def settings_screen(screen):
     theme = Themes.active_theme
     clicked = False
@@ -632,7 +664,7 @@ def settings_screen(screen):
         try:
             theme_button.draw(screen, mx, my)
         except Exception as e:
-            theme_button = Buttons(theme_text, WW // 2, 250, 261, 57)
+            theme_button = Buttons(theme_text, WW // 2, 250, 300, 57)
         if theme_button.is_clicked(clicked, mx, my):
             return ['themes']
 
@@ -654,7 +686,7 @@ def settings_screen(screen):
         try:
             ball_button.draw(screen, mx, my)
         except Exception as e:
-            ball_button = Buttons(ball_text, WW // 2, 325, 200, 57)
+            ball_button = Buttons(ball_text, WW // 2, 325, 250, 57)
         if ball_button.is_clicked(clicked, mx, my):
             return ['ball']
 
@@ -663,16 +695,25 @@ def settings_screen(screen):
         try:
             line_button.draw(screen, mx, my)
         except Exception as e:
-            line_button = Buttons(line_text, WW // 2, 400, 200, 57)
+            line_button = Buttons(line_text, WW // 2, 400, 250, 57)
         if line_button.is_clicked(clicked, mx, my):
             return ['line']
+
+        # Change Music button
+        music_text = medium_font.render('Change Music', True, theme.font_c)
+        try:
+            music_button.draw(screen, mx, my)
+        except Exception as e:
+            music_button = Buttons(music_text, WW // 2, 475, 250, 57)
+        if music_button.is_clicked(clicked, mx, my):
+            return ['music']
 
         # Fullscreen button
         full_text = medium_font.render('Toggle Fullscreen', True, theme.font_c)
         try:
             full_button.draw(screen, mx, my)
         except Exception as e:
-            full_button = Buttons(full_text, WW // 2, 475, 300, 57)
+            full_button = Buttons(full_text, WW // 2, 550, 300, 57)
         if full_button.is_clicked(clicked, mx, my):
             conn = sqlite3.connect(DB.db_path)
             c = conn.cursor()
