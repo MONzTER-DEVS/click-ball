@@ -8,3 +8,5 @@
 installer.bat
 /release.zip
 /dist
+build
+*.spec

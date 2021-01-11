@@ -8,20 +8,21 @@ select_rect_color = GRAY
 coin = pygame.image.load(os.path.join('assets', 'imgs', 'dollar.png'))
 coin = pygame.transform.scale(coin, (40, 40))
 
+URL = "http://cb-leaderboard.herokuapp.com"
+
 
 def send_data_to_leaderboard(name, score):
     params = {
-        'game': 'physics',
+        'game': 'physics_temp',
         'name': name,
         'score': score
     }
 
     req = requests.get("http://cb-leaderboard.herokuapp.com/", params=params, timeout=90)
-    req = req.json()
 
 
 def get_data():
-    req = requests.get("http://cb-leaderboard.herokuapp.com/get", params={'game': 'physics'}, timeout=90)
+    req = requests.get(f"{URL}/get", params={'game': 'physics_temp'}, timeout=90)
     req = req.json()
     to_return = []
     if len(req) > 10:
@@ -53,31 +54,34 @@ def coin_display(screen, coins=User_data.coins):
     text = small_font.render(f": {coins}", True, Themes.active_theme.font_c)
     screen.blit(text, (WW - 155, 10))
 
+
 class Buttons:
     shift = 1.1
+
     def __init__(self, img, x, y, width, height):
         self.small_img = pygame.transform.smoothscale(img, (width, height))
-        self.big_img = pygame.transform.smoothscale(img, (int(width*Buttons.shift), int(height*Buttons.shift)))
+        self.big_img = pygame.transform.smoothscale(img, (int(width * Buttons.shift), int(height * Buttons.shift)))
         self.x = x
         self.y = y
         self.w = width
         self.h = height
         self.small_rect = self.small_img.get_rect(center=(self.x, self.y))
         self.big_rect = self.big_img.get_rect(center=(self.x, self.y))
-    
+
     def draw(self, screen, mx, my):
-        mouse_rect = pygame.Rect(mx-5, my-5, 10, 10)
+        mouse_rect = pygame.Rect(mx - 5, my - 5, 10, 10)
         if not (mouse_rect.colliderect(self.small_rect) or mouse_rect.colliderect(self.big_rect)):
             screen.blit(self.small_img, self.small_rect.topleft)
         else:
             screen.blit(self.big_img, self.big_rect.topleft)
-    
+
     def is_clicked(self, clicked, mx, my):
-        mouse_rect = pygame.Rect(mx-5, my-5, 10, 10)
-        if (mouse_rect.colliderect(self.small_rect) or mouse_rect.colliderect(self.big_rect)):
+        mouse_rect = pygame.Rect(mx - 5, my - 5, 10, 10)
+        if mouse_rect.colliderect(self.small_rect) or mouse_rect.colliderect(self.big_rect):
             if clicked:
                 return True
         return False
+
 
 def draw_cursor(screen, color=(0, 0, 0)):
     pygame.draw.circle(screen, color, pygame.mouse.get_pos(), 15, 10)
