@@ -290,8 +290,10 @@ class Music:
         music_thread.join()
 
         if Music.play:
-            pygame.mixer.music.load('assets/sounds/music/loop.ogg')
-            pygame.mixer.music.play(-1)
+            if pygame.mixer.get_init():
+                pygame.init()
+                pygame.mixer.music.load('assets/sounds/music/loop.ogg')
+                pygame.mixer.music.play(-1)
 
     @staticmethod
     def stop_music():
