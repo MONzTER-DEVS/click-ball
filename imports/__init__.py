@@ -183,16 +183,15 @@ def load_data_while_loading_screen():
 
     # change this at the absolute end else conflicts would take place
     data = DB.Cache.load()
-    Themes.set_active_by_name(data[0][0][0])
-    User_data.music = ast.literal_eval(data[1][0][0])
+    Music.play = ast.literal_eval(data[1][0][0])
     User_data.line = data[2][0][0]
+    Themes.set_active_by_name(data[0][0][0])
     can_start_game = True
     pygame.init()
-    pygame.mixer.music.load("assets/sounds/music.ogg")
     User_data.save = ast.literal_eval(data_u_p[1])
     loading_percent += 0.5
-    if User_data.music:
-        pygame.mixer.music.play(-1)
+    if Music.play:
+        Music.play_music()
 
 
 t_load_data_while_loading_screen = threading.Thread(target=load_data_while_loading_screen)

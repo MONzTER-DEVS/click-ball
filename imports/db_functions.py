@@ -1,6 +1,8 @@
+import threading
+
 from .encryption import *
 from .settings import *
-from .classes import User_data
+from .classes import User_data, Music
 import sqlite3
 
 
@@ -184,14 +186,12 @@ class DB:
 def toggle_music():
     conn = sqlite3.connect(DB.db_path)
     c = conn.cursor()
-    if User_data.music:
+    if Music.play:
         to_update = False
-        User_data.music = False
-        pygame.mixer.music.fadeout(1500)
+        threading.Thread(target=Music.stop_music).start()
     else:
         to_update = True
-        User_data.music = True
-        pygame.mixer.music.play(-1)
+        threading.Thread(target=Music.play_music).start()
 
     c.execute(f"UPDATE music SET state = '{to_update}'")
     conn.commit()

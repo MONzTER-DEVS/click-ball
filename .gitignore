@@ -1,5 +1,6 @@
 /venv/
 /.idea/
+/.vscode
 *.db
 *.pyc
 /assets/level_editor_saves

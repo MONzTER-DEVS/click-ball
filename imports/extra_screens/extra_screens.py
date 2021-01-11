@@ -97,12 +97,9 @@ def welcome_screen(screen):
         screen.blit(music_sign, music_sign_rect)
 
         if clicked and mouse_rect.colliderect(rect):
-            if User_data.music:
-                toggle_music()
-            else:
-                toggle_music()
+            toggle_music()
 
-        if not User_data.music:
+        if not Music.play:
             pygame.draw.line(screen, RED, (music_sign_rect[0] + 5, music_sign_rect[1] + 10),
                              (rect.bottomright[0] - 10, rect.bottomright[1] - 15), 7)
 
@@ -310,7 +307,6 @@ def theme_screen(screen):
 def score_screen(screen, score, data=None):
     theme = Themes.active_theme
     clicked = False
-    mx, my = pygame.mouse.get_pos()
 
     while True:
         screen.fill(theme.background)
@@ -549,9 +545,6 @@ def level_select_screen(screen, number_buttons):
         for i in range(1, 6):
             for j in range(1, 6):
                 counter += 1
-
-                if counter >= 18:
-                    break
 
                 if counter <= User_data.current_level:
                     temp_img = number_buttons[counter]

@@ -4,6 +4,8 @@ import pygame
 import pymunk
 import os
 import sqlite3
+import time
+import threading
 from .settings import *
 from .encryption import *
 
@@ -192,7 +194,9 @@ class Coins:
     def __init__(self, pos):
         self.x = pos[0]
         self.y = pos[1]
-        self.images = [pygame.transform.smoothscale(pygame.image.load(f"assets/imgs/coins/{x}.png").convert_alpha(), (35, 35)) for x in range(1, 11)]
+        self.images = [
+            pygame.transform.smoothscale(pygame.image.load(f"assets/imgs/coins/{x}.png").convert_alpha(), (35, 35)) for
+            x in range(1, 11)]
         self.step = 0
         self.step_step = 0
         self.rect = self.images[0].get_rect()
@@ -202,9 +206,9 @@ class Coins:
     def draw(self, screen):
         if not self.collected:
             self.rect.center = (self.x, self.y)
-            self.step_step+=1
+            self.step_step += 1
             if self.step_step > 4:
-                self.step_step=0
+                self.step_step = 0
                 self.step += 1
             if self.step > 9:
                 self.step = 0
@@ -235,7 +239,6 @@ class User_data:
     save = None
     coins = None
     name = None
-    music = True
     line = "new"
 
     @staticmethod
@@ -270,3 +273,27 @@ class User_data:
         User_data.coins += number_of_coins_to_increment
         conn.commit()
         conn.close()
+
+
+class Music:
+    play = False
+
+    @staticmethod
+    def play_music():
+        def inner():
+            Music.play = True
+            pygame.mixer.music.load('assets/sounds/music/intro.ogg')
+            pygame.mixer.music.play(1)
+            time.sleep(24)
+        music_thread = threading.Thread(target=inner)
+        music_thread.start()
+        music_thread.join()
+
+        if Music.play:
+            pygame.mixer.music.load('assets/sounds/music/loop.ogg')
+            pygame.mixer.music.play(-1)
+
+    @staticmethod
+    def stop_music():
+        pygame.mixer.music.fadeout(1500)
+        Music.play = False

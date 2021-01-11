@@ -18,7 +18,7 @@ def send_data_to_leaderboard(name, score):
         'score': score
     }
 
-    req = requests.get("http://cb-leaderboard.herokuapp.com/", params=params, timeout=90)
+    requests.get(URL, params=params, timeout=90)
 
 
 def get_data():
