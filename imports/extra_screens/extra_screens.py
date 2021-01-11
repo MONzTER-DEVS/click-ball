@@ -109,7 +109,7 @@ def welcome_screen(screen):
         # Play button
         try:
             play_button.draw(screen, mx, my)
-        except Exception as e:
+        except Exception:
             play_button = Buttons(
                 theme.button_c["play"], WW // 2, 215, 150, 65)
         if play_button.is_clicked(clicked, mx, my):
@@ -767,7 +767,7 @@ def line_select_screen(screen):
         screen.blit(heading_text, heading_rect.topleft)
 
         # Line one
-        line_one = pygame.image.load("assets/lines/line_one.png")
+        line_one = pygame.image.load("assets/imgs/lines/line_one.png")
         try:
             line_one_button.draw(screen, mx, my)
         except Exception as e:
@@ -779,7 +779,7 @@ def line_select_screen(screen):
             return ['welcome']
 
         # Line two
-        line_two = pygame.image.load("assets/lines/line_two.png")
+        line_two = pygame.image.load("assets/imgs/lines/line_two.png")
         try:
             line_two_button.draw(screen, mx, my)
         except Exception as e:

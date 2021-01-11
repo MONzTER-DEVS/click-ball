@@ -162,12 +162,20 @@ class Themes:
 
 
 class Portal:
-    def __init__(self, start_pos, end_pos, radius):
+    def __init__(self, start_pos, end_pos, radius, size = "big"):
         self.start_pos = start_pos
         self.end_pos = end_pos
         self.radius = radius
-        self.start_img = pygame.image.load('assets/imgs/PortalStart.png').convert_alpha()
-        self.end_img = pygame.image.load('assets/imgs/PortalEnd.png').convert_alpha()
+        self.size = size
+        if self.size == "big":
+            self.start_img = pygame.image.load('assets/imgs/PortalStart.png').convert_alpha()
+            self.end_img = pygame.image.load('assets/imgs/PortalEnd.png').convert_alpha()
+        elif self.size == "med":
+            self.start_img = pygame.image.load('assets/imgs/PortalStartMed.png').convert_alpha()
+            self.end_img = pygame.image.load('assets/imgs/PortalEndMed.png').convert_alpha()
+
+        elif self.size == "small":
+            pass
         self.start_rect = self.start_img.get_rect()
         self.end_rect = self.end_img.get_rect()
         self.start_rect.center = self.start_pos

@@ -38,6 +38,7 @@ from imports.settings import WW, WH, small_font, medium_font, big_font
 from imports.classes import Themes
 from imports.classes import Levels
 import pygame, math, json, os
+
 if not os.path.exists(os.path.join('assets', 'level_editor_saves')):
     os.mkdir('assets/level_editor_saves')
 
@@ -68,6 +69,7 @@ select_rect_color = Themes.active_theme.hover
 
 obj_rect = pygame.Rect(0, 0, 0, 0)
 
+
 def hover(obj_rect, Screen):
     mouse_rect.center = pygame.mouse.get_pos()
     if mouse_rect.colliderect(obj_rect):
@@ -80,13 +82,14 @@ def hover(obj_rect, Screen):
         s_img.fill(select_rect_color)
         Screen.blit(s_img, select_rect.topleft)
 
+
 class Line:
     def __init__(self, x1, y1, x2, y2, width):
         self.start_pos = (x1, y1)
         self.end_pos = (x2, y2)
         self.width = width
         self.color = LINE_COLOR
-    
+
     def draw(self):
         pygame.draw.line(screen, self.color, self.start_pos, self.end_pos, self.width)
 
@@ -96,7 +99,7 @@ class Flag:
         self.image = pygame.image.load('assets/imgs/victory_flag.png')
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
-    
+
     def draw(self):
         screen.blit(self.image, self.rect.topleft)
 
@@ -106,7 +109,7 @@ class Player:
         self.image = pygame.image.load('assets/imgs/skins_png/ball.png')
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
-    
+
     def draw(self):
         screen.blit(self.image, self.rect.topleft)
 
@@ -115,14 +118,14 @@ class BouncingBall:
     def __init__(self, x, y, r, color):
         self.center = (x, y)
         self.radius = r
-        self.color = color          
+        self.color = color
         self.rect = pygame.Rect(
-            self.center[0] - self.radius, 
-            self.center[1] - self.radius, 
-            self.radius * 2, 
+            self.center[0] - self.radius,
+            self.center[1] - self.radius,
+            self.radius * 2,
             self.radius * 2
         )
-    
+
     def draw(self):
         self.rect.center = self.center
         self.rect.size = (self.radius * 2, self.radius * 2)
@@ -165,7 +168,6 @@ if n != 0:
     num_of_lines = len(level_dict["start"])
     lines = []
     for i in range(num_of_lines):
-
         # l = Line(WW // 2, WH // 2, WW // 2, WH // 2, 10)
         l = Line(level_dict["start"][i][0],
                  level_dict["start"][i][1],
@@ -220,8 +222,8 @@ if n != 0:
         selected_coin_index = 0
         selected_coin = coins[selected_coin_index]
 elif n == 0:
-    flag = Flag(WW//2, WH//2)
-    player = Player(WW//2, WH//2)
+    flag = Flag(WW // 2, WH // 2)
+    player = Player(WW // 2, WH // 2)
     num_of_balls = 1
     balls = []
     for i in range(num_of_balls):
@@ -235,7 +237,6 @@ elif n == 0:
     num_of_lines = 1
     lines = []
     for i in range(num_of_lines):
-
         l = Line(WW // 2, WH // 2, WW // 2, WH // 2, 10)
         lines.append(l)
 
@@ -259,18 +260,17 @@ elif n == 0:
     num_of_coins = 1
     coins = []
     for i in range(num_of_coins):
-        c = Coin(WW//2, WH//2)
+        c = Coin(WW // 2, WH // 2)
         coins.append(c)
     selected_coin_index = 0
     selected_coin = coins[selected_coin_index]
-
-
 
 ## balls
 
 
 running = True
 clicked = False
+
 
 def save():
     ## saving data
@@ -303,24 +303,25 @@ def save():
         coin_positions.append(coin.rect.center)
 
     to_dump_dict = {
-    'start':start_positions,
-    'end':end_positions,
-    'thickness':widths,
-    'moves':5,
-    'victory':victory_position,
-    'player':player_position,
-    'ball_center':ball_positions,
-    'ball_radius':ball_radius, 
-    'portal_start':portal_start_positions, 
-    'portal_end':portal_end_positions,
-    'coin_pos':coin_positions
+        'start': start_positions,
+        'end': end_positions,
+        'thickness': widths,
+        'moves': 5,
+        'victory': victory_position,
+        'player': player_position,
+        'ball_center': ball_positions,
+        'ball_radius': ball_radius,
+        'portal_start': portal_start_positions,
+        'portal_end': portal_end_positions,
+        'coin_pos': coin_positions,
+        'portal_thickness': ["med" for _ in range(len(portal_end_positions))]
     }
 
     f_name = str(len(os.listdir(os.path.join('assets', 'level_editor_saves'))))
     f_path = os.path.join('assets', 'level_editor_saves', f_name + '.json')
 
-    with open(os.path.join('assets', 'level_editor_saves',f_name + '.json'), "w") as f:
-        json.dump(to_dump_dict,f ,indent = 4)
+    with open(os.path.join('assets', 'level_editor_saves', f_name + '.json'), "w") as f:
+        json.dump(to_dump_dict, f, indent=4)
     print('saved at', f_path)
 
 
@@ -329,12 +330,12 @@ modes = ['line', 'flag', 'player', 'bouncing ball', 'portal', 'coin']
 mode_index = 0
 mode = modes[mode_index]
 while running:
-    
+
     # Snapping to the grid
     mx, my = pygame.mouse.get_pos()
     real_mx, real_my = pygame.mouse.get_pos()
-    mx = round(mx/GRID_SIZE)*GRID_SIZE
-    my = round(my/GRID_SIZE)*GRID_SIZE
+    mx = round(mx / GRID_SIZE) * GRID_SIZE
+    my = round(my / GRID_SIZE) * GRID_SIZE
     mouse_rect.center = pygame.mouse.get_pos()
 
     screen.fill(Themes.active_theme.background)
@@ -364,7 +365,7 @@ while running:
                 if e.key == pygame.K_RETURN:
                     selected_coin_index += 1
                 if e.key == pygame.K_n:
-                    c = Coin(WW//2, WH//2)
+                    c = Coin(WW // 2, WH // 2)
                     coins.append(c)
                     selected_coin_index = coins.index(c)
                     selected_coin = coins[selected_coin_index]
@@ -386,11 +387,11 @@ while running:
 
                 ## adding a new line
                 if e.key == pygame.K_n:
-                    l = Line(WW//2, WH//2, WW//2, WH//2, 10)
+                    l = Line(WW // 2, WH // 2, WW // 2, WH // 2, 10)
                     lines.append(l)
-                    selected_line_index = lines.index(l) 
-                
-                ## deleting the current line
+                    selected_line_index = lines.index(l)
+
+                    ## deleting the current line
                 if e.key == pygame.K_d:
                     lines.remove(selected_line)
 
@@ -406,10 +407,10 @@ while running:
             if mode == 'bouncing ball':
                 ## adding a new ball
                 if e.key == pygame.K_n:
-                    b = BouncingBall(WW//2, WH//2, 10, BALL_COLOR)
+                    b = BouncingBall(WW // 2, WH // 2, 10, BALL_COLOR)
                     balls.append(b)
                     selected_ball = balls[-1]
-                
+
                 ## deleting the current ball
                 if e.key == pygame.K_d:
                     balls.remove(selected_ball)
@@ -421,13 +422,13 @@ while running:
                 ## To decrease radius, press down arrow
                 if e.key == pygame.K_DOWN:
                     selected_ball.radius -= 5
-            
+
             ## Will only run if mode is portal
             if mode == 'portal':
                 ## iterating thru portals
                 if e.key == pygame.K_RETURN:
                     selected_portal_index += 1
-                    
+
                 ## iterating thru portal ends
                 if e.key == pygame.K_f:
                     if selected_portal_end == 'start':
@@ -437,25 +438,25 @@ while running:
 
                 ## adding a new portal
                 if e.key == pygame.K_n:
-                    p = Portal((WW//2, 100), (WW//2, WH-100), 10)
+                    p = Portal((WW // 2, 100), (WW // 2, WH - 100), 10)
                     portals.append(p)
-                    selected_portal_index = portals.index(p) 
-                
-                ## deleting the current portal
+                    selected_portal_index = portals.index(p)
+
+                    ## deleting the current portal
                 if e.key == pygame.K_d:
                     portals.remove(selected_portal)
 
     ## GUI STUFF
     # mode indicator
-    mode_text = small_font.render("Mode: "+mode, True, Themes.active_theme.font_c)
+    mode_text = small_font.render("Mode: " + mode, True, Themes.active_theme.font_c)
     mode_rect = mode_text.get_rect()
-    mode_rect.center = (WW//2, 50)
+    mode_rect.center = (WW // 2, 50)
     screen.blit(mode_text, mode_rect.topleft)
 
     # Next mode
     heading_text = small_font.render(' -> ', True, Themes.active_theme.font_c)
     heading_rect = heading_text.get_rect()
-    heading_rect.center = (WW//2 + 175, 50)
+    heading_rect.center = (WW // 2 + 175, 50)
     screen.blit(heading_text, heading_rect.topleft)
 
     hover(heading_rect, screen)
@@ -467,7 +468,7 @@ while running:
     # Previous mode
     heading_text = small_font.render(' <- ', True, Themes.active_theme.font_c)
     heading_rect = heading_text.get_rect()
-    heading_rect.center = (WW//2 - 175, 50)
+    heading_rect.center = (WW // 2 - 175, 50)
     screen.blit(heading_text, heading_rect.topleft)
 
     hover(heading_rect, screen)
@@ -487,7 +488,7 @@ while running:
         selected_line = lines[selected_line_index]
     except IndexError:
         selected_line_index = 0
-    
+
     ## Defining the selected portal
     try:
         selected_portal = portals[selected_portal_index]
@@ -502,7 +503,7 @@ while running:
             selected_coin_index = 0
     ## Defining mode
     try:
-        mode = modes[mode_index]            ## Managing modes
+        mode = modes[mode_index]  ## Managing modes
     except IndexError:
         mode_index = 0
 
@@ -517,7 +518,6 @@ while running:
             )
             if dist < DRAG_OFFSET:
                 coin.rect.center = (mx, my)
-
 
     ## Drawing lines
     for line in lines:
@@ -541,15 +541,15 @@ while running:
             # obj_rect = line.rect.copy()
             if clicked and mode == 'line':
                 dist = math.sqrt(
-                    (line.start_pos[0] - mouse_rect.centerx)**2 + 
-                    (line.start_pos[1] - mouse_rect.centery)**2
+                    (line.start_pos[0] - mouse_rect.centerx) ** 2 +
+                    (line.start_pos[1] - mouse_rect.centery) ** 2
                 )
                 if dist < DRAG_OFFSET:
                     selected_line_end = 'start'
 
                 dist = math.sqrt(
-                    (line.end_pos[0] - mouse_rect.centerx)**2 + 
-                    (line.end_pos[1] - mouse_rect.centery)**2
+                    (line.end_pos[0] - mouse_rect.centerx) ** 2 +
+                    (line.end_pos[1] - mouse_rect.centery) ** 2
                 )
                 if dist < DRAG_OFFSET:
                     selected_line_end = 'end'
@@ -558,14 +558,14 @@ while running:
                     line.start_pos = (mx, my)
                 if selected_line_end == 'end':
                     line.end_pos = (mx, my)
-    
+
     ## Drawing balls
     for ball in balls:
         ball.draw()
         # Selecting ball
         dist = math.sqrt(
-            (ball.center[0] - mouse_rect.centerx)**2 + 
-            (ball.center[1] - mouse_rect.centery)**2
+            (ball.center[0] - mouse_rect.centerx) ** 2 +
+            (ball.center[1] - mouse_rect.centery) ** 2
         )
         if dist < DRAG_OFFSET:
             selected_ball = ball
@@ -582,16 +582,16 @@ while running:
         portal.draw()
         if portal == selected_portal and mode == 'portal':
             dist = math.sqrt(
-                (portal.start_pos[0] - mouse_rect.centerx)**2 + 
-                (portal.start_pos[1] - mouse_rect.centery)**2
+                (portal.start_pos[0] - mouse_rect.centerx) ** 2 +
+                (portal.start_pos[1] - mouse_rect.centery) ** 2
             )
             if dist < DRAG_OFFSET:
                 selected_portal_end = 'start'
                 obj_rect = portal.start_rect.copy()
 
             dist = math.sqrt(
-                (portal.end_pos[0] - mouse_rect.centerx)**2 + 
-                (portal.end_pos[1] - mouse_rect.centery)**2
+                (portal.end_pos[0] - mouse_rect.centerx) ** 2 +
+                (portal.end_pos[1] - mouse_rect.centery) ** 2
             )
             if dist < DRAG_OFFSET:
                 selected_portal_end = 'end'
@@ -607,8 +607,8 @@ while running:
     if clicked and mode == 'flag':
         obj_rect = flag.rect.copy()
         dist = math.sqrt(
-            (flag.rect.centerx - mouse_rect.centerx)**2 + 
-            (flag.rect.centery - mouse_rect.centery)**2
+            (flag.rect.centerx - mouse_rect.centerx) ** 2 +
+            (flag.rect.centery - mouse_rect.centery) ** 2
         )
         if dist < DRAG_OFFSET:
             flag.rect.center = (mx, my)
@@ -618,8 +618,8 @@ while running:
     if clicked and mode == 'player':
         obj_rect = player.rect.copy()
         dist = math.sqrt(
-            (player.rect.centerx - mouse_rect.centerx)**2 + 
-            (player.rect.centery - mouse_rect.centery)**2
+            (player.rect.centerx - mouse_rect.centerx) ** 2 +
+            (player.rect.centery - mouse_rect.centery) ** 2
         )
         if dist < DRAG_OFFSET:
             player.rect.center = (mx, my)

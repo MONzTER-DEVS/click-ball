@@ -4,6 +4,7 @@ from imports import *
 import math
 import pymunk
 import pygame
+
 ## -------- PyMunk Initialization --------
 space = pymunk.Space()  # Create a Space which contain the simulation
 space.gravity = 0, GRAVITY  # Set its gravity
@@ -176,9 +177,14 @@ def load_objects(level, mode='survival'):
     ## Portals
     portals = []
     try:
-        for s, e in zip(level.dict["portal_start"],
-                        level.dict["portal_end"]):  # can't use nested cuz it makes wierd things happen xD
-            p = Portal(s, e, 32)
+        thickness = level.dict["portal_thickness"]
+    except:
+        thickness = ["big" for _ in level.dict["portal_start"]]
+    try:
+        for s, e, portal_thickness in zip(level.dict["portal_start"],
+                                          level.dict["portal_end"],
+                                          thickness):  # can't use nested cuz it makes wierd things happen xD
+            p = Portal(s, e, 32, portal_thickness)
             portals.append(p)
     except KeyError:
         pass
@@ -235,6 +241,7 @@ def draw_objects(moves, clicked, coins_collected_in_current_level, level, lines,
         line.draw(screen, Themes.active_theme.platform_c)
     for ball in balls:
         ball.draw(screen, Themes.active_theme.bouncing_ball_c)
+    portal: Portal
     for portal in portals:
         portal.draw(screen, space)
         portal.teleport(player)
