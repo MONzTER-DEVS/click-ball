@@ -255,6 +255,7 @@ class User_data:
     coins = None
     name = None
     line = "new"
+    skin = None
 
     @staticmethod
     def get_save():

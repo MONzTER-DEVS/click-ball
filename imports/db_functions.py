@@ -49,6 +49,8 @@ class DB:
             values.append(c.fetchall())
             c.execute("SELECT * FROM line")
             values.append(c.fetchall())
+            c.execute("SELECT * FROM skins")
+            values.append(c.fetchall())
             conn.commit()
 
             conn.close()
@@ -150,7 +152,7 @@ class DB:
             'user_name': ["CREATE TABLE user_name(name text)"],
 
             'skins': ["CREATE TABLE skins(data text)",
-                      f"INSERT INTO skins values('{Crypt.en(str([]))}')"]
+                      f"INSERT INTO skins values('{Crypt.en(str(['01.png']))}')"]
 
         }
         # "CREATE TABLE user_name(name text)",

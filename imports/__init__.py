@@ -132,7 +132,7 @@ skins = []
 
 
 def load_data_while_loading_screen():
-    global can_start_game, number_buttons,loading_percent, skins
+    global can_start_game, number_buttons, loading_percent, skins
     st_time = time.time()
 
     loading_percent = 1
@@ -169,14 +169,16 @@ def load_data_while_loading_screen():
             Levels(name='placeholder', data=json.load(f))
             f.close()
             loading_percent += 0.2
-    except:
+    finally:
         pass
 
     for img_name in os.listdir(img_path):
         if os.path.isfile(os.path.join(img_path, img_name)):
-            small_img = Ball(pygame.transform.smoothscale(pygame.image.load(os.path.join(img_path, img_name)), (32, 32)), img_name)
+            small_img = Ball(
+                pygame.transform.smoothscale(pygame.image.load(os.path.join(img_path, img_name)), (32, 32)), img_name)
             skins.append(small_img)
-    loading_percent += 5
+        loading_percent += 1
+
 
     sleep = (3 - float(time.time() - st_time)) / (int(100 - loading_percent) * 5)
 
@@ -191,6 +193,7 @@ def load_data_while_loading_screen():
     data = DB.Cache.load()
     Music.play = ast.literal_eval(data[1][0][0])
     User_data.line = data[2][0][0]
+    User_data.skin = Crypt.de(data[3][0][0])
     Themes.set_active_by_name(data[0][0][0])
     can_start_game = True
     pygame.init()
