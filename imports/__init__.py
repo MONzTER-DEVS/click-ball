@@ -128,11 +128,11 @@ loading_percent = 0
 
 pygame.init()
 
+skins = []
+
 
 def load_data_while_loading_screen():
-    global can_start_game
-    global number_buttons
-    global loading_percent
+    global can_start_game, number_buttons,loading_percent, skins
     st_time = time.time()
 
     loading_percent = 1
@@ -171,6 +171,12 @@ def load_data_while_loading_screen():
             loading_percent += 0.2
     except:
         pass
+
+    for img_name in os.listdir(img_path):
+        if os.path.isfile(os.path.join(img_path, img_name)):
+            small_img = Ball(pygame.transform.smoothscale(pygame.image.load(os.path.join(img_path, img_name)), (32, 32)), img_name)
+            skins.append(small_img)
+    loading_percent += 5
 
     sleep = (3 - float(time.time() - st_time)) / (int(100 - loading_percent) * 5)
 

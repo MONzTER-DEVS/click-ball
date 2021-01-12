@@ -34,12 +34,6 @@ EMRALD = (99, 212, 113)
 
 ## Player Skins
 img_path = os.path.join('assets', 'imgs', 'skins_png')
-skins = []
-for img_name in os.listdir(img_path):
-    if os.path.isfile(os.path.join(img_path, img_name)):
-        big_img = pygame.image.load(os.path.join(img_path, img_name))
-        small_img = pygame.transform.smoothscale(big_img, (32, 32))
-        skins.append(small_img)
 
 ## Levels
 lvl_path_50 = os.path.join('assets', 'levels', '1-50')

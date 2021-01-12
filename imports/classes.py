@@ -35,7 +35,7 @@ class DynamicBall:
         space.add(self.body, self.shape)
         self.shape.collision_type = 1  ## idk wht this does, but if i comment it, the ball doesn't move
         ## This will b used for collsions for pygame
-        self.rect = self.image.get_rect()
+        self.rect = self.image.surface.get_rect()
         self.rect = pygame.Rect(
             self.body.position.x,
             self.body.position.y,
@@ -48,8 +48,8 @@ class DynamicBall:
         x, y = self.body.position
         self.rect.center = self.shape.body.position
 
-        rotated_image = pygame.transform.rotate(self.image, -math.degrees(self.body.angle))
-        new_rect = rotated_image.get_rect(center=self.image.get_rect(topleft=self.rect.topleft).center)
+        rotated_image = pygame.transform.rotate(self.image.surface, -math.degrees(self.body.angle))
+        new_rect = rotated_image.get_rect(center=self.image.surface.get_rect(topleft=self.rect.topleft).center)
 
         if shade:
             pygame.draw.circle(surf, GRAY, (self.rect.centerx + shading, self.rect.centery + shading), 16)
@@ -162,7 +162,7 @@ class Themes:
 
 
 class Portal:
-    def __init__(self, start_pos, end_pos, radius, size = "big"):
+    def __init__(self, start_pos, end_pos, radius, size="big"):
         self.start_pos = start_pos
         self.end_pos = end_pos
         self.radius = radius
@@ -239,7 +239,14 @@ class Levels:
         self.dict = data
         self.name = name
         self.number = len(Levels.levels) + 1
+        self.skin = None
         Levels.levels.append(self)
+
+
+class Ball:
+    def __init__(self, surface, name):
+        self.surface = surface
+        self.name = name
 
 
 class User_data:
@@ -293,6 +300,7 @@ class Music:
             pygame.mixer.music.load('assets/sounds/music/intro.ogg')
             pygame.mixer.music.play(1)
             time.sleep(24)
+
         music_thread = threading.Thread(target=inner)
         music_thread.start()
         music_thread.join()

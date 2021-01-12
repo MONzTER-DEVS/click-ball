@@ -59,8 +59,16 @@ class Buttons:
     shift = 1.1
 
     def __init__(self, img, x, y, width, height):
-        self.small_img = pygame.transform.smoothscale(img, (width, height))
-        self.big_img = pygame.transform.smoothscale(img, (int(width * Buttons.shift), int(height * Buttons.shift)))
+        try:
+            self.small_img = pygame.transform.smoothscale(img, (width, height))
+        except Exception:
+            self.small_img = pygame.transform.smoothscale(img.surface, (width, height))
+
+        try:
+            self.big_img = pygame.transform.smoothscale(img, (int(width * Buttons.shift), int(height * Buttons.shift)))
+        except Exception:
+            self.big_img = pygame.transform.smoothscale(img.surface,
+                                                        (int(width * Buttons.shift), int(height * Buttons.shift)))
         self.x = x
         self.y = y
         self.w = width

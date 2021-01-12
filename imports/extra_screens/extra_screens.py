@@ -814,10 +814,10 @@ def line_select_screen(screen):
         pygame.display.update()
 
 
-def skin_select_screen(screen):
+def skin_select_screen(screen, skins):
     theme = Themes.active_theme
     clicked = False
-    mx, my = pygame.mouse.get_pos()
+
     skin = 1  # Default skin
     skins_per_page = 5
     gap = (WH // skins_per_page) - 22

@@ -147,7 +147,10 @@ class DB:
             'line': ["CREATE TABLE line(type text)",
                      "INSERT INTO line values('new')"],
 
-            'user_name': ["CREATE TABLE user_name(name text)"]
+            'user_name': ["CREATE TABLE user_name(name text)"],
+
+            'skins': ["CREATE TABLE skins(data text)",
+                      f"INSERT INTO skins values('{Crypt.en(str([]))}')"]
 
         }
         # "CREATE TABLE user_name(name text)",

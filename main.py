@@ -537,7 +537,7 @@ while True:
     elif to_do[0] == 'line':
         to_do = line_select_screen(screen)
     elif to_do[0] == 'ball':
-        to_do = skin_select_screen(screen)
+        to_do = skin_select_screen(screen, skins)
         p_img = to_do[1]
 
     elif to_do[0] == 'quit':
