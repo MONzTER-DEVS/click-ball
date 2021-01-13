@@ -174,11 +174,12 @@ def load_data_while_loading_screen():
 
     for img_name in os.listdir(img_path):
         if os.path.isfile(os.path.join(img_path, img_name)):
-            small_img = Ball(
-                pygame.transform.smoothscale(pygame.image.load(os.path.join(img_path, img_name)), (32, 32)), img_name)
-            skins.append(small_img)
-        loading_percent += 1
+            base_img = pygame.image.load(os.path.join(img_path, img_name))
+            big_img = Ball(pygame.transform.smoothscale(base_img, (48, 48)), img_name)
+            small_img = Ball(pygame.transform.smoothscale(base_img, (32, 32)), img_name)
 
+            skins.append([small_img, big_img])
+        loading_percent += 1
 
     sleep = (3 - float(time.time() - st_time)) / (int(100 - loading_percent) * 5)
 

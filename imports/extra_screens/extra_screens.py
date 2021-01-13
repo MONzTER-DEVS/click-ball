@@ -47,7 +47,7 @@ def welcome_screen(screen):
 
     discord_button = pygame.image.load('assets/imgs/discord.png')
     discord_rect = discord_button.get_rect()
-    discord_rect.center = (WW-50, WH-200)
+    discord_rect.center = (WW - 50, WH - 200)
     # webbrowser.open_new('https://discord.gg/b3ScQB5bpJ')
 
     while True:
@@ -228,7 +228,7 @@ def game_select_screen(screen):
             return ['welcome']
 
         draw_cursor(screen, theme.cursor_c)
-        coin_display(screen, coins=User_data.coins)     ## coins
+        coin_display(screen, coins=User_data.coins)  ## coins
 
         # Events
         clicked = False
@@ -289,7 +289,7 @@ def theme_screen(screen):
                     'theme', Themes.active_theme.name, old.name)
 
         draw_cursor(screen, theme.cursor_c)
-        coin_display(screen, coins=User_data.coins)     ## coins
+        coin_display(screen, coins=User_data.coins)  ## coins
 
         clicked = False
         for event in pygame.event.get():
@@ -424,7 +424,7 @@ def leaderboard_screen(screen):
             return ['welcome']
 
         draw_cursor(screen, theme.cursor_c)
-        coin_display(screen, coins=User_data.coins)     ## coins
+        coin_display(screen, coins=User_data.coins)  ## coins
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -493,7 +493,7 @@ def guide_screen(screen):
             return ['welcome']
 
         draw_cursor(screen, theme.cursor_c)
-        coin_display(screen, coins=User_data.coins)     ## coins
+        coin_display(screen, coins=User_data.coins)  ## coins
 
         clicked = False
         for event in pygame.event.get():
@@ -599,7 +599,7 @@ def level_select_screen(screen, number_buttons):
         #             level = num
 
         draw_cursor(screen, theme.cursor_c)
-        coin_display(screen, coins=User_data.coins)     ## coins
+        coin_display(screen, coins=User_data.coins)  ## coins
 
         clicked = False
         for event in pygame.event.get():
@@ -734,7 +734,7 @@ def settings_screen(screen):
         clicked = False
 
         draw_cursor(screen, theme.cursor_c)
-        coin_display(screen, coins=User_data.coins)     ## coins
+        coin_display(screen, coins=User_data.coins)  ## coins
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -795,7 +795,7 @@ def line_select_screen(screen):
             return ['welcome']
 
         draw_cursor(screen, theme.cursor_c)
-        coin_display(screen, coins=User_data.coins)     ## coins
+        coin_display(screen, coins=User_data.coins)  ## coins
 
         clicked = False
         for event in pygame.event.get():
@@ -812,94 +812,51 @@ def line_select_screen(screen):
 
 def skin_select_screen(screen, skins):
     theme = Themes.active_theme
-    clicked = False
+    heading_text = big_font.render('Shop', True, theme.font_c)
+    heading_rect = heading_text.get_rect()
+    heading_rect.center = (WW // 2, 50)
 
-    skin = 1  # Default skin
-    skins_per_page = 5
-    gap = (WH // skins_per_page) - 22
+    free_text = big_font.render('Free', True, theme.font_c)
+    free_rect = free_text.get_rect()
+    free_rect.center = (125, WH * 1 // 4)
 
-    max_page, min_page = (len(skins) + skins_per_page) // skins_per_page, 1
-    page = 1  # Default page
-
-    skin_nums_to_display = range(
-        ((page - 1) * skins_per_page), (page * skins_per_page) + 1)
+    paid_text = big_font.render('Paid', True, theme.font_c)
+    paid_rect = paid_text.get_rect()
+    paid_rect.midright = (720, WH * 1 // 4)
 
     while True:
         mx, my = pygame.mouse.get_pos()
         screen.fill(theme.background)
-        heading_text = big_font.render('Skin Select!', True, theme.font_c)
-        heading_rect = heading_text.get_rect()
-        heading_rect.center = (WW // 2, 50)
         screen.blit(heading_text, heading_rect.topleft)
+        screen.blit(free_text, free_rect.topleft)
+        screen.blit(paid_text, paid_rect.topleft)
+
+        #  Free Skins!
+        offset = WH // 2
+        for balls in skins:
+            screen.blit(balls[1].surface, (100, offset))
+            offset += WH // 4
+
+        offset_y = WH * 3 // 8
+        count = 2
+        for x in range(4):
+            offset_x = WW//2 - 200
+            for y in range(5):
+                screen.blit(skins[count][1].surface, (offset_x, offset_y))
+                offset_x += (int(WW - 600) // 5)
+                count += 1
+            offset_y += 100
+
 
         # Back button
         try:
             back_button.draw(screen, mx, my)
         except Exception as e:
             back_button = Buttons(theme.button_c["back"], 60, WH - 50, 100, 60)
-        if back_button.is_clicked(clicked, mx, my):
-            return ['settings', skins[skin]]
 
         # Next Page
-        next_text = medium_font.render('->', True, theme.font_c)
-        try:
-            next_button.draw(screen, mx, my)
-        except Exception as e:
-            next_button = Buttons(next_text, WW // 2 + 200, WH // 2, 75, 75)
-        if next_button.is_clicked(clicked, mx, my):
-            if page < max_page:
-                page += 1
-                skin_nums_to_display = range(
-                    ((page - 1) * skins_per_page), (page * skins_per_page) + 1)
-                clicked = False
-
-        # Prev Page
-        prev_text = medium_font.render('<-', True, theme.font_c)
-        try:
-            prev_button.draw(screen, mx, my)
-        except Exception as e:
-            prev_button = Buttons(prev_text, WW // 2 - 200, WH // 2, 75, 75)
-        if prev_button.is_clicked(clicked, mx, my):
-            if page > min_page:
-                page -= 1
-                skin_nums_to_display = range(
-                    ((page - 1) * skins_per_page), (page * skins_per_page) + 1)
-                clicked = False
-
-        # -------------------- The skin selection --------------------
-        for y, num in zip(range(125, WH, gap), skin_nums_to_display):
-            # drawing skins
-            try:
-                ball_img = skins[num]
-                if num >= 3:
-                    price_img = medium_font.render(
-                        str(num*100) + "$", True, theme.font_c)
-                else:
-                    price_img = medium_font.render(
-                        "FREE", True, theme.font_c)
-            except IndexError:
-                ball_img = None
-                price_img = None
-
-            if ball_img != None:
-                ball_button = Buttons(ball_img, (WW // 2) - 50, y, 64, 64)
-                ball_button.draw(screen, mx, my)
-                if ball_button.is_clicked(clicked, mx, my):
-                    skin = num
-                    clicked = False
-
-            if price_img != None:
-                screen.blit(price_img, (ball_button.small_rect.x +
-                                        100, ball_button.small_rect.y))
-            # Drawing a selection rectangle
-            if num == skin:
-                s_img = pygame.Surface(ball_button.big_rect.size)
-                s_img.set_alpha(100)
-                s_img.fill(select_rect_color)
-                screen.blit(s_img, ball_button.big_rect.topleft)
-
         draw_cursor(screen, theme.cursor_c)
-        coin_display(screen, coins=User_data.coins)  # coins
+        coin_display(screen, int(str(User_data.coins)))  # coins
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -993,7 +950,7 @@ def death_screen(screen, status, score):
 
         clicked = False
         draw_cursor(screen, theme.cursor_c)
-        coin_display(screen, coins=User_data.coins)     ## coins
+        coin_display(screen, coins=User_data.coins)  ## coins
         pygame.display.update()
 
 
@@ -1069,7 +1026,7 @@ def name_screen(screen):
                                                input_name_rect.height + (rect_border_gap * 2)), width=2)
 
         draw_cursor(screen, theme.cursor_c)
-        coin_display(screen, coins=User_data.coins)     ## coins
+        coin_display(screen, coins=User_data.coins)  ## coins
         pygame.display.update()
 
 
@@ -1138,7 +1095,7 @@ def campaign_continue_screen(screen, coins):
                 clicked = True
 
         draw_cursor(screen, theme.cursor_c)
-        coin_display(screen, coins=User_data.coins)     ## coins
+        coin_display(screen, coins=User_data.coins)  ## coins
         pygame.display.update()
 
 
@@ -1193,7 +1150,7 @@ def campaign_death_screen(screen):
                 clicked = True
 
         draw_cursor(screen, theme.cursor_c)
-        coin_display(screen, coins=User_data.coins)     ## coins
+        coin_display(screen, coins=User_data.coins)  ## coins
         pygame.display.update()
 
 # WIll come in handy when we will have Multiple Users :)
