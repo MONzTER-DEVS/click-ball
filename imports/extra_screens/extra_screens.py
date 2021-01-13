@@ -360,10 +360,6 @@ def score_screen(screen, score, data=None):
         pygame.display.update()
 
 
-# pycharm msg below -_-
-# noinspection PyUnboundLocalVariable
-# pycharm msg above -_-
-
 def leaderboard_screen(screen):
     theme = Themes.active_theme
     mx, my = pygame.mouse.get_pos()
@@ -1032,7 +1028,8 @@ def name_screen(screen):
             if event.type == pygame.QUIT:
                 return 'quit'
             elif event.type == pygame.KEYDOWN:
-                name += event.unicode
+                if event.key != pygame.K_BACKSPACE:
+                    name += event.unicode
 
                 if event.key == pygame.K_RETURN:
                     if len(name) > 32:

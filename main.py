@@ -14,11 +14,12 @@ pygame.display.set_caption('Click Ball!')
 clock = pygame.time.Clock()
 
 ## Common To both modes
-p_img = skins[0]
 player_speed_factor = 1.2  ## Experimental value
 max_speed = 100
-player = DynamicBall((WW // 2, WH // 2), 10, 0, p_img, space)
+player = DynamicBall((WW // 2, WH // 2), 10, 0, User_data.active_skin, space)
 flag = VictoryFlag((WW - 100, WH - 100))
+
+print(User_data.active_skin.name)
 
 
 ## -------------------- Some functions --------------------
@@ -151,7 +152,7 @@ def draw_dashed_line(surf, color, start_pos, end_pos, width=1, dash_length=20):
 
 def load_objects(level, mode='survival'):
     ## -------------------- Initializing Level --------------------
-    player.image = p_img  ## Player
+    player.image = User_data.active_skin  ## Player
     player.body.position = level.dict["player"][0]  ## Player
     player.body.velocity = (0, 0)  ## Player
     flag.rect.bottomleft = level.dict["victory"][0]  ## Flag
@@ -538,7 +539,6 @@ while True:
         to_do = line_select_screen(screen)
     elif to_do[0] == 'ball':
         to_do = skin_select_screen(screen, skins)
-        p_img = to_do[1]
 
     elif to_do[0] == 'quit':
         break

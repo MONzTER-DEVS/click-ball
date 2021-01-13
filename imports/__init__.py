@@ -193,7 +193,8 @@ def load_data_while_loading_screen():
     data = DB.Cache.load()
     Music.play = ast.literal_eval(data[1][0][0])
     User_data.line = data[2][0][0]
-    User_data.skin = Crypt.de(data[3][0][0])
+    User_data.skins = Crypt.de(data[3][0][0])
+    User_data.activate_skin_by_name(Crypt.de(data[4][0][0]))
     Themes.set_active_by_name(data[0][0][0])
     can_start_game = True
     pygame.init()

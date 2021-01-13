@@ -244,9 +244,12 @@ class Levels:
 
 
 class Ball:
+    all_b = {}
+
     def __init__(self, surface, name):
         self.surface = surface
         self.name = name
+        Ball.all_b[name] = self
 
 
 class User_data:
@@ -255,7 +258,15 @@ class User_data:
     coins = None
     name = None
     line = "new"
-    skin = None
+    active_skin = None
+    skins = None
+
+    @staticmethod
+    def activate_skin_by_name(name):
+        for ball in Ball.all_b:
+            if ball == name:
+                User_data.active_skin = Ball.all_b[name]
+                break
 
     @staticmethod
     def get_save():
