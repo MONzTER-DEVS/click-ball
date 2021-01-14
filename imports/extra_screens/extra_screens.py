@@ -834,13 +834,13 @@ def skin_select_screen(screen, skins):
         #         y += 100
         #         x = WW//6
         counter = 0
+        radius = 30
         for i in range(1, 6):
             for j in range(1, 6):
                 ball = skins[counter][1]
                 coords = (j * WW / 6, (i * WH / 8) + 50)
-
                 if ball.name in User_data.skins:
-                    pygame.draw.circle(screen, (0, 255, 0), (coords[0], coords[1]), 26)
+                    pygame.draw.circle(screen, (0, 255, 0), (coords[0] + 24, coords[1] + 24), radius)
 
                 screen.blit(ball.surface, coords)
 
