@@ -301,6 +301,15 @@ class User_data:
         conn.commit()
         conn.close()
 
+    @staticmethod
+    def add_skin(name):
+        conn = sqlite3.connect(db_path)
+        c = conn.cursor()
+        User_data.skins.append(name)
+        c.execute(f"UPDATE skins SET data = '{Crypt.en(str(User_data.skins))}'")
+        conn.commit()
+        conn.close()
+
 
 class Music:
     play = False

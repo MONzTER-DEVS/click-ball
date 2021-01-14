@@ -19,8 +19,6 @@ max_speed = 100
 player = DynamicBall((WW // 2, WH // 2), 10, 0, User_data.active_skin, space)
 flag = VictoryFlag((WW - 100, WH - 100))
 
-print(User_data.active_skin.name)
-
 
 ## -------------------- Some functions --------------------
 def load_level_by_num(name, i, is_survival=False):
@@ -193,7 +191,6 @@ def load_objects(level, mode='survival'):
     coins = []
     if mode != 'survival':
         try:
-            # print(level)
             for p in level.dict["coin_pos"]:
                 c = Coins(p)
                 coins.append(c)
@@ -539,7 +536,6 @@ while True:
         to_do = line_select_screen(screen)
     elif to_do[0] == 'ball':
         to_do = skin_select_screen(screen, skins)
-
     elif to_do[0] == 'quit':
         break
 

@@ -817,33 +817,29 @@ def skin_select_screen(screen, skins):
     heading_rect.center = (WW // 2, 50)
 
     clicked = False
+    active_ball = None
     while True:
+        pygame.display.update()
         mx, my = pygame.mouse.get_pos()
         screen.fill(theme.background)
         screen.blit(heading_text, heading_rect.topleft)
 
-        x = WW // 6
-        y = 100
-        count = 0
-        # for balls in skins:
-        #     count += 1
-        #     screen.blit(balls[1].surface, (x, y))
-        #     x += WW // 6
-        #     if count > 4:
-        #         count = 0
-        #         y += 100
-        #         x = WW//6
         counter = 0
         radius = 30
         for i in range(1, 6):
             for j in range(1, 6):
                 ball = skins[counter][1]
                 coords = (j * WW / 6, (i * WH / 8) + 50)
+
                 if ball.name in User_data.skins:
                     pygame.draw.circle(screen, (0, 255, 0), (coords[0] + 24, coords[1] + 24), radius)
 
                 screen.blit(ball.surface, coords)
 
+                if ((mx - (coords[0] + 24)) ** 2 + (my - (coords[1] + 24)) ** 2) ** 0.5 < 24:
+                    if clicked:
+                        active_ball = ball
+                        active_ball_cost = counter * 100
                 if counter < 22:
                     counter += 1
                 else:
@@ -859,9 +855,33 @@ def skin_select_screen(screen, skins):
         if back_button.is_clicked(clicked, mx, my):
             return ['welcome']
 
-        # Next Page
+        if active_ball is not None:
+            if active_ball.name not in User_data.skins:
+                if User_data.coins > active_ball_cost:
+                    text = medium_font.render(f"Buy now: {active_ball_cost}", True, theme.font_c)
+                    rect = text.get_rect()
+                    rect.midleft = (WW - 400, WH - 100)
+                    if rect.left < mx < rect.right and rect.top < my < rect.bottom and clicked:
+                        for x in skins:
+                            if x[0].name == active_ball.name:
+                                pass
+                                # User_data.active_skin = x[0]
+                        User_data.increment_coins(active_ball_cost)
+                        User_data.add_skin(active_ball.name)
+                        # User_data.activate_skin_by_name(active_ball.name)
+                        print(User_data.active_skin.name)
+
+                else:
+                    text = medium_font.render(f"Not enough Money!", True, theme.font_c)
+                    rect = text.get_rect()
+                    rect.midleft = (WW - 400, WH - 100)
+                screen.blit(text, rect)
+            else:
+                User_data.active_skin = ball
+
         draw_cursor(screen, theme.cursor_c)
         coin_display(screen, int(str(User_data.coins)))  # coins
+        clicked = False
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -871,8 +891,6 @@ def skin_select_screen(screen, skins):
                 mx, my = pygame.mouse.get_pos()
             if event.type == pygame.MOUSEBUTTONUP:
                 clicked = False
-
-        pygame.display.update()
 
 
 def death_screen(screen, status, score):
