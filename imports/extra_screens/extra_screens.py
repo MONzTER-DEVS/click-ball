@@ -816,43 +816,48 @@ def skin_select_screen(screen, skins):
     heading_rect = heading_text.get_rect()
     heading_rect.center = (WW // 2, 50)
 
-    free_text = big_font.render('Free', True, theme.font_c)
-    free_rect = free_text.get_rect()
-    free_rect.center = (125, WH * 1 // 4)
-
-    paid_text = big_font.render('Paid', True, theme.font_c)
-    paid_rect = paid_text.get_rect()
-    paid_rect.midright = (720, WH * 1 // 4)
-
+    clicked = False
     while True:
         mx, my = pygame.mouse.get_pos()
         screen.fill(theme.background)
         screen.blit(heading_text, heading_rect.topleft)
-        screen.blit(free_text, free_rect.topleft)
-        screen.blit(paid_text, paid_rect.topleft)
 
-        #  Free Skins!
-        offset = WH // 2
-        for balls in skins:
-            screen.blit(balls[1].surface, (100, offset))
-            offset += WH // 4
+        x = WW // 6
+        y = 100
+        count = 0
+        # for balls in skins:
+        #     count += 1
+        #     screen.blit(balls[1].surface, (x, y))
+        #     x += WW // 6
+        #     if count > 4:
+        #         count = 0
+        #         y += 100
+        #         x = WW//6
+        counter = 0
+        for i in range(1, 6):
+            for j in range(1, 6):
+                ball = skins[counter][1]
+                coords = (j * WW / 6, (i * WH / 8) + 50)
 
-        offset_y = WH * 3 // 8
-        count = 2
-        for x in range(4):
-            offset_x = WW//2 - 200
-            for y in range(5):
-                screen.blit(skins[count][1].surface, (offset_x, offset_y))
-                offset_x += (int(WW - 600) // 5)
-                count += 1
-            offset_y += 100
+                if ball.name in User_data.skins:
+                    pygame.draw.circle(screen, (0, 255, 0), (coords[0], coords[1]), 26)
 
+                screen.blit(ball.surface, coords)
 
-        # Back button
+                if counter < 22:
+                    counter += 1
+                else:
+                    break
+            else:
+                continue
+            break
+
         try:
             back_button.draw(screen, mx, my)
         except Exception as e:
             back_button = Buttons(theme.button_c["back"], 60, WH - 50, 100, 60)
+        if back_button.is_clicked(clicked, mx, my):
+            return ['welcome']
 
         # Next Page
         draw_cursor(screen, theme.cursor_c)

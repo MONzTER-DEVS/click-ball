@@ -154,7 +154,7 @@ class DB:
             'user_name': ["CREATE TABLE user_name(name text)"],
 
             'skins': ["CREATE TABLE skins(data text)",
-                      f"INSERT INTO skins values('{Crypt.en(str(['00.png']))}')"],
+                      f"INSERT INTO skins values('{Crypt.en(str(['00.png', '01.png']))}')"],
 
             'skin': ["CREATE TABLE skin(data text)",
                       f"INSERT INTO skin values('{Crypt.en('00.png')}')"]
