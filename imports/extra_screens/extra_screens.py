@@ -832,14 +832,16 @@ def skin_select_screen(screen, skins):
                 coords = (j * WW / 6, (i * WH / 8) + 50)
 
                 if ball.name in User_data.skins:
-                    pygame.draw.circle(screen, (0, 255, 0), (coords[0] + 24, coords[1] + 24), radius)
+                    pygame.draw.circle(screen, (0, 255, 0), (coords[0], coords[1]), radius)
 
-                screen.blit(ball.surface, coords)
+                # screen.blit(ball.surface, coords)
+                ball_button = Buttons(ball.surface, coords[0], coords[1], ball.surface.get_rect().w, ball.surface.get_rect().h)
+                ball_button.draw(screen, mx, my)
 
-                if ((mx - (coords[0] + 24)) ** 2 + (my - (coords[1] + 24)) ** 2) ** 0.5 < 24:
-                    if clicked:
-                        active_ball = ball
-                        active_ball_cost = counter * 100
+                if ball_button.is_clicked(clicked, mx, my):    
+                    active_ball = ball
+                    active_ball_cost = counter * 100
+
                 if counter < 22:
                     counter += 1
                 else:
@@ -859,24 +861,22 @@ def skin_select_screen(screen, skins):
             if active_ball.name not in User_data.skins:
                 if User_data.coins > active_ball_cost:
                     text = medium_font.render(f"Buy now: {active_ball_cost}", True, theme.font_c)
-                    rect = text.get_rect()
-                    rect.midleft = (WW - 400, WH - 100)
-                    if rect.left < mx < rect.right and rect.top < my < rect.bottom and clicked:
+                    text_button = Buttons(text, WW - 200, WH - 50, text.get_rect().w, text.get_rect().h)
+                    text_button.draw(screen, mx, my)
+                    if text_button.is_clicked(clicked, mx, my):
                         User_data.active_skin = skins[int(active_ball_cost/100)][0]
                         User_data.increment_coins(active_ball_cost)
                         User_data.add_skin(active_ball.name)
 
                 else:
                     text = medium_font.render(f"Not enough Money!", True, theme.font_c)
-                    rect = text.get_rect()
-                    rect.midleft = (WW - 400, WH - 100)
-                screen.blit(text, rect)
+                    text_button = Buttons(text, WW - 250, WH - 50, text.get_rect().w, text.get_rect().h)
+                    text_button.draw(screen, mx, my)
             else:
                 text = medium_font.render("Activate", True, theme.font_c)
-                rect = text.get_rect()
-                rect.midleft = (WW - 400, WH - 100)
-                screen.blit(text, rect)
-                if rect.left < mx < rect.right and rect.top < my < rect.bottom and clicked:
+                text_button = Buttons(text, WW - 200, WH - 50, text.get_rect().w, text.get_rect().h)
+                text_button.draw(screen, mx, my)
+                if text_button.is_clicked(clicked, mx, my):
                     User_data.active_skin = skins[int(active_ball_cost/100)][0]
 
         draw_cursor(screen, theme.cursor_c)
