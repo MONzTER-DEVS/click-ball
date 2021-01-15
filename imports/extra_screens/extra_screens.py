@@ -862,14 +862,9 @@ def skin_select_screen(screen, skins):
                     rect = text.get_rect()
                     rect.midleft = (WW - 400, WH - 100)
                     if rect.left < mx < rect.right and rect.top < my < rect.bottom and clicked:
-                        for x in skins:
-                            if x[0].name == active_ball.name:
-                                pass
-                                # User_data.active_skin = x[0]
+                        User_data.active_skin = skins[int(active_ball_cost/100)][0]
                         User_data.increment_coins(active_ball_cost)
                         User_data.add_skin(active_ball.name)
-                        # User_data.activate_skin_by_name(active_ball.name)
-                        print(User_data.active_skin.name)
 
                 else:
                     text = medium_font.render(f"Not enough Money!", True, theme.font_c)
@@ -877,7 +872,12 @@ def skin_select_screen(screen, skins):
                     rect.midleft = (WW - 400, WH - 100)
                 screen.blit(text, rect)
             else:
-                User_data.active_skin = ball
+                text = medium_font.render("Activate", True, theme.font_c)
+                rect = text.get_rect()
+                rect.midleft = (WW - 400, WH - 100)
+                screen.blit(text, rect)
+                if rect.left < mx < rect.right and rect.top < my < rect.bottom and clicked:
+                    User_data.active_skin = skins[int(active_ball_cost/100)][0]
 
         draw_cursor(screen, theme.cursor_c)
         coin_display(screen, int(str(User_data.coins)))  # coins

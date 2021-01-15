@@ -307,6 +307,7 @@ class User_data:
         c = conn.cursor()
         User_data.skins.append(name)
         c.execute(f"UPDATE skins SET data = '{Crypt.en(str(User_data.skins))}'")
+        c.execute(f"UPDATE skin SET data = '{Crypt.en(name)}'")
         conn.commit()
         conn.close()
 
