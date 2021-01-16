@@ -175,7 +175,9 @@ class Portal:
             self.end_img = pygame.image.load('assets/imgs/PortalEndMed.png').convert_alpha()
 
         elif self.size == "small":
-            pass
+            self.start_img = pygame.image.load('assets/imgs/PortalStartSm.png').convert_alpha()
+            self.end_img = pygame.image.load('assets/imgs/PortalEndSm.png').convert_alpha()
+
         self.start_rect = self.start_img.get_rect()
         self.end_rect = self.end_img.get_rect()
         self.start_rect.center = self.start_pos
@@ -310,6 +312,7 @@ class User_data:
         c.execute(f"UPDATE skin SET data = '{Crypt.en(name)}'")
         conn.commit()
         conn.close()
+
 
 
 class Music:
