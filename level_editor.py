@@ -176,6 +176,7 @@ if n != 0:
         lines.append(l)
 
     selected_line_index = 0
+
     selected_line = lines[selected_line_index]
     selected_line_end = 'start'
     if len(level_dict['portal_start']):
@@ -270,6 +271,14 @@ elif n == 0:
 
 running = True
 clicked = False
+
+#
+# def change_line_color(lines, selected_line_index, original_color, new_color):
+#     for line in lines:
+#         if lines[lines.index(line)] == lines[selected_line_index]:
+#             lines[lines.index(line)].color =
+
+# def change_color(list, selected_object_index, original_color, new_color):
 
 
 def save():
@@ -378,6 +387,12 @@ while running:
                 if e.key == pygame.K_RETURN:
                     selected_line_index += 1
 
+                    # lines[selected_line_index].color = SELECTED_LINE_COLOR
+                    # for line in lines:
+                    #     if lines.index(line) == selected_line_index:
+                    #         lines[selected_line_index].color = SELECTED_LINE_COLOR
+                    #     else:
+                    #         lines[line].color = LINE_COLOR
                 ## iterating thru line ends
                 if e.key == pygame.K_f:
                     if selected_line_end == 'start':
@@ -521,7 +536,22 @@ while running:
 
     ## Drawing lines
     for line in lines:
+    #     # print(lines[selected_line_index])
+    #     # if selected_line_index == 1:
+    #     #     for line in lines:
+    #     if lines[lines.index(line)] == lines[selected_line_index]:
+    #         lines[lines.index(line)].color = SELECTED_LINE_COLOR
+    #     else:
+    #         lines[lines.index(line)].color = LINE_COLOR
         line.draw()
+            # for line in lines:
+        # print(lines.index(line))
+        # selected_line_index = 1
+        # if selected_line_index == 1:
+        #     lines[selected_line_index].color = (0, 0, 0)
+        # else:
+        #     lines[selected_line_index].color = LINE_COLOR
+
         ## Selecting line
         # if mouse_rect.centerx in range(line.start_pos[0], line.end_pos[0] + 1):
         #     if mouse_rect.centery in range(line.start_pos[1], line.end_pos[1] + 1):
@@ -537,7 +567,17 @@ while running:
         # )
 
         ## Selected line
+        if mode == 'line':
+            if lines[lines.index(line)] == lines[selected_line_index]:
+                lines[lines.index(line)].color = SELECTED_LINE_COLOR
+            else:
+                lines[lines.index(line)].color = LINE_COLOR
         if line == selected_line and mode == 'line':
+                # print(lines[selected_line_index])
+                # if selected_line_index == 1:
+                #     for line in lines:
+
+                # line.draw()
             # obj_rect = line.rect.copy()
             if clicked and mode == 'line':
                 dist = math.sqrt(
@@ -571,6 +611,11 @@ while running:
             selected_ball = ball
 
         # Selected ball
+        if mode == 'bouncing ball':
+            if balls[balls.index(ball)] == balls[selected_ball_index]:
+                balls[balls.index(ball)].color = SELECTED_BALL_COLOR
+            else:
+                balls[balls.index(ball)].color = BALL_COLOR
         if ball == selected_ball and mode == 'bouncing ball':
             obj_rect = ball.rect.copy()
             if clicked and mode == 'bouncing ball':
