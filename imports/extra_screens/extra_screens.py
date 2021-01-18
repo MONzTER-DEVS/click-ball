@@ -633,6 +633,12 @@ def music_screen(screen):
                 mx, my = pygame.mouse.get_pos()
             if event.type == pygame.MOUSEBUTTONUP:
                 clicked = False
+        try:
+            back_button.draw(screen, mx, my)
+        except Exception as e:
+            back_button = Buttons(theme.button_c["back"], 60, WH - 50, 100, 60)
+        if back_button.is_clicked(clicked, mx, my):
+            return ['settings']
         # ball_text = medium_font.render('Change Ball', True, theme.font_c)
         # try:
         #     ball_button.draw(screen, mx, my)
