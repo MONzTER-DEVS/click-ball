@@ -1,4 +1,4 @@
-from cryptography.fernet import *
+from cryptography.fernet import Fernet
 
 
 class Crypt:

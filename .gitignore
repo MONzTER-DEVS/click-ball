@@ -11,3 +11,5 @@ installer.bat
 /dist
 build
 *.spec
+god mode.py
+*.exe

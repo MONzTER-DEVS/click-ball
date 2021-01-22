@@ -13,7 +13,7 @@ URL = "http://cb-leaderboard.herokuapp.com"
 
 def send_data_to_leaderboard(name, score):
     params = {
-        'game': 'physics_temp',
+        'game': 'physics',
         'name': name,
         'score': score
     }
@@ -22,7 +22,7 @@ def send_data_to_leaderboard(name, score):
 
 
 def get_data():
-    req = requests.get(f"{URL}/get", params={'game': 'physics_temp'}, timeout=90)
+    req = requests.get(f"{URL}/get", params={'game': 'physics'}, timeout=90)
     req = req.json()
     to_return = []
     if len(req) > 10:
