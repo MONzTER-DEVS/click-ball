@@ -25,7 +25,7 @@ MODES:
         > 'N' to add a new pair of portals and 'D' to delete the current portal
         > Click to place portal
         > 'F' to change end of portal
-        > 'Enter' to change ball
+        > 'Enter' to change portal
     coin:
         > 'N' to add a new coin and 'D' to delete the current coin
         > 'Enter' to change coin
