@@ -26,7 +26,12 @@ yellow_buttons = {
     "back": pygame.image.load("assets/buttons/Yellow button/Back.png").convert_alpha(),
     "continue": pygame.image.load("assets/buttons/Yellow button/Continue.png").convert_alpha(),
     "next level": pygame.image.load("assets/buttons/Yellow button/Next level.png").convert_alpha(),
-    "music": pygame.image.load("assets/buttons/Yellow button/music.png").convert_alpha()
+    "music": pygame.image.load("assets/buttons/Yellow button/music.png").convert_alpha(),
+    "instructions": pygame.image.load("assets/buttons/Yellow button/Instructions.png").convert_alpha(),
+    "restart": pygame.image.load("assets/buttons/Yellow button/Restart.png").convert_alpha(),
+    "next_level": pygame.image.load("assets/buttons/Yellow button/Next level.png").convert_alpha(),
+    "level_map": pygame.image.load("assets/buttons/Yellow button/LevelMap.png").convert_alpha(),
+    "send_data": pygame.image.load("assets/buttons/Yellow button/SendToLeaderBoard.png").convert_alpha()
 }
 
 blue_button = {
@@ -41,7 +46,13 @@ blue_button = {
     "back": pygame.image.load("assets/buttons/Blue button/Back.png").convert_alpha(),
     "continue": pygame.image.load("assets/buttons/Blue button/Continue.png").convert_alpha(),
     "next level": pygame.image.load("assets/buttons/Blue button/Next level.png").convert_alpha(),
-    "music": pygame.image.load("assets/buttons/Blue button/music.png").convert_alpha()
+    "music": pygame.image.load("assets/buttons/Blue button/music.png").convert_alpha(),
+    "instructions": pygame.image.load("assets/buttons/Blue button/Instructions.png").convert_alpha(),
+    "restart": pygame.image.load("assets/buttons/Blue button/Restart.png").convert_alpha(),
+    "next_level": pygame.image.load("assets/buttons/Blue button/Next level.png").convert_alpha(),
+    "level_map": pygame.image.load("assets/buttons/Blue button/LevelMap.png").convert_alpha(),
+    "send_data": pygame.image.load("assets/buttons/Blue button/SendToLeaderBoard.png").convert_alpha()
+
 }
 
 green_button = {
@@ -57,6 +68,12 @@ green_button = {
     "continue": pygame.image.load("assets/buttons/Green button/Continue.png").convert_alpha(),
     "next level": pygame.image.load("assets/buttons/Green button/Next level.png").convert_alpha(),
     "music": pygame.image.load("assets/buttons/Green button/music.png").convert_alpha(),
+    "instructions": pygame.image.load("assets/buttons/Green button/Instructions.png").convert_alpha(),
+    "restart": pygame.image.load("assets/buttons/Green button/Restart.png").convert_alpha(),
+    "next_level": pygame.image.load("assets/buttons/Green button/Next level.png").convert_alpha(),
+    "level_map": pygame.image.load("assets/buttons/Green button/LevelMap.png").convert_alpha(),
+    "send_data": pygame.image.load("assets/buttons/Green button/SendToLeaderBoard.png").convert_alpha()
+
 }
 
 pink_button = {
@@ -71,7 +88,13 @@ pink_button = {
     "back": pygame.image.load("assets/buttons/Pink button/Back.png").convert_alpha(),
     "continue": pygame.image.load("assets/buttons/Pink button/Continue.png").convert_alpha(),
     "next level": pygame.image.load("assets/buttons/Pink button/Next level.png").convert_alpha(),
-    "music": pygame.image.load("assets/buttons/Pink button/music.png").convert_alpha()
+    "music": pygame.image.load("assets/buttons/Pink button/music.png").convert_alpha(),
+    "instructions": pygame.image.load("assets/buttons/Pink button/Instructions.png").convert_alpha(),
+    "restart": pygame.image.load("assets/buttons/Pink button/Restart.png").convert_alpha(),
+    "next_level": pygame.image.load("assets/buttons/Pink button/Next level.png").convert_alpha(),
+    "level_map": pygame.image.load("assets/buttons/Pink button/LevelMap.png").convert_alpha(),
+    "send_data": pygame.image.load("assets/buttons/Pink button/SendToLeaderBoard.png").convert_alpha()
+
 }
 
 purple_button = {
@@ -87,6 +110,12 @@ purple_button = {
     "continue": pygame.image.load("assets/buttons/Purple button/Continue.png").convert_alpha(),
     "next level": pygame.image.load("assets/buttons/Purple button/Next level.png").convert_alpha(),
     "music": pygame.image.load("assets/buttons/Purple button/music.png").convert_alpha(),
+    "instructions": pygame.image.load("assets/buttons/Purple button/Instructions.png").convert_alpha(),
+    "restart": pygame.image.load("assets/buttons/Purple button/Restart.png").convert_alpha(),
+    "next_level": pygame.image.load("assets/buttons/Purple button/Next level.png").convert_alpha(),
+    "level_map": pygame.image.load("assets/buttons/Purple button/LevelMap.png").convert_alpha(),
+    "send_data": pygame.image.load("assets/buttons/Purple button/SendToLeaderBoard.png").convert_alpha()
+
 }
 
 red_button = {
@@ -102,6 +131,12 @@ red_button = {
     "continue": pygame.image.load("assets/buttons/Red button/Continue.png").convert_alpha(),
     "next level": pygame.image.load("assets/buttons/Red button/Next level.png").convert_alpha(),
     "music": pygame.image.load("assets/buttons/Red button/music.png").convert_alpha(),
+    "instructions": pygame.image.load("assets/buttons/Red button/Instructions.png").convert_alpha(),
+    "restart": pygame.image.load("assets/buttons/Red button/Restart.png").convert_alpha(),
+    "next_level": pygame.image.load("assets/buttons/Red button/Next level.png").convert_alpha(),
+    "level_map": pygame.image.load("assets/buttons/Red button/LevelMap.png").convert_alpha(),
+    "send_data": pygame.image.load("assets/buttons/Red button/SendToLeaderBoard.png").convert_alpha()
+
 }
 
 #                      name,               bg,       platform_c, mouse_line, font_c,  hover, bouncing_ball_c, cursor

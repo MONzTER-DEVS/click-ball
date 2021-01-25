@@ -133,7 +133,7 @@ def welcome_screen(screen):
             instructions_button.draw(screen, mx, my)
         except Exception as e:
             instructions_button = Buttons(
-                instructions_text, WW // 2, WH - 150, 200, 54)
+                theme.button_c['instructions'], WW // 2, WH - 150, 200, 54)
         if instructions_button.is_clicked(clicked, mx, my):
             return ['guide']
 
@@ -956,8 +956,8 @@ def death_screen(screen, status, score):
         try:
             send_button.draw(screen, mx, my)
         except Exception as e:
-            send_button = Buttons(send_data_text, WW // 4,
-                                  350, send_data_rect.w, send_data_rect.h)
+            send_button = Buttons(theme.button_c['send_data'], WW // 4,
+                                  350, send_data_rect.w, send_data_rect.h+40)
         if send_button.is_clicked(clicked, mx, my):
             def sending_thread(name, score):
                 send_data_to_leaderboard(name, score)
@@ -1112,7 +1112,7 @@ def campaign_continue_screen(screen, coins):
         try:
             map_button.draw(screen, mx, my)
         except Exception as e:
-            map_button = Buttons(map_text, int(WW * 3) // 4, WH // 2, 150, 60)
+            map_button = Buttons(theme.button_c['level_map'], int(WW * 3) // 4, WH // 2, 150, 60)
         if map_button.is_clicked(clicked, mx, my):
             return ['level_map']
 
@@ -1159,7 +1159,7 @@ def campaign_death_screen(screen):
         try:
             map_button.draw(screen, mx, my)
         except Exception as e:
-            map_button = Buttons(map_text, int(WW * 3) // 4, WH // 2, 150, 60)
+            map_button = Buttons(theme.button_c['level_map'], int(WW * 3) // 4, WH // 2, 150, 60)
         if map_button.is_clicked(clicked, mx, my):
             return ['level_map']
 
@@ -1167,7 +1167,7 @@ def campaign_death_screen(screen):
         try:
             restart_button.draw(screen, mx, my)
         except Exception as e:
-            restart_button = Buttons(restart_text, WW // 4, WH // 2, 150, 60)
+            restart_button = Buttons(theme.button_c['restart'], WW // 4, WH // 2, 150, 60)
         if restart_button.is_clicked(clicked, mx, my):
             return ['restart']
 
