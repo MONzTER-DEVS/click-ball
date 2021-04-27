@@ -178,6 +178,7 @@ def load_data_while_loading_screen():
         errors.append("no name")
     else:
         User_data.name = DB.fetch_name()
+
     loading_percent = 4
     loading_percent = 5
     loading_percent = 6
@@ -231,6 +232,9 @@ def load_data_while_loading_screen():
     User_data.line = data[2][0][0]
     User_data.skins = ast.literal_eval(Crypt.de(data[3][0][0]))
     User_data.activate_skin_by_name(Crypt.de(data[4][0][0]))
+    tutorial = data[5][0][0]
+    if tutorial == 'False':
+        errors.append("tutorial")
     Themes.set_active_by_name(data[0][0][0])
     can_start_game = True
     pygame.init()
