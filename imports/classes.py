@@ -237,12 +237,16 @@ class Coins:
 class Levels:
     levels = []
 
-    def __init__(self, name, data):
+    def __init__(self, name, data, to_append_to_levels=True, level_number=None):
         self.dict = data
         self.name = name
-        self.number = len(Levels.levels) + 1
+        if level_number is None:
+            self.number = len(Levels.levels) + 1
+        else:
+            self.number = level_number
         self.skin = None
-        Levels.levels.append(self)
+        if to_append_to_levels:
+            Levels.levels.append(self)
 
 
 class Ball:

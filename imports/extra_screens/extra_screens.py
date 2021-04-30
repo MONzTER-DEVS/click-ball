@@ -871,7 +871,7 @@ def skin_select_screen(screen, skins):
                     text_button.draw(screen, mx, my)
                     if text_button.is_clicked(clicked, mx, my):
                         User_data.active_skin = skins[int(active_ball_cost/100)][0]
-                        User_data.increment_coins(active_ball_cost)
+                        User_data.increment_coins(-active_ball_cost)
                         User_data.add_skin(active_ball.name)
 
                 else:

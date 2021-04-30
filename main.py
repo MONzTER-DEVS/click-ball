@@ -35,9 +35,9 @@ def load_level_by_num(name, i, is_survival=False):
 
 
 def remove_lines_and_balls_of_level_by_number(i, lines, balls):
-    '''
+    """
     Returns empty list, assign this to the lines and balls list
-    '''
+    """
     for rl in lines:
         space.remove(rl.body, rl.shape)  # Extremely Necessary
     for rb in balls:
@@ -484,6 +484,39 @@ def campaign(screen, current_level):
         pygame.display.update()
 
 
+def tutorial_screen(screen):
+    running = True
+    mz_face = pygame.transform.scale(pygame.image.load("assets/tutorial/monzter-face.png"), (220, 190))  # load mz boi image
+
+    with open("assets/tutorial/level.json", "r") as f:
+        # create the level object
+        level_obj = Levels('tutorial level', json.load(f), to_append_to_levels=False, level_number="Tutorial")
+
+    # loading data from level obj
+    level_data = load_objects(level_obj, 'campaign')
+    moves = level_data["moves"]
+    lines = level_data["lines"]
+    balls = level_data["balls"]
+    portals = level_data["portals"]
+    coins = level_data["coins"]
+
+    while running:
+        screen.fill(WHITE)
+        mx, my = pygame.mouse.get_pos()
+        clicked = False
+        draw_objects(moves, clicked, 0, level_obj, lines, balls, portals, coins, 0)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return 'quit'
+
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                clicked = True
+
+        # screen.blit(mz_face, (200, 200))
+        pygame.display.update()
+
+
 for error in errors:
     if error == "no name":
         temp_to_do = name_screen(screen)
@@ -491,6 +524,12 @@ for error in errors:
             to_do[0] = 'quit'
         else:
             User_data.name = DB.fetch_name()
+
+    if error == 'tutorial':
+        temp_to_do = tutorial_screen(screen)
+        if temp_to_do == 'quit':
+            to_do[0] = 'quit'
+
 # Main Loop
 pygame.mouse.set_visible(False)
 while True:
