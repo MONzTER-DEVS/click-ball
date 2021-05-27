@@ -217,7 +217,7 @@ def load_data_while_loading_screen():
             skins.append([small_img, big_img])
         loading_percent += 1
 
-    sleep = (3 - float(time.time() - st_time)) / (int(100 - loading_percent) * 5)
+    sleep = (3 - float(time.time() - st_time)) / (int(100 - loading_percent) * 15)
 
     if sleep < 0:
         loading_percent = 99
