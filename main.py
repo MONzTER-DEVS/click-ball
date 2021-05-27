@@ -95,7 +95,7 @@ def tutorial_screen(screen):
                     yes_button.set_alpha(yes_button_alpha)
 
                     if clicked:
-                        return "Finished"
+                        return "finished"
                 else:
                     if yes_button_alpha > 60:
                         yes_button_alpha -= 2
