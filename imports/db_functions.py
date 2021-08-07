@@ -53,8 +53,6 @@ class DB:
             values.append(c.fetchall())
             c.execute("SELECT * FROM skin")
             values.append(c.fetchall())
-            c.execute("SELECT * FROM tutorial")
-            values.append(c.fetchall())
             conn.commit()
 
             conn.close()
@@ -159,10 +157,7 @@ class DB:
                       f"INSERT INTO skins values('{Crypt.en(str(['00.png', '01.png']))}')"],
 
             'skin': ["CREATE TABLE skin(data text)",
-                      f"INSERT INTO skin values('{Crypt.en('00.png')}')"],
-
-            'tutorial': ["CREATE TABLE tutorial(data text)",
-                      f"INSERT INTO tutorial values('False')"]
+                      f"INSERT INTO skin values('{Crypt.en('00.png')}')"]
 
         }
         # "CREATE TABLE user_name(name text)",
