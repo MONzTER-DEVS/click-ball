@@ -1,4 +1,3 @@
-import requests
 from imports.settings import *
 from imports.classes import *
 
@@ -7,31 +6,6 @@ select_rect = pygame.Rect(0, 0, 0, 0)
 select_rect_color = GRAY
 coin = pygame.image.load(os.path.join('assets', 'imgs', 'dollar.png'))
 coin = pygame.transform.scale(coin, (40, 40))
-
-URL = "http://cb-leaderboard.herokuapp.com"
-
-
-def send_data_to_leaderboard(name, score):
-    params = {
-        'game': 'physics',
-        'name': name,
-        'score': score
-    }
-
-    requests.get(URL, params=params, timeout=90)
-
-
-def get_data():
-    req = requests.get(f"{URL}/get", params={'game': 'physics'}, timeout=90)
-    req = req.json()
-    to_return = []
-    if len(req) > 10:
-        arg_2 = 11
-    else:
-        arg_2 = len(req) + 1
-    for x in range(1, arg_2):
-        to_return.append(req[str(x)])
-    return to_return
 
 
 def hover(obj_rect, Screen):

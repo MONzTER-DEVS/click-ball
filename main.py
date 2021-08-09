@@ -7,16 +7,6 @@ import pygame
 from imports.game_modes import *
 
 
-for error in errors:
-    if error == "no name":
-        temp_to_do = name_screen(screen)
-        if temp_to_do == 'quit':
-            to_do[0] = 'quit'
-        else:
-            User_data.name = DB.fetch_name()
-
-    if to_do[0] == "quit":
-        break
 # Main Loop
 pygame.mouse.set_visible(False)
 while True:
@@ -48,20 +38,21 @@ while True:
     elif to_do[0] == 'themes':
         to_do = theme_screen(screen)
 
-    elif to_do[0] == 'leaderboard':
-        to_do = leaderboard_screen(screen)
-
     elif to_do[0] == 'guide':
         to_do = guide_screen(screen)
+
     elif to_do[0] == 'music':
         to_do = music_screen(screen)
 
     elif to_do[0] == 'death':
         to_do = death_screen(screen, to_do[1], to_do[2])
+
     elif to_do[0] == 'line':
         to_do = line_select_screen(screen)
+
     elif to_do[0] == 'ball':
         to_do = skin_select_screen(screen, skins)
+
     elif to_do[0] == 'quit':
         break
 

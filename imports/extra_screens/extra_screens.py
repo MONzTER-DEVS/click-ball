@@ -5,11 +5,6 @@ import webbrowser
 from imports.db_functions import *
 from .extra_screen_functions import *
 
-# Declaring some Variables
-lboard_data = []
-
-# Size is 204 x 81
-## Ratio is 51/20
 # bg_sound = pygame.mixer.Sound("assets/sounds/music.ogg")
 line_mode = 1
 
@@ -25,10 +20,7 @@ def welcome_screen(screen):
     BORDERS = 50
     NUM_OF_BALLS = 100
     balls = []
-    name_text = medium_font.render(
-        f"Name: {DB.fetch_name()}", True, theme.font_c)
-    name_rect = name_text.get_rect()
-    name_rect.midleft = (10, WH - 50)
+
     start_time = pygame.time.get_ticks()
     click = 0
 
@@ -104,7 +96,6 @@ def welcome_screen(screen):
                              (rect.bottomright[0] - 10, rect.bottomright[1] - 15), 7)
 
         screen.blit(heading_text, heading_rect.topleft)
-        screen.blit(name_text, name_rect.topleft)
 
         # Play button
         try:
@@ -121,7 +112,7 @@ def welcome_screen(screen):
             settings_button.draw(screen, mx, my)
         except Exception as e:
             settings_button = Buttons(
-                theme.button_c["settings"], WW // 2, WH - 225, 145, 54)
+                theme.button_c["settings"], WW // 2, WH - 125, 145, 54)
         if settings_button.is_clicked(clicked, mx, my):
             return ['settings']
         hover(heading_rect, screen)
@@ -133,19 +124,9 @@ def welcome_screen(screen):
             instructions_button.draw(screen, mx, my)
         except Exception as e:
             instructions_button = Buttons(
-                theme.button_c['instructions'], WW // 2, WH - 150, 200, 54)
+                theme.button_c['instructions'], WW // 2, WH - 50, 180, 54)
         if instructions_button.is_clicked(clicked, mx, my):
             return ['guide']
-
-        # Leaderboard Button
-        try:
-            leaderboard_button.draw(screen, mx, my)
-        except Exception as e:
-            leaderboard_button = Buttons(
-                theme.button_c["leaderboard"], WW // 2, WH - 75, 185, 56)
-        if leaderboard_button.is_clicked(clicked, mx, my):
-            return ['leaderboard']
-        hover(heading_rect, screen)
 
         # Exit
         try:
@@ -356,84 +337,6 @@ def score_screen(screen, score, data=None):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 clicked = True
                 mx, my = pygame.mouse.get_pos()
-
-        pygame.display.update()
-
-
-def leaderboard_screen(screen):
-    theme = Themes.active_theme
-    mx, my = pygame.mouse.get_pos()
-
-    def global_some_data():
-        global lboard_data
-        lboard_data = get_data()
-
-    threading.Thread(target=global_some_data).start()
-    clicked = False
-    while True:
-        mx, my = pygame.mouse.get_pos()
-        initial_coordinates = [WW // 2 - 200, 100]
-        screen.fill(theme.background)
-        heading_text = big_font.render(
-            'Click Ball Leaderboard!', True, theme.font_c)
-        heading_rect = heading_text.get_rect()
-        heading_rect.center = (WW // 2, 50)
-        screen.blit(heading_text, heading_rect.topleft)
-        # music_button = theme.button_c["music"]
-        # music_button = pygame.transform.smoothscale(music_button, (60, 60))
-        # rect = music_button.get_rect(center=(40, 40))
-        # if mouse_rect.colliderect(rect):
-        #     music_button = pygame.transform.smoothscale(theme.button_c["music"], (70, 64))
-        #     rect = music_button.get_rect(center=(40, 40))
-        # else:
-        #     music_button = pygame.transform.smoothscale(theme.button_c["music"], (60, 60))
-        #     rect = music_button.get_rect(center=(40, 40))
-        # screen.blit(music_button, rect.topleft)
-        # if clicked and mouse_rect.colliderect(rect):
-        #     pass
-        if len(lboard_data) != 0:
-            heading_text = medium_font.render('Name', True, theme.font_c)
-            heading_rect = heading_text.get_rect()
-            heading_rect.topleft = (WW // 2 - 200, 100)
-            screen.blit(heading_text, heading_rect.topleft)
-
-            heading_text = medium_font.render('Score', True, theme.font_c)
-            heading_rect = heading_text.get_rect()
-            heading_rect.topleft = (WW // 2 + 100, 100)
-            screen.blit(heading_text, heading_rect.topleft)
-
-            for obj in lboard_data:
-                initial_coordinates[1] += 50  # control Y change
-                screen.blit(game_font_generator(28).render(obj[0], True, theme.font_c),
-                            (initial_coordinates[0], initial_coordinates[1] + 20))
-                screen.blit(game_font_generator(28).render(str(obj[1]), True, theme.font_c),
-                            (initial_coordinates[0] + 300, initial_coordinates[1] + 20))
-        else:
-            heading_text = medium_font.render(
-                'Fetching data...', True, theme.font_c)
-            heading_rect = heading_text.get_rect()
-            heading_rect.center = (WW / 2, 400)
-            screen.blit(heading_text, heading_rect.topleft)
-
-        # back Button
-        try:
-            back_button.draw(screen, mx, my)
-        except Exception as e:
-            back_button = Buttons(theme.button_c["back"], 60, WH - 50, 100, 60)
-        if back_button.is_clicked(clicked, mx, my):
-            return ['welcome']
-
-        draw_cursor(screen, theme.cursor_c)
-        coin_display(screen, coins=User_data.coins)  ## coins
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                return ['quit']
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                clicked = True
-                mx, my = pygame.mouse.get_pos()
-            if event.type == pygame.MOUSEBUTTONUP:
-                clicked = False
 
         pygame.display.update()
 
@@ -841,10 +744,11 @@ def skin_select_screen(screen, skins):
                     pygame.draw.circle(screen, (0, 255, 0), (coords[0], coords[1]), radius)
 
                 # screen.blit(ball.surface, coords)
-                ball_button = Buttons(ball.surface, coords[0], coords[1], ball.surface.get_rect().w, ball.surface.get_rect().h)
+                ball_button = Buttons(ball.surface, coords[0], coords[1], ball.surface.get_rect().w,
+                                      ball.surface.get_rect().h)
                 ball_button.draw(screen, mx, my)
 
-                if ball_button.is_clicked(clicked, mx, my):    
+                if ball_button.is_clicked(clicked, mx, my):
                     active_ball = ball
                     active_ball_cost = counter * 100
 
@@ -870,7 +774,7 @@ def skin_select_screen(screen, skins):
                     text_button = Buttons(text, WW - 200, WH - 50, text.get_rect().w, text.get_rect().h)
                     text_button.draw(screen, mx, my)
                     if text_button.is_clicked(clicked, mx, my):
-                        User_data.active_skin = skins[int(active_ball_cost/100)][0]
+                        User_data.active_skin = skins[int(active_ball_cost / 100)][0]
                         User_data.increment_coins(-active_ball_cost)
                         User_data.add_skin(active_ball.name)
 
@@ -883,7 +787,7 @@ def skin_select_screen(screen, skins):
                 text_button = Buttons(text, WW - 200, WH - 50, text.get_rect().w, text.get_rect().h)
                 text_button.draw(screen, mx, my)
                 if text_button.is_clicked(clicked, mx, my):
-                    User_data.active_skin = skins[int(active_ball_cost/100)][0]
+                    User_data.active_skin = skins[int(active_ball_cost / 100)][0]
 
         draw_cursor(screen, theme.cursor_c)
         coin_display(screen, int(str(User_data.coins)))  # coins
@@ -957,7 +861,7 @@ def death_screen(screen, status, score):
             send_button.draw(screen, mx, my)
         except Exception as e:
             send_button = Buttons(theme.button_c['send_data'], WW // 4,
-                                  350, send_data_rect.w, send_data_rect.h+40)
+                                  350, send_data_rect.w, send_data_rect.h + 40)
         if send_button.is_clicked(clicked, mx, my):
             def sending_thread(name, score):
                 send_data_to_leaderboard(name, score)
@@ -978,82 +882,6 @@ def death_screen(screen, status, score):
         #         return ['welcome']
 
         clicked = False
-        draw_cursor(screen, theme.cursor_c)
-        coin_display(screen, coins=User_data.coins)  ## coins
-        pygame.display.update()
-
-
-def name_screen(screen):
-    name = ""
-    theme = Themes.active_theme
-    name_text = big_font.render("Enter your Name:", True, theme.font_c)
-    name_rect = name_text.get_rect()
-    name_rect.center = WW // 2, 50
-
-    running = True
-    rect_border_gap = 2
-    error = medium_font.render("", True, theme.font_c)
-    error_rect = error.get_rect()
-    error_rect.center = (WW // 2, 500)
-    while running:
-        screen.fill(theme.background)
-        screen.blit(name_text, name_rect)
-        # music_button = theme.button_c["music"]
-        # music_button = pygame.transform.smoothscale(music_button, (60, 60))
-        # rect = music_button.get_rect(center=(40, 40))
-        # if mouse_rect.colliderect(rect):
-        #     music_button = pygame.transform.smoothscale(theme.button_c["music"], (70, 64))
-        #     rect = music_button.get_rect(center=(40, 40))
-        # else:
-        #     music_button = pygame.transform.smoothscale(theme.button_c["music"], (60, 60))
-        #     rect = music_button.get_rect(center=(40, 40))
-        # screen.blit(music_button, rect.topleft)
-        # if clicked and mouse_rect.colliderect(rect):
-        #     pass
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                return 'quit'
-            elif event.type == pygame.KEYDOWN:
-                if event.key != pygame.K_BACKSPACE:
-                    name += event.unicode
-
-                if event.key == pygame.K_RETURN:
-                    if len(name) > 32:
-                        error = medium_font.render(
-                            "Name Too long", True, theme.font_c)
-                        error_rect = error.get_rect()
-                        error_rect.center = (WW // 2, 500)
-
-                    elif name == "":
-                        error = medium_font.render(
-                            "Empty Name", True, theme.font_c)
-                        error_rect = error.get_rect()
-                        error_rect.center = (WW // 2, 500)
-
-                    else:
-                        while name[-1] == " ":
-                            name = name[:-1]
-                        DB.save_name(name)
-                        running = False
-
-                elif event.key == pygame.K_BACKSPACE:
-                    name = name[:-1]
-
-        if len(name) >= 1:
-            if name[0] == " ":
-                name = name[1:]
-
-        screen.blit(error, error_rect.topleft)
-        input_name_text = small_font.render(name, True, theme.font_c)
-        input_name_rect = input_name_text.get_rect()
-        input_name_rect.center = (WW // 2, 400)
-        screen.blit(input_name_text, input_name_rect)
-
-        pygame.draw.rect(screen, (255, 0, 0), (input_name_rect.x - rect_border_gap, input_name_rect.y - rect_border_gap,
-                                               input_name_rect.width +
-                                               (rect_border_gap * 2),
-                                               input_name_rect.height + (rect_border_gap * 2)), width=2)
-
         draw_cursor(screen, theme.cursor_c)
         coin_display(screen, coins=User_data.coins)  ## coins
         pygame.display.update()

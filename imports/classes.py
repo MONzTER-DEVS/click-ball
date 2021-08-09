@@ -262,7 +262,6 @@ class User_data:
     current_level = None
     save = None
     coins = None
-    name = None
     line = "new"
     active_skin = None
     skins = None
@@ -316,7 +315,6 @@ class User_data:
         c.execute(f"UPDATE skin SET data = '{Crypt.en(name)}'")
         conn.commit()
         conn.close()
-
 
 
 class Music:
