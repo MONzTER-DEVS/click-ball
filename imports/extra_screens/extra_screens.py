@@ -37,10 +37,20 @@ def welcome_screen(screen):
 
     mouse_ball = DynamicBallWithColor((mx, my), 0, 0, 100, space)
 
-    discord_button = pygame.image.load('assets/imgs/discord.png')
+    discord_button = pygame.transform.scale(pygame.image.load('assets/imgs/discord.png').convert_alpha(), (64, 64))
     discord_rect = discord_button.get_rect()
-    discord_rect.center = (WW - 50, WH - 200)
-    # webbrowser.open_new('https://discord.gg/b3ScQB5bpJ')
+    discord_rect.width = 64
+    discord_rect.height = 64
+    discord_rect.center = (50, WH - 50)
+
+    github_button = pygame.transform.scale(pygame.image.load('assets/imgs/github.png').convert_alpha(), (64, 64))
+    github_rect = discord_button.get_rect()
+    github_rect.width = 64
+    github_rect.height = 64
+    github_rect.center = (50, WH - 120)
+
+    more_games = Buttons(theme.button_c["more_games"], WW // 2, WH - 200, 145, 50)
+    settings_button = Buttons(theme.button_c["settings"], WW // 2, WH - 125, 145, 54)
 
     while True:
 
@@ -104,18 +114,18 @@ def welcome_screen(screen):
             play_button = Buttons(
                 theme.button_c["play"], WW // 2, 215, 150, 65)
         if play_button.is_clicked(clicked, mx, my):
-            return ['game']
+            return ['campaign', "select"]
         hover(heading_rect, screen)
 
         # Settings Button
-        try:
-            settings_button.draw(screen, mx, my)
-        except Exception as e:
-            settings_button = Buttons(
-                theme.button_c["settings"], WW // 2, WH - 125, 145, 54)
+        settings_button.draw(screen, mx, my)
         if settings_button.is_clicked(clicked, mx, my):
             return ['settings']
         hover(heading_rect, screen)
+
+        more_games.draw(screen, mx, my)
+        if more_games.is_clicked(clicked, mx, my):
+            return ["more_games"]
 
         # How to play button
         instructions_text = small_font.render(
@@ -138,7 +148,15 @@ def welcome_screen(screen):
             return ['quit']
 
         # todo make Discord image better
-        # screen.blit(discord_button, discord_rect)
+        screen.blit(discord_button, discord_rect)
+
+        if mouse_rect.colliderect(discord_rect) and clicked:
+            webbrowser.open_new('https://discord.gg/b3ScQB5bpJ')
+
+        screen.blit(github_button, github_rect)
+
+        if mouse_rect.colliderect(github_rect) and clicked:
+            webbrowser.open_new('https://github.com/MONzTER-DEVS/click-ball')
 
         hover(heading_rect, screen)
 
@@ -158,70 +176,6 @@ def welcome_screen(screen):
                 clicked = False
 
         space.step(1.5 / FPS)
-        pygame.display.update()
-
-
-def game_select_screen(screen):
-    clicked = False
-    mx, my = pygame.mouse.get_pos()
-    theme = Themes.active_theme
-    while True:
-        screen.fill(theme.background)
-        mx, my = pygame.mouse.get_pos()
-
-        # survival button
-        try:
-            survival_button.draw(screen, mx, my)
-        except Exception as e:
-            survival_button = Buttons(
-                theme.button_c["survival"], WW / 4, WH / 2, 216, 75)
-        if survival_button.is_clicked(clicked, mx, my):
-            return ['survival']
-
-        # music_button = theme.button_c["music"]
-        # music_button = pygame.transform.smoothscale(music_button, (60, 60))
-        # rect = music_button.get_rect(center=(40, 40))
-        # if mouse_rect.colliderect(rect):
-        #     music_button = pygame.transform.smoothscale(theme.button_c["music"], (70, 64))
-        #     rect = music_button.get_rect(center=(40, 40))
-        # else:
-        #     music_button = pygame.transform.smoothscale(theme.button_c["music"], (60, 60))
-        #     rect = music_button.get_rect(center=(40, 40))
-        # screen.blit(music_button, rect.topleft)
-        # if clicked and mouse_rect.colliderect(rect):
-        #     pass
-
-        # Campaign button
-        try:
-            campaign_button.draw(screen, mx, my)
-        except Exception as e:
-            campaign_button = Buttons(
-                theme.button_c["campaign"], WW * 3 / 4, WH / 2, 250, 75)
-        if campaign_button.is_clicked(clicked, mx, my):
-            return ['campaign', 'map']
-
-        # Back Button
-        try:
-            back_button.draw(screen, mx, my)
-        except Exception as e:
-            back_button = Buttons(theme.button_c["back"], 60, WH - 50, 100, 60)
-        if back_button.is_clicked(clicked, mx, my):
-            return ['welcome']
-
-        draw_cursor(screen, theme.cursor_c)
-        coin_display(screen, coins=User_data.coins)  ## coins
-
-        # Events
-        clicked = False
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                return ['quit']
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                clicked = True
-                mx, my = pygame.mouse.get_pos()
-            if event.type == pygame.MOUSEBUTTONUP:
-                clicked = False
-
         pygame.display.update()
 
 
@@ -801,90 +755,6 @@ def skin_select_screen(screen, skins):
                 mx, my = pygame.mouse.get_pos()
             if event.type == pygame.MOUSEBUTTONUP:
                 clicked = False
-
-
-def death_screen(screen, status, score):
-    theme = Themes.active_theme
-    clicked = False
-    mx, my = pygame.mouse.get_pos()
-
-    if status == "completed":
-        header_text = big_font.render(
-            'Well played! You completed the Game', True, theme.font_c)
-    else:
-        header_text = big_font.render(
-            'Better luck next time', True, theme.font_c)
-    header_rect = header_text.get_rect()
-    header_rect.center = (WW // 2, 50)
-
-    send_data_text = small_font.render(
-        'Send Data to Leaderboard', True, theme.font_c)
-    send_data_rect = send_data_text.get_rect()
-    send_data_rect.center = (WW // 4, 350)
-
-    # if clicked and mouse_rect.colliderect(rect):
-    #     return ['quit']
-    # screen.blit(exit_button, rect.topleft)
-
-    while True:
-        screen.fill(theme.background)
-        mx, my = pygame.mouse.get_pos()
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                return ['quit']
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                clicked = True
-        # music_button = theme.button_c["music"]
-        # music_button = pygame.transform.smoothscale(music_button, (60, 60))
-        # rect = music_button.get_rect(center=(40, 40))
-        # if mouse_rect.colliderect(rect):
-        #     music_button = pygame.transform.smoothscale(theme.button_c["music"], (70, 64))
-        #     rect = music_button.get_rect(center=(40, 40))
-        # else:
-        #     music_button = pygame.transform.smoothscale(theme.button_c["music"], (60, 60))
-        #     rect = music_button.get_rect(center=(40, 40))
-        # screen.blit(music_button, rect.topleft)
-        # if clicked and mouse_rect.colliderect(rect):
-        #     pass
-
-        # Back button
-        try:
-            back_button.draw(screen, mx, my)
-        except Exception as e:
-            back_button = Buttons(
-                theme.button_c["back"], WW // 2 + 400, WH // 2 - 20, 90, 60)
-        if back_button.is_clicked(clicked, mx, my):
-            return ['welcome']
-
-        # Send button
-        try:
-            send_button.draw(screen, mx, my)
-        except Exception as e:
-            send_button = Buttons(theme.button_c['send_data'], WW // 4,
-                                  350, send_data_rect.w, send_data_rect.h + 40)
-        if send_button.is_clicked(clicked, mx, my):
-            def sending_thread(name, score):
-                send_data_to_leaderboard(name, score)
-
-            threading.Thread(target=sending_thread, args=(
-                User_data.name, score)).start()  # sends Score
-            return ['welcome']
-
-        screen.blit(header_text, header_rect)
-        # screen.blit(send_data_text, send_data_rect)
-        # if send_data_rect.left < mx < send_data_rect.right and send_data_rect.top < my < send_data_rect.bottom:
-        #     # todo Replace with Button
-        #     if clicked:
-        #         def sending_thread(name, score):
-        #             send_data_to_leaderboard(name, score)
-
-        #         threading.Thread(target=sending_thread, args=(User_data.name, score)).start()  # sends Score
-        #         return ['welcome']
-
-        clicked = False
-        draw_cursor(screen, theme.cursor_c)
-        coin_display(screen, coins=User_data.coins)  ## coins
-        pygame.display.update()
 
 
 def campaign_continue_screen(screen, coins):

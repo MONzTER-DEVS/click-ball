@@ -19,7 +19,6 @@ yellow_buttons = {
     "settings": pygame.image.load("assets/buttons/Yellow button/settings.png").convert_alpha(),
     "leaderboard": pygame.image.load("assets/buttons/Yellow button/Leaderboard.png").convert_alpha(),
     "exit": pygame.image.load("assets/buttons/Yellow button/Exit.png").convert_alpha(),
-    "survival": pygame.image.load("assets/buttons/Yellow button/Survival.png").convert_alpha(),
     "campaign": pygame.image.load("assets/buttons/Yellow button/Campaign.png").convert_alpha(),
     "theme": pygame.image.load("assets/buttons/Yellow button/Theme.png").convert_alpha(),
     "ball": pygame.image.load("assets/buttons/Yellow button/Ball.png").convert_alpha(),
@@ -31,7 +30,8 @@ yellow_buttons = {
     "restart": pygame.image.load("assets/buttons/Yellow button/Restart.png").convert_alpha(),
     "next_level": pygame.image.load("assets/buttons/Yellow button/Next level.png").convert_alpha(),
     "level_map": pygame.image.load("assets/buttons/Yellow button/LevelMap.png").convert_alpha(),
-    "send_data": pygame.image.load("assets/buttons/Yellow button/SendToLeaderBoard.png").convert_alpha()
+    "send_data": pygame.image.load("assets/buttons/Yellow button/SendToLeaderBoard.png").convert_alpha(),
+    "more_games": pygame.image.load("assets/buttons/Yellow button/more games.png").convert_alpha(),
 }
 
 blue_button = {
@@ -39,7 +39,6 @@ blue_button = {
     "settings": pygame.image.load("assets/buttons/Blue button/settings.png").convert_alpha(),
     "leaderboard": pygame.image.load("assets/buttons/Blue button/Leaderboard.png").convert_alpha(),
     "exit": pygame.image.load("assets/buttons/Blue button/Exit.png").convert_alpha(),
-    "survival": pygame.image.load("assets/buttons/Blue button/Survival.png").convert_alpha(),
     "campaign": pygame.image.load("assets/buttons/Blue button/Campaign.png").convert_alpha(),
     "theme": pygame.image.load("assets/buttons/Blue button/Theme.png").convert_alpha(),
     "ball": pygame.image.load("assets/buttons/Blue button/Ball.png").convert_alpha(),
@@ -60,7 +59,6 @@ green_button = {
     "settings": pygame.image.load("assets/buttons/Green button/settings.png").convert_alpha(),
     "leaderboard": pygame.image.load("assets/buttons/Green button/Leaderboard.png").convert_alpha(),
     "exit": pygame.image.load("assets/buttons/Green button/Exit.png").convert_alpha(),
-    "survival": pygame.image.load("assets/buttons/Green button/Survival.png").convert_alpha(),
     "campaign": pygame.image.load("assets/buttons/Green button/Campaign.png").convert_alpha(),
     "theme": pygame.image.load("assets/buttons/Green button/Theme.png").convert_alpha(),
     "ball": pygame.image.load("assets/buttons/Green button/Ball.png").convert_alpha(),
@@ -81,7 +79,6 @@ pink_button = {
     "settings": pygame.image.load("assets/buttons/Pink button/settings.png").convert_alpha(),
     "leaderboard": pygame.image.load("assets/buttons/Pink button/Leaderboard.png").convert_alpha(),
     "exit": pygame.image.load("assets/buttons/Pink button/Exit.png").convert_alpha(),
-    "survival": pygame.image.load("assets/buttons/Pink button/Survival.png").convert_alpha(),
     "campaign": pygame.image.load("assets/buttons/Pink button/Campaign.png").convert_alpha(),
     "theme": pygame.image.load("assets/buttons/Pink button/Theme.png").convert_alpha(),
     "ball": pygame.image.load("assets/buttons/Pink button/Ball.png").convert_alpha(),
@@ -102,7 +99,6 @@ purple_button = {
     "settings": pygame.image.load("assets/buttons/Purple button/settings.png").convert_alpha(),
     "leaderboard": pygame.image.load("assets/buttons/Purple button/Leaderboard.png").convert_alpha(),
     "exit": pygame.image.load("assets/buttons/Purple button/Exit.png").convert_alpha(),
-    "survival": pygame.image.load("assets/buttons/Purple button/Survival.png").convert_alpha(),
     "campaign": pygame.image.load("assets/buttons/Purple button/Campaign.png").convert_alpha(),
     "theme": pygame.image.load("assets/buttons/Purple button/Theme.png").convert_alpha(),
     "ball": pygame.image.load("assets/buttons/Purple button/Ball.png").convert_alpha(),
@@ -123,7 +119,6 @@ red_button = {
     "settings": pygame.image.load("assets/buttons/Red button/settings.png").convert_alpha(),
     "leaderboard": pygame.image.load("assets/buttons/Red button/Leaderboard.png").convert_alpha(),
     "exit": pygame.image.load("assets/buttons/Red button/Exit.png").convert_alpha(),
-    "survival": pygame.image.load("assets/buttons/Red button/Survival.png").convert_alpha(),
     "campaign": pygame.image.load("assets/buttons/Red button/Campaign.png").convert_alpha(),
     "theme": pygame.image.load("assets/buttons/Red button/Theme.png").convert_alpha(),
     "ball": pygame.image.load("assets/buttons/Red button/Ball.png").convert_alpha(),

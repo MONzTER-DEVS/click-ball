@@ -10,10 +10,8 @@ from imports.game_modes import *
 # Main Loop
 pygame.mouse.set_visible(False)
 while True:
-    if to_do[0] == 'game':
-        to_do = game_select_screen(screen)
 
-    elif to_do[0] == 'welcome':
+    if to_do[0] == 'welcome':
         to_do = welcome_screen(screen)
 
     elif to_do[0] == 'survival':
@@ -29,7 +27,7 @@ while True:
             level_num = level_select_screen(screen, number_buttons)
 
         if level_num == 'back':
-            to_do = ['game']
+            to_do = ['welcome']
         elif level_num == 'quit':
             to_do = ['quit']
         else:
@@ -43,9 +41,6 @@ while True:
 
     elif to_do[0] == 'music':
         to_do = music_screen(screen)
-
-    elif to_do[0] == 'death':
-        to_do = death_screen(screen, to_do[1], to_do[2])
 
     elif to_do[0] == 'line':
         to_do = line_select_screen(screen)
